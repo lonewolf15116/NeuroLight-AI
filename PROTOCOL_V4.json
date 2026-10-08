@@ -1,6 +1,6 @@
 {
   "study": "NeuroLight-AI prospective confirmation v4 (phase 4: mechanisms)",
-  "status": "DRAFT",
+  "status": "FROZEN",
   "confirmation": {
     "plant_seeds": "8000-8049",
     "plant_seeds_range": [
@@ -454,5 +454,6 @@
     "No change of hypotheses, thresholds or alpha after FROZEN",
     "Report all arms and conditions",
     "No biological claim"
-  ]
+  ],
+  "frozen_utc": "2026-10-08T16:44:59+00:00"
 }
