@@ -11,10 +11,10 @@ const p1a = get('P1_history', 's0.60'), p1b = get('P1_history', 's0.80'), p2 = g
 const s3a = get('S3_chronology', 's0.60'), s3b = get('S3_chronology', 's0.80');
 
 const C = [];
-C.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 120 }, children: [new TextRun({ text: 'Better Prediction, Worse Control: Temporal History, Linear Adaptation and Regime Dependence in Learned Control of a Synthetic Neural Population', bold: true, size: 32 })] }));
+C.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 120 }, children: [new TextRun({ text: 'Temporal History, Linear Adaptation and Prediction–Control Mismatch in Learned Control of a Synthetic Neural Population', bold: true, size: 32 })] }));
 C.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 60 }, children: [new TextRun({ text: 'Mahesh Reddy Pagadala', size: 22 })] }));
-C.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 240 }, children: [new TextRun({ text: 'Manuscript draft v3 — 8 October 2026 — results from the frozen prospective confirmation (protocol v3)', size: 18, italics: true, color: '555555' })] }));
-C.push(NOTE('**Drafting notes (remove before submission).** All numbers in Section 4 are generated directly from results_v3/confirmation_v3_results.json (sha256 7273…b58b). The provisional title is to be confirmed once the literature review in the roadmap is complete. References must be verified against publisher records.'));
+C.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 240 }, children: [new TextRun({ text: 'Manuscript draft v3.1 — 8 October 2026 — results from the frozen prospective confirmation (protocol v3)', size: 18, italics: true, color: '555555' })] }));
+C.push(NOTE('**Drafting notes (remove before submission).** All numbers in Section 4 are generated directly from results_v3/confirmation_v3_results.json (sha256 7273…b58b). Title revised after the literature review (LITERATURE_REVIEW.md). References verified except: Nagabandi 2018 ICRA DOI/pages, book ISBNs, and Bolus 2021 DOI (from PMC listing) — confirm before submission.'));
 
 // ---------------------------------------------------------------- Abstract
 C.push(H1('Abstract'));
@@ -28,10 +28,10 @@ C.push(P('Contributions. (i) A matched history ablation and an aligned-pair chro
 
 // ---------------------------------------------------------------- 2
 C.push(H1('2. Related Work'));
-C.push(P('**Closed-loop optogenetic control.** PI-type optogenetic feedback control of population activity has been demonstrated experimentally [1], and model-based designs using identified input–output models, including robustness to gain mismatch, have been developed for in-vivo use [2, 3]. These works motivate the problem; they are not validated here.'));
-C.push(P('**Identification and adaptive control.** ARX models with recursive least squares and certainty-equivalence adaptive control are classical tools [4, 5]; PI tuning and integrator anti-windup are covered in [6].'));
-C.push(P('**Learned dynamics and objective mismatch.** Domain randomisation trains across simulated parameter variation [7]; neural dynamics models with sampling-based action selection are a common model-based control recipe [8]. That one-step model accuracy and control performance can diverge has been argued in model-based reinforcement learning [9].'));
-C.push(P('**Novelty boundary.** We do not introduce any of these methods. The contribution is a controlled, pre-registered characterisation in one synthetic plant family of when history, nonlinearity and adaptation matter, together with a prospective test of prediction–control mismatch. A systematic literature search is still required before any “to our knowledge” claim.'));
+C.push(P('**Closed-loop optogenetic and neural control.** PI-type optogenetic feedback control of population activity has been demonstrated experimentally [1]; the light required varied widely across preparations, which motivates treating plant gain as unknown. Model-based designs using identified input–output models have been developed for in-vivo use [2, 3], including LQR control with a parameter-adaptive Kalman filter that tracks a drifting disturbance but does not re-estimate the input gain [11]. Learned forecasting models combined with model predictive control have been applied to a conductance-based neuron model, where a simple proportional controller was sometimes better [12], and to spiking networks via latent manifolds, where MPC outperformed PID [13]. None of these compares a history-conditioned learned predictor with adaptive linear and tuned PI controllers under hidden gain shifts.'))
+C.push(P('**Identification, adaptation and history.** ARX models with recursive least squares and certainty-equivalence adaptive control are classical tools [4, 5]; PI tuning and integrator anti-windup are covered in [6]. In learning-based control, recent input–output history is used to identify hidden parameters implicitly or explicitly under domain randomisation [7, 14, 15].'))
+C.push(P('**Learned dynamics, fair baselines and objective mismatch.** Neural dynamics models with sampling-based action selection are a common model-based control recipe [8]. That one-step model accuracy and control performance can diverge was shown in model-based reinforcement learning [9], and argued theoretically through value equivalence [16]. Carefully equalising information and tuning between learned and classical controllers can shrink reported performance gaps [17], although in-context learned models have outperformed PI on nonlinear motor loads [18].'))
+C.push(P('**Novelty boundary.** None of these methods or phenomena is new, and we do not claim to have discovered objective mismatch. To our knowledge, the contribution lies in their combination in neural-population rate control: a pre-registered, prospectively confirmed comparison under hidden gain shifts of a history-conditioned learned predictor, a parameter-matched memoryless predictor, fixed and adaptive linear predictors with the same information, and development-tuned PI, together with a prospective replication of prediction–control mismatch arising from training length.'));
 
 // ---------------------------------------------------------------- 3
 C.push(H1('3. Methods'));
@@ -111,8 +111,8 @@ C.push(P(`The 10 000-epoch DR-H4 models had lower one-step validation RMSE than 
 // ---------------------------------------------------------------- 5
 C.push(H1('5. Discussion'));
 C.push(P('**What matters in this system is information and adaptation, not nonlinear capacity.** History is indispensable for a learned predictor facing a hidden gain (Q1), but once the history is available a linear model performs as well at low gain (Q2), and letting that linear model adapt online makes it the best controller tested across almost the entire range (Q3). A plausible explanation is structural: the hidden shift is a multiplicative input gain, which a linear model can re-estimate from a few recent steps, whereas a fixed network must have encoded the whole family of plants in its weights. We have not tested this explanation directly.'));
-C.push(P('**Classical feedback is a hard baseline.** The apparent low-gain advantage of the learned controller in phase 1 largely disappears once PI gains are tuned on the same development data and anti-windup is added. The residual advantages occur where actuator limits or the rate floor bind. Any claim that a learned controller beats classical control should therefore state how the classical baseline was tuned.'));
-C.push(P('**A more accurate model made a worse controller (Q4).** Longer training reduced one-step validation error yet worsened closed-loop tracking at most sensitivities, consistent with the objective-mismatch argument [9]. Possible contributors include over-fitting to the open-loop excitation used for training, which differs from closed-loop trajectories, and sharper prediction surfaces that the one-step action rule exploits. These are hypotheses for further work, not conclusions of this study.'));
+C.push(P('**Classical feedback is a hard baseline.** The apparent low-gain advantage of the learned controller in phase 1 largely disappears once PI gains are tuned on the same development data and anti-windup is added. The residual advantages occur where actuator limits or the rate floor bind. Any claim that a learned controller beats classical control should therefore state how the classical baseline was tuned, as also argued for quadrotor control [17]. Our result differs from the MPC-over-PID finding in spiking networks [13]; candidate reasons are our one-step (not receding-horizon) action selection, our development-tuned PI with anti-windup, and our fully observed population rate. These differences are untested.'));
+C.push(P('**A more accurate model made a worse controller (Q4).** Longer training reduced one-step validation error yet worsened closed-loop tracking at most sensitivities, a controlled replication of the objective mismatch reported in model-based reinforcement learning [9, 16]. Possible contributors include over-fitting to the open-loop excitation used for training, which differs from closed-loop trajectories, and sharper prediction surfaces that the one-step action rule exploits. These are hypotheses for further work, not conclusions of this study.'));
 
 // ---------------------------------------------------------------- 6
 C.push(H1('6. Limitations'));
@@ -134,14 +134,22 @@ C.push(H1('References'));
 [
   'Newman JP, Fong M, Millard DC, Whitmire CJ, Stanley GB, Potter SM. Optogenetic feedback control of neural activity. *eLife* 4:e07192, 2015. doi:10.7554/eLife.07192',
   'Bolus MF, Willats AA, Whitmire CJ, Rozell CJ, Stanley GB. Design strategies for dynamic closed-loop optogenetic neurocontrol in vivo. *Journal of Neural Engineering* 15(2):026011, 2018. doi:10.1088/1741-2552/aaa506',
-  'Grosenick L, Marshel JH, Deisseroth K. Closed-loop and activity-guided optogenetic control. *Neuron* 86(1):106–139, 2015. doi:10.1016/j.neuron.2015.03.034',
+  'Grosenick L, Marshel JH, Deisseroth K. Closed-Loop and Activity-Guided Optogenetic Control. *Neuron* 86(1):106–139, 2015. doi:10.1016/j.neuron.2015.03.034',
   'Åström KJ, Wittenmark B. *Adaptive Control*, 2nd ed. Addison-Wesley, 1995.',
-  'Ljung L. *System Identification: Theory for the User*, 2nd ed. Prentice Hall, 1999.',
-  'Åström KJ, Hägglund T. *PID Controllers: Theory, Design, and Tuning*, 2nd ed. ISA, 1995.',
-  'Tobin J, Fong R, Ray A, Schneider J, Zaremba W, Abbeel P. Domain randomization for transferring deep neural networks from simulation to the real world. *IROS*, 2017. arXiv:1703.06907',
+  'Ljung L. *System Identification: Theory for the User*, 2nd ed. Prentice Hall PTR, Upper Saddle River, NJ, 1999.',
+  'Åström KJ, Hägglund T. *PID Controllers: Theory, Design, and Tuning*, 2nd ed. Instrument Society of America, 1995.',
+  'Tobin J, Fong R, Ray A, Schneider J, Zaremba W, Abbeel P. Domain randomization for transferring deep neural networks from simulation to the real world. *IEEE/RSJ IROS*, pp. 23–30, 2017. doi:10.1109/IROS.2017.8202133',
   'Nagabandi A, Kahn G, Fearing RS, Levine S. Neural network dynamics for model-based deep reinforcement learning with model-free fine-tuning. *ICRA*, 2018. arXiv:1708.02596',
-  'Lambert N, Amos B, Yadan O, Calandra R. Objective mismatch in model-based reinforcement learning. *L4DC*, 2020. arXiv:2002.04523',
-  'Efron B. Better bootstrap confidence intervals. *Journal of the American Statistical Association* 82(397):171–185, 1987.',
+  'Lambert N, Amos B, Yadan O, Calandra R. Objective mismatch in model-based reinforcement learning. *Proc. 2nd Conference on Learning for Dynamics and Control (L4DC)*, PMLR 120:761–770, 2020. arXiv:2002.04523',
+  'Efron B. Better bootstrap confidence intervals. *Journal of the American Statistical Association* 82(397):171–185, 1987. doi:10.1080/01621459.1987.10478410',
+  'Bolus MF, Willats AA, Rozell CJ, Stanley GB. State-space optimal feedback control of optogenetically driven neural activity. *Journal of Neural Engineering* 18(3), 2021. doi:10.1088/1741-2552/abb89c',
+  'Fehrman C, Meliza CD. Nonlinear model predictive control of a conductance-based neuron model via data-driven forecasting. arXiv:2312.14274.',
+  'Fehrman C, Meliza CD. Model predictive control on the neural manifold. arXiv:2406.14801, 2024.',
+  'Yu W, Tan J, Liu CK, Turk G. Preparing for the unknown: learning a universal policy with online system identification. arXiv:1702.02453, 2017.',
+  'Kumar A, Fu Z, Pathak D, Malik J. RMA: Rapid motor adaptation for legged robots. arXiv:2107.04034, 2021.',
+  'Grimm C, Barreto A, Singh S, Silver D. The value equivalence principle for model-based reinforcement learning. arXiv:2011.03506, 2020.',
+  'Kunapuli P, Welde J, Jayaraman D, Kumar V. Leveling the playing field: carefully comparing classical and learned controllers for quadrotor trajectory tracking. arXiv:2506.17832, 2025.',
+  'Jian T, Dai T, Yu T. Learning nonlinear systems in-context: from synthetic data to real-world motor control. arXiv:2602.07173, 2026.',
 ].forEach(t => C.push(N(t, 'refs')));
 
 // ---------------------------------------------------------------- Appendices
@@ -161,7 +169,7 @@ C.push(H1('Appendix B. Run integrity'));
 C.push(P('The confirmation ran in nine resumable invocations on a laptop. Two invocations were accidentally launched concurrently and wrote the same progress file. The simulator is deterministic per plant and each write is a complete snapshot, so the only possible effect is duplicated work. All 200 plant-conditions in the four affected conditions (s = 0.80–1.10) were recomputed from the frozen code; the maximum absolute RMSE difference from the recorded values was 0.0.'));
 
 const doc = new Document({
-  creator: 'Mahesh Reddy Pagadala', title: 'Better Prediction, Worse Control — manuscript draft v3',
+  creator: 'Mahesh Reddy Pagadala', title: 'NeuroLight-AI manuscript draft v3.1',
   styles: {
     default: { document: { run: { font: FONT, size: 22 } } },
     paragraphStyles: [
@@ -177,4 +185,4 @@ const doc = new Document({
     footers: { default: new Footer({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ children: [PageNumber.CURRENT], size: 18, color: '777777' })] })] }) },
     children: C }]
 });
-Packer.toBuffer(doc).then(b => { fs.writeFileSync('NeuroLight_AI_Manuscript_v3.docx', b); console.log('written'); });
+Packer.toBuffer(doc).then(b => { fs.writeFileSync('NeuroLight_AI_Manuscript_v3.1.docx', b); console.log('written'); });

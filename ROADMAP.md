@@ -18,8 +18,8 @@ Spent plant blocks (never reuse): 1000–1049, 3000–3049, 4000–4049, 6000–
 
 | # | Task | Done when |
 |---|---|---|
-| 3.1 | Literature search to test novelty. For every close competitor, record the DOI or arXiv link and quote the exact section or experiment that overlaps. Topics: adaptive optogenetic control, neural-population MPC, in-context / history-based system identification, adaptive MPC, objective mismatch, learned vs adaptive control benchmarks. | Table of the 5 closest papers with links and overlap quotes |
-| 3.2 | Verify all references against publisher records | Every reference has a checked DOI or arXiv ID |
+| 3.1 | ✅ (8 Oct, see LITERATURE_REVIEW.md) Literature search to test novelty. For every close competitor, record the DOI or arXiv link and quote the exact section or experiment that overlaps. Topics: adaptive optogenetic control, neural-population MPC, in-context / history-based system identification, adaptive MPC, objective mismatch, learned vs adaptive control benchmarks. | Table of the 5 closest papers with links and overlap quotes |
+| 3.2 | ✅ mostly (Nagabandi ICRA DOI, book ISBNs, Bolus 2021 DOI still to confirm) Verify all references against publisher records | Every reference has a checked DOI or arXiv ID |
 | 3.3 | Settle title and framing after 3.1 (draft: *Better Prediction, Worse Control*) | Title fixed; "to our knowledge" only if 3.1 supports it |
 | 3.4 | Independent read of manuscript v3 by someone who hasn't seen the work (supervisor or peer) | Comments resolved |
 | 3.5 | Pick a venue: an ML-for-control / ML-for-science workshop first, then a neural-engineering or control conference. Check the current calls and deadlines. | Venue and deadline chosen |
