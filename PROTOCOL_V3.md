@@ -5,7 +5,7 @@
 ## 1. Historical record (preserved, not overwritten)
 
 - The phase-1 confirmations remain as historical results and are not re-run: C0 (plants 3000–3049), A (4000–4049) and B (6000–6049).
-- Their scripts, protocols, weights and results are under `archived_results/`. The repository state before phase 2 is git tag **`phase1-historical`**.
+- Their scripts, protocols, weights and results are under `archived_results/`. The repository state before phase 2 is preserved as git branch **`phase1-historical`** (commit c348cb8).
 - The original manuscript drafts and the v2 manuscript are separate files and are not modified by v3.
 - V3 writes only to `results_v3/`.
 - Phase 1 used a fixed PI (Kp 0.02, Ki 0.15) whose integral gain sat on its tuning-grid edge. It also used an ARX/RLS whose online updates were negligible.

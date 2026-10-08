@@ -3,7 +3,7 @@
   "status": "DRAFT",
   "historical_record": {
     "note": "Phase-1 confirmations C0 (3000-3049), A (4000-4049) and B (6000-6049), their archives under archived_results/, and the manuscript drafts are historical and are neither re-run nor overwritten. V3 writes only to results_v3/.",
-    "phase1_git_tag": "phase1-historical"
+    "phase1_git_branch": "phase1-historical (commit c348cb8)"
   },
   "confirmation": {
     "plant_seeds": "7000-7049",

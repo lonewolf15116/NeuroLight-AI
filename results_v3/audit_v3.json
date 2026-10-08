@@ -2,7 +2,7 @@
  "script_sha256": "3480a3490378cafc4b3ba619e03b56732fde627fe569817c81d2daea95b73508",
  "file_hashes": {
   "confirmation_v3.py": "3480a3490378cafc4b3ba619e03b56732fde627fe569817c81d2daea95b73508",
-  "PROTOCOL_V3.json": "c867649657282ed5ac284e30c4448d7566c88970a86a8dd41a8b16d17e231f35",
+  "PROTOCOL_V3.json": "4e48321053017ce5a02dc5a99412139b5179afc58019eca9931b07745d850937",
   "v02_robustness.py": "80dd11f3664e1bafd6bffc5e2013b932c3a40eabf6446e4dc5d8ad2b78f7e34a",
   "experiment.py": "cf36ee4baad8eadebe39ac9220cd16d23310ab827294fb6412f19ee202c6937d",
   "experiment_b_final.py": "d2217f3434f4564d30e9bdec6361deed90df7928f44c06b36d3a2f433d83af69",
@@ -23,7 +23,7 @@
   "status": "DRAFT",
   "historical_record": {
    "note": "Phase-1 confirmations C0 (3000-3049), A (4000-4049) and B (6000-6049), their archives under archived_results/, and the manuscript drafts are historical and are neither re-run nor overwritten. V3 writes only to results_v3/.",
-   "phase1_git_tag": "phase1-historical"
+   "phase1_git_branch": "phase1-historical (commit c348cb8)"
   },
   "confirmation": {
    "plant_seeds": "7000-7049",
