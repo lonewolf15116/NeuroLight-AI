@@ -68,8 +68,12 @@ def load_models(spec):
     return out
 
 
+def ckey(s, nz, P):
+    return f"s{s:.2f}" if nz == P["noise_primary"] else f"n{nz:.1f}_s{s:.2f}"
+
+
 def conditions(P):
-    return [{"key": f"s{s:.2f}", "s": s, "noise": P["noise"]} for s in P["sensitivities"]]
+    return [{"key": ckey(s, nz, P), "s": s, "noise": nz} for nz in [P["noise_primary"]] + P["noise_robustness"] for s in P["sensitivities"]]
 
 
 def run_plant(seed, cond, P, models, prior):
@@ -102,56 +106,74 @@ def bca_stat(stat, data, seed, nboot, alpha):
 
 def analyse(raw, P):
     A = P["analysis"]; NB = P["statistics"]["resamples"]; out = {}; k = [0]
+    n = len(raw[conditions(P)[0]["key"]]); sv9 = np.array(P["sensitivities"])
+    keys = lambda nz: [ckey(x, nz, P) for x in P["sensitivities"]]
+    hikeys = lambda nz: [ckey(x, nz, P) for x in A["high_gain_set"]]
+    def nextseed(): k[0] += 1; return 800000 + k[0]
     def diff(a, b, c, alpha, tag):
-        d = np.asarray([val(r, a) - val(r, b) for r in raw[c]]); k[0] += 1
-        res = E.bca_mean_ci(d, seed=800000 + k[0], nboot=NB, alpha=alpha)
+        d = np.asarray([val(r, a) - val(r, b) for r in raw[c]])
+        res = E.bca_mean_ci(d, seed=nextseed(), nboot=NB, alpha=alpha)
         res.update(contrast=f"{a} - {b}", condition=c, ci=res.pop("bca95"), ci_level=1 - alpha, positive_fraction=float(np.mean(d > 0)), tag=tag)
         return res
-    conds = [c["key"] for c in conditions(P)]
-    # Q1: fraction of full-RLS improvement over fixed ARX recovered by the one-parameter gain RLS (plant-level means over the sweep)
-    rows = np.array([[np.mean([val(raw[c][i], "ARX_fixed") - val(raw[c][i], "ARX_gain") for c in conds]),
-                      np.mean([val(raw[c][i], "ARX_fixed") - val(raw[c][i], "ARX_RLS") for c in conds])] for i in range(len(raw[conds[0]]))])
-    k[0] += 1; out["Q1_gain_fraction"] = bca_stat(lambda d: d[:, 0].mean() / d[:, 1].mean(), rows, 800000 + k[0], NB, A["Q1"]["alpha"])
-    # Q2: within-plant Spearman correlation between the plant-condition gain summary (mean g over the last 60 steps)
-    #     and s across the 9 sensitivities; one value per plant; BCa over plants for the mean. Time steps are never units.
-    sv9 = np.array([float(c[1:]) for c in conds]); n = len(raw[conds[0]])
+    def mean_stat(rows, alpha):   # BCa for the mean over plants of one per-plant value
+        return bca_stat(lambda d: d[:, 0].mean(), np.asarray(rows).reshape(-1, 1), nextseed(), NB, alpha)
+    def q1(nz, alpha):
+        C = keys(nz); rows = np.array([[np.mean([val(raw[c][i], "ARX_fixed") - val(raw[c][i], "ARX_gain") for c in C]),
+                                        np.mean([val(raw[c][i], "ARX_fixed") - val(raw[c][i], "ARX_RLS") for c in C])] for i in range(n)])
+        return bca_stat(lambda d: d[:, 0].mean() / d[:, 1].mean(), rows, nextseed(), NB, alpha)
+    def hi_mean(fn, nz, alpha):
+        return mean_stat([np.mean([fn(raw[c][i]) for c in hikeys(nz)]) for i in range(n)], alpha)
+    plain = lambda r: val(r, "H4_snap_e6000") - val(r, "H4_snap_e900")
+    gain = lambda r: val(r, "H4_I2_e6000") - val(r, "H4_I2_e900")
+    q3f = lambda r: val(r, "H4_10k") - val(r, "H4_I2")
+    q4f = lambda r: plain(r) - gain(r)
+    P0 = P["noise_primary"]
+    # ---------------- primary (sigma = noise_primary)
+    out["Q1_gain_fraction"] = q1(P0, A["Q1"]["alpha"])
+    out["Q3_gain_input_vs_10k"] = hi_mean(q3f, P0, A["Q3"]["alpha"])
+    out["Q4_differential_training_length"] = hi_mean(q4f, P0, A["Q4"]["alpha"])
+    # ---------------- secondary
+    gsum = lambda i, nz: np.array([raw[c][i]["ARX_gain"]["g_final_mean60"] for c in keys(nz)])
     rk = lambda x: np.argsort(np.argsort(x)).astype(float)
-    rho = np.array([[np.corrcoef(rk([raw[c][i]["ARX_gain"]["g_final_mean60"] for c in conds]), rk(sv9))[0, 1]] for i in range(n)])
-    k[0] += 1; out["Q2_gain_spearman"] = bca_stat(lambda d: d[:, 0].mean(), rho, 800000 + k[0], NB, A["Q2"]["alpha"])
-    out["Q2_gain_spearman"]["per_plant"] = rho[:, 0].tolist()
-    HI = A["high_gain_set"]
-    def agg(fn, alpha):   # BCa for the mean over plants of a per-plant aggregate over the high-gain set
-        rows = np.array([[np.mean([fn(raw[c][i]) for c in HI])] for i in range(n)]); k[0] += 1
-        return bca_stat(lambda d: d[:, 0].mean(), rows, 800000 + k[0], NB, alpha)
-    # Q3: H4_10k - H4_I2, aggregate over the high-gain set (decision); per-setting intervals reported for consistency
-    out["Q3_gain_input_vs_10k"] = agg(lambda r: val(r, "H4_10k") - val(r, "H4_I2"), A["Q3"]["alpha"])
-    out["Q3_per_setting"] = [diff("H4_10k", "H4_I2", c, A["Q3"]["per_setting_alpha_each"], "Q3c") for c in HI]
-    # Q4: training-length interaction (difference in differences) at the same epochs for both networks, aggregate over HI
-    did = lambda r: (val(r, "H4_snap_e6000") - val(r, "H4_snap_e900")) - (val(r, "H4_I2_e6000") - val(r, "H4_I2_e900"))
-    out["Q4_training_length_DiD"] = agg(did, A["Q4"]["alpha"])
-    out["Q4_components"] = {"plain_e6000_minus_e900": agg(lambda r: val(r, "H4_snap_e6000") - val(r, "H4_snap_e900"), A["Q4"]["alpha"]),
-                            "gaininput_e6000_minus_e900": agg(lambda r: val(r, "H4_I2_e6000") - val(r, "H4_I2_e900"), A["Q4"]["alpha"])}
-    out["S1_I2_vs_ARX_RLS"] = [diff("H4_I2", "ARX_RLS", c, A["S1"]["alpha_each"], "S1") for c in conds]
-    out["S2_I1_vs_10k"] = [diff("H4_10k", "H4_I1", c, A["S2"]["alpha_each"], "S2") for c in conds]
-    out["S3_I3_vs_10k"] = [diff("H4_10k", "H4_I3", c, A["S3"]["alpha_each"], "S3") for c in conds]
-    out["S6_I2_vs_PI_AW"] = [diff("H4_I2", "PI_tuned_AW", c, A["S6"]["alpha_each"], "S6") for c in conds]
-    # S4: action-sensitivity slope ratio (network d yhat/du vs s) / (reference 60*g*w_u vs s), plant-level bootstrap
+    rho = [np.corrcoef(rk(gsum(i, P0)), rk(sv9))[0, 1] for i in range(n)]
+    out["S_Q2_gain_spearman"] = mean_stat(rho, A["S_Q2"]["alpha"]); out["S_Q2_gain_spearman"]["per_plant"] = rho
+    fits = np.array([np.polyfit(sv9, gsum(i, P0), 1) for i in range(n)])          # per plant: g = a*s + b
+    resid = [float(np.mean(np.abs(gsum(i, P0) - np.polyval(fits[i], sv9)))) for i in range(n)]
+    g_nom = [float(gsum(i, P0)[list(sv9).index(1.0)]) for i in range(n)]
+    ratio_cv = [float(np.std(gsum(i, P0) / sv9) / np.mean(gsum(i, P0) / sv9)) for i in range(n)]
+    out["S_calibration"] = {"slope_dg_ds": mean_stat(fits[:, 0], A["S_calibration"]["alpha_each"]),
+                            "intercept": mean_stat(fits[:, 1], A["S_calibration"]["alpha_each"]),
+                            "mean_abs_residual_from_linear": mean_stat(resid, A["S_calibration"]["alpha_each"]),
+                            "g_at_nominal_s1_minus_1": mean_stat([x - 1 for x in g_nom], A["S_calibration"]["alpha_each"]),
+                            "cv_of_g_over_s": mean_stat(ratio_cv, A["S_calibration"]["alpha_each"]),
+                            "note": "g is a multiplier on the prior's action terms; g = 1 means the prior gain. Its absolute scale is defined relative to the domain-randomised prior, not to s itself."}
+    out["S_Q4_components"] = {"plain_e6000_minus_e900": hi_mean(plain, P0, A["S_Q4dir"]["alpha_each"]),
+                              "gaininput_e6000_minus_e900": hi_mean(gain, P0, A["S_Q4dir"]["alpha_each"])}
+    out["S_Q4_opposite_directions"] = bool(out["S_Q4_components"]["plain_e6000_minus_e900"]["ci"][0] > 0 and out["S_Q4_components"]["gaininput_e6000_minus_e900"]["ci"][1] < 0)
+    out["S_Q3_per_setting"] = [diff("H4_10k", "H4_I2", c, A["S_Q3_per_setting"]["alpha_each"], "Q3c") for c in hikeys(P0)]
+    out["S1_I2_vs_ARX_RLS"] = [diff("H4_I2", "ARX_RLS", c, A["S1"]["alpha_each"], "S1") for c in keys(P0)]
+    out["S2_I1_vs_10k"] = [diff("H4_10k", "H4_I1", c, A["S2"]["alpha_each"], "S2") for c in keys(P0)]
+    out["S3_I3_vs_10k"] = [diff("H4_10k", "H4_I3", c, A["S3"]["alpha_each"], "S3") for c in keys(P0)]
+    out["S6_I2_vs_PI_AW"] = [diff("H4_I2", "PI_tuned_AW", c, A["S6"]["alpha_each"], "S6") for c in keys(P0)]
     w0u = P["arx_prior"]["w_u"]
     def slope_rows(name):
-        return np.array([[np.mean([q["dyhat_du"] for q in raw[c][i][name]]) for c in conds] +
-                         [SCALE * w0u * raw[c][i]["ARX_gain"]["g_final_mean60"] for c in conds] for i in range(len(raw[conds[0]]))])
+        return np.array([[np.mean([q["dyhat_du"] for q in raw[c][i][name]]) for c in keys(P0)] +
+                         [SCALE * w0u * raw[c][i]["ARX_gain"]["g_final_mean60"] for c in keys(P0)] for i in range(n)])
     sl = lambda d: np.polyfit(sv9, d[:, :9].mean(0), 1)[0] / np.polyfit(sv9, d[:, 9:].mean(0), 1)[0]
-    out["S4_sensitivity_slope_ratio"] = {}
-    for name in ("H4_10k", "H4_900", "H4_I2"):
-        k[0] += 1; out["S4_sensitivity_slope_ratio"][name] = bca_stat(sl, slope_rows(name), 800000 + k[0], NB, A["S4"]["alpha_each"])
+    out["S4_sensitivity_slope_ratio"] = {nm: bca_stat(sl, slope_rows(nm), nextseed(), NB, A["S4"]["alpha_each"]) for nm in ("H4_10k", "H4_900", "H4_I2")}
+    # ---------------- robustness (sigma = 2.0): primary statistics repeated, secondary role
+    for nz in P["noise_robustness"]:
+        al = A["R"]["alpha_each"]; tag = f"R_sigma{nz:.1f}"
+        out[tag] = {"Q1_gain_fraction": q1(nz, al), "Q3_gain_input_vs_10k": hi_mean(q3f, nz, al), "Q4_differential_training_length": hi_mean(q4f, nz, al)}
     names = ["PI_tuned", "PI_tuned_AW", "ARX_fixed", "ARX_RLS", "ARX_gain"] + P["network_arms"]
-    out["S5_mean_rmse"] = {c: {n: float(np.mean([val(r, n) for r in raw[c]])) for n in names} for c in conds}
+    out["S5_mean_rmse"] = {c["key"]: {nm: float(np.mean([val(r, nm) for r in raw[c["key"]]])) for nm in names} for c in conditions(P)}
     out["decisions"] = {
         "Q1_supported": bool(out["Q1_gain_fraction"]["ci"][0] >= A["Q1"]["threshold"]),
-        "Q2_supported": bool(out["Q2_gain_spearman"]["ci"][0] >= A["Q2"]["threshold"]),
         "Q3_supported": bool(out["Q3_gain_input_vs_10k"]["ci"][0] > 0),
-        "Q4_supported": bool(out["Q4_training_length_DiD"]["ci"][0] > 0),
-        "S": "secondary/exploratory and per-setting consistency results; reported, no decision rule"}
+        "Q4_supported_differential_effect": bool(out["Q4_differential_training_length"]["ci"][0] > 0),
+        "secondary": {"S_Q2_lower_bound_ge_0.90": bool(out["S_Q2_gain_spearman"]["ci"][0] >= A["S_Q2"]["threshold"]),
+                      "S_Q4_opposite_directions": out["S_Q4_opposite_directions"],
+                      "note": "secondary and robustness results are reported with their stated levels; they do not change primary decisions"}}
     return out
 
 
@@ -181,7 +203,7 @@ def main(mode, budget):
     print("mode:", mode, "| status:", P["status"], "| script sha256:", sha256(Path(__file__)))
     if mode == "audit":
         t0 = time.time(); r = run_plant(P["audit_smoke_plant"], conditions(P)[-1], P, models, prior)
-        print("SMOKE plant", P["audit_smoke_plant"], "s", conditions(P)[-1]["s"], round(time.time() - t0, 1), "s:", {n: round(val(r, n), 3) for n in r})
+        print("SMOKE plant", P["audit_smoke_plant"], "cond", conditions(P)[-1]["key"], round(time.time() - t0, 1), "s:", {n: round(val(r, n), 3) for n in r})
         (out / "audit_v4.json").write_text(json.dumps({"file_hashes": manifest_files(P), "smoke": r}, indent=1)); print("AUDIT ONLY - no confirmation plant instantiated."); return
     if mode == "selftest":
         raw = block(P["self_test_plants"], P, models, prior, out / "selftest_partial.json", budget)

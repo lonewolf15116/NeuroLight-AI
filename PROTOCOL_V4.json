@@ -30,7 +30,11 @@
     1.2,
     1.4
   ],
-  "noise": 0.5,
+  "noise_primary": 0.5,
+  "noise_robustness": [
+    2.0
+  ],
+  "conditions_note": "9 sensitivities x {sigma 0.5 (primary), sigma 2.0 (robustness)} = 18 conditions x 50 plants. Keys: s0.50 ... (sigma 0.5), n2.0_s0.50 ... (sigma 2.0).",
   "controllers": {
     "PI_tuned": {
       "kp": 0.02,
@@ -290,50 +294,68 @@
   },
   "analysis": {
     "high_gain_set": [
-      "s1.00",
-      "s1.10",
-      "s1.20",
-      "s1.40"
+      1.0,
+      1.1,
+      1.2,
+      1.4
     ],
-    "high_gain_definition": "all sweep sensitivities at or above the nominal s = 1.0, fixed before confirmation",
+    "high_gain_definition": "sweep sensitivities at or above nominal s = 1.0 (1.0, 1.1, 1.2, 1.4), fixed before confirmation",
+    "primary_family": [
+      "Q1",
+      "Q3",
+      "Q4"
+    ],
+    "primary_noise": 0.5,
     "Q1": {
       "role": "PRIMARY",
-      "test": "fraction of the full-RLS mean improvement over fixed ARX recovered by ARX_gain: ratio of plant-level means of (fixed - gain) and (fixed - full) averaged over the 9 sensitivities",
+      "test": "fraction of the full-RLS mean improvement over fixed ARX recovered by ARX_gain: ratio of plant-level means of (fixed - gain) and (fixed - full), each averaged over the 9 sensitivities at sigma 0.5",
       "alpha": 0.05,
       "threshold": 0.7,
       "decision": "BCa lower bound >= 0.70",
       "dev_value": 0.86
     },
-    "Q2": {
-      "role": "PRIMARY",
-      "test": "per plant: Spearman correlation between the plant-condition gain summary g (mean of the last 60 steps) and s across the 9 sensitivities; statistic = mean over the 50 plants",
-      "unit": "plant (time steps are never units)",
-      "alpha": 0.05,
-      "threshold": 0.9,
-      "decision": "BCa lower bound >= 0.90",
-      "dev_value": "about 1.0"
-    },
     "Q3": {
       "role": "PRIMARY",
-      "test": "H4_10k - H4_I2, per-plant mean over the high-gain set",
+      "test": "H4_10k - H4_I2: per-plant mean over the high-gain set at sigma 0.5",
       "alpha": 0.05,
       "decision": "BCa lower bound > 0",
-      "per_setting_alpha_each": 0.0125,
-      "per_setting_role": "consistency check, reported, not a decision criterion",
       "dev_value": 1.84
     },
     "Q4": {
       "role": "PRIMARY",
-      "test": "training-length interaction: [H4_snap_e6000 - H4_snap_e900] - [H4_I2_e6000 - H4_I2_e900], per-plant mean over the high-gain set",
+      "name": "differential training-length effect",
+      "test": "D = [H4_snap_e6000 - H4_snap_e900] - [H4_I2_e6000 - H4_I2_e900]: per-plant mean over the high-gain set at sigma 0.5",
       "alpha": 0.05,
-      "decision": "BCa lower bound > 0",
-      "components": "each bracket reported with its own interval",
-      "dev_value": "about 0.98 / 2.24 / 3.82 at s 1.0 / 1.2 / 1.4",
-      "checkpoint_rule": "all checkpoints fixed before confirmation: fixed epochs 900 and 6000 for both networks; no checkpoint is chosen on confirmation plants"
+      "decision": "BCa lower bound > 0 (supports a differential effect only; opposite directions are tested separately in S_Q4dir)",
+      "dev_value": "about 1.0 / 2.2 / 3.8 at s 1.0 / 1.2 / 1.4",
+      "checkpoint_rule": "fixed epochs 900 and 6000 for both networks; no checkpoint chosen on confirmation plants"
+    },
+    "note_on_primary_multiplicity": "Q1, Q3, Q4 are three distinct questions, each tested at its own 95% level; not combined.",
+    "S_Q2": {
+      "role": "secondary",
+      "test": "per plant: Spearman(g summary, s) across the 9 sensitivities at sigma 0.5; mean over plants",
+      "alpha": 0.05,
+      "threshold": 0.9,
+      "caveat": "rank correlation checks ordering only, not accuracy"
+    },
+    "S_calibration": {
+      "role": "secondary",
+      "test": "per-plant linear fit g = a s + b: slope, intercept, mean |residual|; g at s 1.0 minus 1; CV of g/s",
+      "alpha_each": 0.01
+    },
+    "S_Q4dir": {
+      "role": "secondary",
+      "test": "opposite directions: plain e6000-e900 > 0 AND gain-input e6000-e900 < 0 (high-gain means)",
+      "alpha_each": 0.025
+    },
+    "S_Q3_per_setting": {
+      "role": "secondary consistency",
+      "test": "H4_10k - H4_I2 at each high-gain setting",
+      "alpha_each": 0.0125
     },
     "S1": {
       "role": "secondary",
-      "test": "H4_I2 - ARX_RLS",
+      "test": "H4_I2 - ARX_RLS (paired differences, no equivalence claim)",
       "conditions": [
         "s0.50",
         "s0.60",
@@ -381,7 +403,7 @@
     },
     "S4": {
       "role": "secondary",
-      "test": "slope of network dyhat/du vs s divided by slope of 60*g*w_u vs s, for H4_10k, H4_900, H4_I2",
+      "test": "slope of network dyhat/du vs s / slope of 60*g*w_u vs s, for H4_10k, H4_900, H4_I2",
       "alpha_each": 0.016667,
       "dev_value": {
         "H4_10k": 0.39,
@@ -391,7 +413,7 @@
     },
     "S5": {
       "role": "descriptive",
-      "test": "mean RMSE per controller (incl. PI_tuned, PI_tuned_AW, ARX_fixed, ARX_RLS, ARX_gain, all network arms) and condition"
+      "test": "mean RMSE per arm and condition (both noise levels)"
     },
     "S6": {
       "role": "secondary",
@@ -408,7 +430,16 @@
         "s1.40"
       ],
       "alpha_each": 0.005556
+    },
+    "R": {
+      "role": "secondary robustness",
+      "test": "Q1, Q3, Q4 statistics recomputed at sigma 2.0 with identical definitions",
+      "alpha_each": 0.016667
     }
+  },
+  "gain_estimator": {
+    "definition": "scalar RLS on g with prediction = prior non-action terms + g * prior action terms (u, u-1..u-4); lambda 0.98, P0 1000, g0 = 1; updated after every step with the applied action; identical in ARX_gain and as the H4_I2 input; same construction at both noise levels",
+    "prior": "OLS ARX-10 prior fitted on training plants 2000-2099 (hash in arx_prior)"
   },
   "checkpoint_provenance": {
     "H4_10k": "best validation (plants 2100-2129), v3",

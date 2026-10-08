@@ -1,0 +1,20 @@
+mode: selftest | status: DRAFT | script sha256: f63112a9384fd17bbe8a090e3ec95536050f14566dfd45ddebd46c1dcad6a613
+s0.50 complete
+s0.60 complete
+s0.70 complete
+s0.80 complete
+s0.90 complete
+s1.00 complete
+s1.10 complete
+s1.20 complete
+s1.40 complete
+n2.0_s0.50 complete
+n2.0_s0.60 complete
+n2.0_s0.70 complete
+n2.0_s0.80 complete
+n2.0_s0.90 complete
+n2.0_s1.00 complete
+n2.0_s1.10 complete
+n2.0_s1.20 complete
+n2.0_s1.40 complete
+SELF-TEST COMPLETE {"Q1_supported": true, "Q3_supported": true, "Q4_supported_differential_effect": true, "secondary": {"S_Q2_lower_bound_ge_0.90": true, "S_Q4_opposite_directions": true, "note": "secondary and robustness results are reported with their stated levels; they do not change primary decisions"}}

@@ -35,36 +35,49 @@ Each network arm has five seeds, averaged within plant.
 
 ## Conditions
 
-s ∈ {0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.4} at σ = 0.5, giving 9 conditions × 50 plants. Exact scalar simulator.
+s ∈ {0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.4}, each at **σ = 0.5 (primary)** and **σ = 2.0 (robustness)**. That gives 18 conditions × 50 plants = 900 plant-conditions, run on the exact scalar simulator.
 
-## Hypotheses
+## Hypotheses (final design, 8 Oct 2026)
 
-The unit is the plant. Intervals are BCa with 10 000 resamples and a fixed bootstrap seed per interval. **High-gain set (fixed in advance):** s ∈ {1.0, 1.1, 1.2, 1.4}, all sweep values at or above nominal.
+**Setup**
+- The unit is the plant; network arms are averaged over five seeds within each plant.
+- Intervals are BCa with 10 000 resamples and a fixed bootstrap seed per interval.
+- **High-gain set (fixed in advance):** s ∈ {1.0, 1.1, 1.2, 1.4}.
+- **Gain estimator g:** scalar RLS where prediction = prior non-action terms + g × prior action terms (u, u₋₁…u₋₄); λ 0.98, P₀ 1000, g₀ = 1, updated every step. It is identical in ARX_gain and as the H4_I2 input, at both noise levels.
 
-| ID | Role | Test | Decision | Development value |
-|---|---|---|---|---|
-| Q1 | primary | Fraction of the full-RLS improvement over fixed ARX recovered by ARX_gain: ratio of plant-level means averaged over the 9 sensitivities | 95% lower bound ≥ 0.70 | 0.86 |
-| Q2 | primary | Per plant, Spearman correlation between the plant-condition gain summary g (mean of the last 60 steps) and s across the 9 sensitivities; statistic = mean over 50 plants. Time steps are never units. | 95% lower bound ≥ 0.90 | 1.00 (self-test) |
-| Q3 | primary | H4_10k − H4_I2, per-plant mean over the high-gain set (one aggregate) | 95% lower bound > 0 | +1.84 |
-| Q4 | primary | Training-length interaction (difference in differences) at the same epochs for both networks: [plain e6000 − e900] − [gain-input e6000 − e900], per-plant mean over the high-gain set | 95% lower bound > 0 | about +1.0 / +2.2 / +3.8 at s 1.0 / 1.2 / 1.4 |
-| Q3c | consistency | Q3 contrast at each high-gain setting | 98.75% each; reported, not a criterion | |
-| Q4c | consistency | Each Q4 bracket on its own | reported | |
-| S1 | secondary | H4_I2 − ARX_RLS, all 9 | 99.44% each | |
-| S2 / S3 | secondary | H4_10k − H4_I1 and H4_10k − H4_I3, all 9 | 99.44% each | |
-| S4 | secondary | dŷ/du slope ratio vs the gain reference, for H4_10k, H4_900, H4_I2 | 98.3% each | 0.39, 0.09, 0.84 |
-| S5 | descriptive | Mean RMSE for every arm, including PI_tuned, PI_tuned_AW, ARX_fixed, ARX_RLS, ARX_gain | — | |
-| S6 | secondary | H4_I2 − PI_tuned_AW, all 9 | 99.44% each | |
+### Primary (σ = 0.5; three distinct questions, each at 95%)
 
-**Checkpoint rule (Q4 and all arms).** Every checkpoint is fixed before confirmation:
+| ID | Test | Decision | Development value |
+|---|---|---|---|
+| Q1 | Fraction of the full-RLS improvement over fixed ARX recovered by ARX_gain: ratio of plant-level means averaged over the 9 sensitivities | lower bound ≥ 0.70 | 0.86 |
+| Q3 | H4_10k − H4_I2, per-plant mean over the high-gain set | lower bound > 0 | +1.84 |
+| Q4 | **Differential training-length effect:** D = [plain e6000 − e900] − [gain-input e6000 − e900], per-plant mean over the high-gain set | lower bound > 0 | ≈ +1.0 / +2.2 / +3.8 at s 1.0 / 1.2 / 1.4 |
+
+Q4 > 0 supports a differential effect only. That longer training **hurts** the plain network and **helps** the gain-input network is tested separately (S_Q4dir).
+
+### Secondary (reported at the stated levels; they do not change primary decisions)
+
+| ID | Test | Level |
+|---|---|---|
+| S_Q2 | Per plant, Spearman(g summary, s) across the 9 sensitivities; mean over plants; reference ≥ 0.90. Checks ordering only, not accuracy. | 95% |
+| S_calibration | Per plant, linear fit g = a·s + b: slope, intercept, mean absolute residual; g at s = 1.0 minus 1; CV of g/s. g's scale is relative to the domain-randomised prior. | 99% each |
+| S_Q4dir | Opposite directions: plain e6000 − e900 > 0 and gain-input e6000 − e900 < 0 | 97.5% each |
+| S_Q3_per_setting | Q3 contrast at each high-gain setting | 98.75% each |
+| S1 | H4_I2 − ARX_RLS: paired differences only, no equivalence claim | 99.44% each |
+| S2 / S3 | H4_10k − H4_I1 and H4_10k − H4_I3 | 99.44% each |
+| S4 | dŷ/du slope ratio vs the gain reference (H4_10k, H4_900, H4_I2) | 98.3% each |
+| S6 | H4_I2 − PI_tuned_AW | 99.44% each |
+| R (robustness) | Q1, Q3 and Q4 recomputed at σ = 2.0 with identical definitions | 98.3% each |
+| S5 | Mean RMSE for every arm and condition, both noise levels | descriptive |
+
+**Checkpoint rule.** Every checkpoint is fixed before confirmation:
 - fixed epochs (900 and 6000 for both networks);
 - best-validation checkpoints chosen on validation plants 2100–2129;
 - I1 epochs chosen on development plants 5250–5299.
 
-No checkpoint, epoch or model variant is chosen on confirmation plants.
+No checkpoint, epoch, model variant or estimator setting is chosen on confirmation plants. The same frozen choices are used at σ = 2.0.
 
-**Note on Q2.** Within each plant g was perfectly monotone in s in development, so Q2 is likely to pass. It confirms monotone tracking, not accuracy. Q1 and S4 carry the quantitative weight.
-
-**Intended claim if supported (synthetic plant only).** Explicit online estimation of a low-dimensional hidden plant parameter can substantially improve learned closed-loop control, and may explain part of the gap between history-based neural predictors and adaptive linear models.
+**Intended claim if supported (synthetic plant only).** Explicit online estimation of a low-dimensional hidden plant parameter can substantially improve learned closed-loop control, and may explain part of the gap between history-based neural predictors and adaptive linear models. The confirmation decides the claim, even if the gain-input model does not reproduce its development advantage.
 
 ## Disclosures to carry into the paper
 
@@ -76,11 +89,13 @@ No checkpoint, epoch or model variant is chosen on confirmation plants.
 ## Integrity and runtime
 
 - **Manifest:** `MANIFEST_V4.json` will hash `confirmation_v4.py`, `confirmation_v3.py`, the protocol, the simulator modules, the ARX prior and all 45 weight files (9 network arms × 5 seeds).
-- **Runtime:** about 13 s per plant-condition in the cloud and roughly 5 s on the laptop, so about 40 minutes for 450 plant-conditions. The run is resumable in 160-s chunks; invocations must run one at a time.
+- **Runtime:** about 13 s per plant-condition in the cloud and roughly 5 s on the laptop, so about 70 minutes for 900 plant-conditions. The run is resumable in 160-s chunks; invocations must run one at a time.
 
-## Open choices for the reviewer before freezing
+## Reviewer decisions (8 Oct 2026)
 
-1. Thresholds: Q1 (0.70) and Q2 (0.90) are conservative relative to development values. Keep them, or tighten?
-2. Should σ ∈ {1, 2} conditions be added? This version omits them to keep the focus on gain.
-3. Should H4_I2 and ARX_RLS be tested for equivalence (for example ±0.10 Hz) instead of reported as S1?
-4. Q2 is close to certain to pass; keep it as primary, or move it to secondary?
+- Q1 threshold kept at 0.70.
+- Q2 moved to secondary with calibration diagnostics.
+- σ 0.5 primary, σ 2.0 robustness.
+- No equivalence claim for H4_I2 vs ARX_RLS.
+- Q3 high-gain set and Q4 matched-epoch difference-in-differences approved; Q4 labelled a differential effect.
+- Phase-1 to v3 results are preserved unchanged.
