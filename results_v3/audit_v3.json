@@ -1,9 +1,30 @@
 {
- "script_sha256": "367de99ef9948e11c53aa25be9e9f6a87d06595d3d4a80b71791a65e6dd2baab",
+ "script_sha256": "3480a3490378cafc4b3ba619e03b56732fde627fe569817c81d2daea95b73508",
+ "file_hashes": {
+  "confirmation_v3.py": "3480a3490378cafc4b3ba619e03b56732fde627fe569817c81d2daea95b73508",
+  "PROTOCOL_V3.json": "c867649657282ed5ac284e30c4448d7566c88970a86a8dd41a8b16d17e231f35",
+  "v02_robustness.py": "80dd11f3664e1bafd6bffc5e2013b932c3a40eabf6446e4dc5d8ad2b78f7e34a",
+  "experiment.py": "cf36ee4baad8eadebe39ac9220cd16d23310ab827294fb6412f19ee202c6937d",
+  "experiment_b_final.py": "d2217f3434f4564d30e9bdec6361deed90df7928f44c06b36d3a2f433d83af69",
+  "prospective_dev/arx10_prior.npz": "7afd3e874bfccd7ebb56ab7008c964068a7a91dd9bebdf512be7e68f767988b8",
+  "prospective_dev/retrain_10000/DR_H4_seed_101.npz": "3b7e3e71936828d21956f1ecacfc6c1a14203609a52f3ad91af06bb4cbd0f0b2",
+  "prospective_dev/retrain_10000/DR_H4_seed_102.npz": "2ccb8eed99d348a6c141a505b8f200dc955ca751ce5b0de6e62a85c3ca83240d",
+  "prospective_dev/retrain_10000/DR_H4_seed_103.npz": "f3d1e1d60bfd9871bdbb082c21afb280086b663b86ce0b12a2e8e5e9cb3e6fc7",
+  "prospective_dev/retrain_10000/DR_H4_seed_104.npz": "4d1b840d2a2d32e17312693e25f0410cd21bfdaec54927bbf02560faa9216d1c",
+  "prospective_dev/retrain_10000/DR_H4_seed_105.npz": "2f871c484446c4d6befac0bfea8fcebc017f473ddf80e0fe12b4982965fcadbf",
+  "prospective_dev/retrain_10000/DR_Memoryless_141_seed_101.npz": "376321dfc7f775ef7b6a3024eaf11f4af673d6eda9cfda82b5d53fa6648fe226",
+  "prospective_dev/retrain_10000/DR_Memoryless_141_seed_102.npz": "ba8f727b1b38a42efff8b16a0ec933fd1ee1b6825debda2cfce75b509a4e4539",
+  "prospective_dev/retrain_10000/DR_Memoryless_141_seed_103.npz": "b92e4b0704e1c5b8c95927a654ccc17441d640758fa717cd9da6cc1e3df112fd",
+  "prospective_dev/retrain_10000/DR_Memoryless_141_seed_104.npz": "a918aab7a0a8796dd22d660177849e329b3cc370be668382c2e22635e339d843",
+  "prospective_dev/retrain_10000/DR_Memoryless_141_seed_105.npz": "c5410487bec8a39da68b8402efbbe4361540b7fbd33743313be1f8f3238f9707"
+ },
  "protocol": {
   "study": "NeuroLight-AI prospective confirmation v3 (study phase 2)",
   "status": "DRAFT",
-  "note": "Set status to FROZEN only after review. Earlier confirmations (3000-3049, 4000-4049, 6000-6049) remain as historical results and are not re-run.",
+  "historical_record": {
+   "note": "Phase-1 confirmations C0 (3000-3049), A (4000-4049) and B (6000-6049), their archives under archived_results/, and the manuscript drafts are historical and are neither re-run nor overwritten. V3 writes only to results_v3/.",
+   "phase1_git_tag": "phase1-historical"
+  },
   "confirmation": {
    "plant_seeds": "7000-7049",
    "plant_seeds_range": [
@@ -14,8 +35,13 @@
    "rule": "Untouched until FROZEN; spent after the first completed run regardless of outcome."
   },
   "development_seeds": {
-   "tuning": "5000-5099 (even seeds used for grids)",
-   "evaluation": "5100-5149"
+   "tuning": "5000-5099 (even seeds used in grids)",
+   "evaluation": "5100-5149",
+   "rehearsal": "5100-5149",
+   "rehearsal_range": [
+    5100,
+    5150
+   ]
   },
   "audit_smoke_plant": 5100,
   "sensitivities": [
@@ -34,6 +60,23 @@
    1.0,
    2.0
   ],
+  "conditions": {
+   "count": 11,
+   "keys": [
+    "s0.50",
+    "s0.60",
+    "s0.70",
+    "s0.80",
+    "s0.90",
+    "s1.00",
+    "s1.10",
+    "s1.20",
+    "s1.40",
+    "n1.0",
+    "n2.0"
+   ],
+   "definition": "9 sensitivities at sigma 0.5, plus sigma 1.0 and 2.0 at s 1.0. s 0.5 lies outside the 0.6-1.4 training range."
+  },
   "chronology_conditions": [
    "s0.60",
    "s0.80"
@@ -50,7 +93,7 @@
    },
    "PI_tuned": {
     "kp": 0.02,
-    "ki": 0.25,
+    "ki": 0.2,
     "kt": 0.0
    },
    "PI_tuned_AW": {
@@ -58,51 +101,51 @@
     "ki": 0.25,
     "kt": 0.5
    },
-   "PI_oracle": {
+   "PI_sens_ref": {
     "s0.50": {
-     "kp": 0.06,
-     "ki": 0.1,
-     "kt": 0.0
+     "kp": 0.03,
+     "ki": 0.5,
+     "kt": 0.5
     },
     "s0.60": {
      "kp": 0.03,
-     "ki": 0.3,
-     "kt": 0.0
+     "ki": 0.4,
+     "kt": 0.5
     },
     "s0.70": {
-     "kp": 0.03,
-     "ki": 0.3,
-     "kt": 0.0
+     "kp": 0.02,
+     "ki": 0.4,
+     "kt": 1.0
     },
     "s0.80": {
      "kp": 0.02,
-     "ki": 0.25,
-     "kt": 0.0
+     "ki": 0.3,
+     "kt": 0.1
     },
     "s0.90": {
      "kp": 0.02,
      "ki": 0.25,
-     "kt": 0.0
+     "kt": 0.1
     },
     "s1.00": {
      "kp": 0.02,
      "ki": 0.25,
-     "kt": 0.0
+     "kt": 0.5
     },
     "s1.10": {
      "kp": 0.02,
      "ki": 0.2,
-     "kt": 0.0
+     "kt": 0.2
     },
     "s1.20": {
      "kp": 0.015,
      "ki": 0.2,
-     "kt": 0.0
+     "kt": 0.5
     },
     "s1.40": {
      "kp": 0.015,
      "ki": 0.15,
-     "kt": 0.0
+     "kt": 0.1
     }
    },
    "ARX_fixed": {
@@ -114,10 +157,14 @@
     "p_scale": 1000000000.0
    }
   },
+  "controller_notes": {
+   "PI_sens_ref": "Sensitivity-informed tuned PI reference: per-sensitivity best member of the searched PI family. Uses knowledge of s, so it is not deployable; it is the best PI this search found, not an upper bound on classical control. Not hypothesis-tested.",
+   "ARX_fixed": "OLS prior; online update disabled (lam and p_scale unused)."
+  },
   "arx_prior": {
    "path": "prospective_dev/arx10_prior.npz",
    "sha256": "7afd3e874bfccd7ebb56ab7008c964068a7a91dd9bebdf512be7e68f767988b8",
-   "source": "OLS on training plants 2000-2099 (identical to Experiment B prior)"
+   "source": "OLS on training plants 2000-2099 (identical to the Experiment B prior)"
   },
   "models": {
    "DR_H4": [
@@ -166,10 +213,11 @@
    ]
   },
   "equivalence_margin_hz": 0.25,
+  "equivalence_margin_justification": "Carried over unchanged from the Experiment B protocol (locked 8 Oct 2026, before its confirmation). It is about 15% of DR-H4 RMSE at s 0.6 in every phase-1 confirmation and was not re-chosen after phase-2 development data.",
   "statistics": {
    "unit": "plant",
    "learned_model_reduction": "mean over five initialisations within plant before differencing",
-   "interval": "BCa bootstrap of mean paired plant-level difference",
+   "interval": "BCa bootstrap of the mean paired plant-level difference",
    "resamples": 10000
   },
   "analysis": {
@@ -180,37 +228,67 @@
      "s0.60",
      "s0.80"
     ],
+    "n_comparisons": 2,
     "alpha_each": 0.025,
-    "multiplicity": "Bonferroni over 2 conditions",
-    "decision": "supported iff lower bound > 0 at both conditions"
+    "multiplicity": "Bonferroni over 2",
+    "decision": "supported iff the lower bound is > 0 at both conditions"
    },
    "P2": {
     "role": "PRIMARY - linear sufficiency",
     "contrast": "ARX_fixed - DR_H4",
+    "comparator": "fixed (non-adaptive) ARX",
     "conditions": [
      "s0.60"
     ],
+    "n_comparisons": 1,
     "alpha": 0.05,
-    "decision": "supported iff whole interval within +/-0.25 Hz"
+    "decision": "supported iff the whole interval lies within +/-0.25 Hz"
    },
    "B1": {
     "role": "MANDATORY BENCHMARK - PI robustness",
     "contrast": "{PI_tuned, PI_tuned_AW} - DR_H4",
-    "conditions": "all 9 sensitivities + 2 noise conditions",
+    "conditions": [
+     "s0.50",
+     "s0.60",
+     "s0.70",
+     "s0.80",
+     "s0.90",
+     "s1.00",
+     "s1.10",
+     "s1.20",
+     "s1.40",
+     "n1.0",
+     "n2.0"
+    ],
+    "n_comparisons": 22,
     "alpha_each": 0.002273,
-    "multiplicity": "Bonferroni over 22 intervals (simultaneous 95%)",
-    "decision": "none; no direction assumed"
+    "multiplicity": "Bonferroni over 22 (simultaneous 95%)",
+    "decision": "none; no direction assumed; all reported"
    },
    "S1": {
     "role": "SECONDARY - adaptation utility",
     "contrast": "ARX_RLS - ARX_fixed",
-    "conditions": "all 11",
+    "conditions": [
+     "s0.50",
+     "s0.60",
+     "s0.70",
+     "s0.80",
+     "s0.90",
+     "s1.00",
+     "s1.10",
+     "s1.20",
+     "s1.40",
+     "n1.0",
+     "n2.0"
+    ],
+    "n_comparisons": 11,
     "alpha_each": 0.004545,
     "decision": "none; exploratory (no minimum effect justified)"
    },
    "S2": {
     "role": "SECONDARY - regime dependence",
-    "output": "mean RMSE and ranking per condition; crossovers reported descriptively"
+    "n_comparisons": 0,
+    "output": "mean RMSE and ranking per condition (PI_sens_ref shown, excluded from ranking); crossovers described, none assumed"
    },
    "S3": {
     "role": "SECONDARY - chronology",
@@ -219,23 +297,96 @@
      "s0.60",
      "s0.80"
     ],
+    "n_comparisons": 2,
     "alpha_each": 0.025,
-    "note": "plant-level, replaces the cell-level C0 interval"
+    "note": "plant-level; replaces the cell-level C0 interval"
+   },
+   "S4": {
+    "role": "SECONDARY - adaptive linear vs neural",
+    "contrast": "ARX_RLS - DR_H4",
+    "conditions": [
+     "s0.50",
+     "s0.60",
+     "s0.70",
+     "s0.80",
+     "s0.90",
+     "s1.00",
+     "s1.10",
+     "s1.20",
+     "s1.40",
+     "n1.0",
+     "n2.0"
+    ],
+    "n_comparisons": 11,
+    "alpha_each": 0.004545,
+    "decision": "none; exploratory"
    }
+  },
+  "comparison_count": {
+   "conditions": 11,
+   "primary": 3,
+   "benchmark": 22,
+   "secondary_intervals": 24,
+   "note": "Each family is corrected only within itself. Conditions (11) are not comparisons."
+  },
+  "runtime_estimate": {
+   "laptop_seconds_per_plant_condition": 1.4,
+   "plant_conditions": 550,
+   "estimate_minutes": "15-20 on the laptop (resumable 165-s chunks)"
   },
   "development_summary": {
    "PI_tuned": {
     "kp": 0.02,
-    "ki": 0.25,
+    "ki": 0.2,
     "kt": 0.0,
-    "_dev_mean_tuning_rmse": 1.643939866719723
+    "mean_tuning_rmse": 1.6452,
+    "by_s": [
+     4.322,
+     1.875,
+     1.499,
+     1.262,
+     1.136,
+     1.08,
+     1.087,
+     1.152,
+     1.393
+    ],
+    "runner_up": {
+     "gain": [
+      0.02,
+      0.25,
+      0.0
+     ],
+     "mean_tuning_rmse": 1.6475
+    }
    },
    "PI_tuned_AW": {
     "kp": 0.02,
     "ki": 0.25,
     "kt": 0.5,
-    "_dev_mean_tuning_rmse": 1.4633424666976806,
-    "_form": "back-calculation anti-windup"
+    "mean_tuning_rmse": 1.4521,
+    "by_s": [
+     2.871,
+     1.67,
+     1.312,
+     1.138,
+     1.069,
+     1.072,
+     1.137,
+     1.239,
+     1.56
+    ]
+   },
+   "PI_sens_ref_by_s": {
+    "s0.50": 2.703,
+    "s0.60": 1.481,
+    "s0.70": 1.244,
+    "s0.80": 1.116,
+    "s0.90": 1.063,
+    "s1.00": 1.072,
+    "s1.10": 1.079,
+    "s1.20": 1.058,
+    "s1.40": 1.075
    },
    "ARX_RLS": {
     "p_scale": 1000000000.0,
@@ -302,12 +453,13 @@
    ]
   },
   "training_notes": [
-   "DR_H4 seed 103 showed a transient validation spike (3.84 Hz) at epoch 10000; the best-validation checkpoint (epoch 9986, 1.393 Hz) is used.",
-   "Retraining was run on the laptop in resumable 165-s chunks (Adam state checkpointed); maths identical to experiment_a.MLP.fit apart from the 10000-epoch budget."
+   "DR_H4 seed 103 had a transient validation spike (3.84 Hz) at epoch 10000; its best-validation checkpoint (epoch 9986, 1.393 Hz) is used.",
+   "Retraining ran on the laptop in resumable 165-s chunks with Adam state checkpointed; maths identical to experiment_a.MLP.fit except the 10000-epoch budget."
   ],
   "flags": [
-   "ARX_RLS.p_scale=1e+09 is the largest tested; objective is a plateau (see arx_plateau), so not extended further",
-   "best epoch >= 9950 for ['DR_H4_101', 'DR_H4_103', 'DR_Memoryless_141_102']; validation gain over last 1000 epochs (Hz): {'DR_H4_101': 0.006, 'DR_H4_103': 0.0054, 'DR_Memoryless_141_102': 0.0027} - treated as plateau"
+   "PI_sens_ref[s0.70].kt=1 is on the grid edge [0, 1]",
+   "ARX_RLS.p_scale=1e+09 is the largest tested; the objective is a plateau (6 configs within 0.02 Hz of best, see arx_plateau), so the grid was not extended",
+   "best epoch >= 9950 for ['DR_H4_101', 'DR_H4_103', 'DR_Memoryless_141_102']; validation gain over the last 1000 epochs {'DR_H4_101': 0.006, 'DR_H4_103': 0.0054, 'DR_Memoryless_141_102': 0.0027} Hz - treated as converged in practice"
   ],
   "prohibitions": [
    "No tuning or model selection on 7000-7049",
@@ -326,11 +478,11 @@
     "slew": 0.02998402424570292
    },
    "PI_tuned": {
-    "rmse": 3.6764832003635193,
-    "rmse_t50": 4.148043462236027,
-    "mean_intensity": 0.68624432818876,
+    "rmse": 3.6193078134946703,
+    "rmse_t50": 4.048379336878084,
+    "mean_intensity": 0.6840682478831243,
     "frac_bound": 0.17777777777777778,
-    "slew": 0.03508505204312832
+    "slew": 0.032034071073645747
    },
    "PI_tuned_AW": {
     "rmse": 2.305472686924005,
@@ -339,12 +491,12 @@
     "frac_bound": 0.17222222222222222,
     "slew": 0.03746510686678952
    },
-   "PI_oracle": {
-    "rmse": 2.7076145765585244,
-    "rmse_t50": 2.7828967831361293,
-    "mean_intensity": 0.6689536949646849,
-    "frac_bound": 0.19444444444444445,
-    "slew": 0.09891689393661923
+   "PI_sens_ref": {
+    "rmse": 2.05735616231477,
+    "rmse_t50": 2.263781815191801,
+    "mean_intensity": 0.6767209110852676,
+    "frac_bound": 0.2,
+    "slew": 0.06181389775258198
    },
    "ARX_fixed": {
     "rmse": 2.2677557400282007,
@@ -452,11 +604,11 @@
     "slew": 0.036101360851608456
    },
    "PI_tuned": {
-    "rmse": 4.045184486098107,
-    "rmse_t50": 2.9608774205133828,
-    "mean_intensity": 0.19407606965022728,
+    "rmse": 3.9808834783872142,
+    "rmse_t50": 2.8349561598812065,
+    "mean_intensity": 0.19124484874212527,
     "frac_bound": 0.35555555555555557,
-    "slew": 0.03839857165610951
+    "slew": 0.03466060885194742
    },
    "PI_tuned_AW": {
     "rmse": 2.5607329363563607,

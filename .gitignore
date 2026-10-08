@@ -5,3 +5,4 @@ __pycache__/
 prospective_dev/retrain_data_cache.npz
 prospective_dev/retrain_*/ckpt_*
 results_v3/confirmation_v3_raw_partial.json
+results_v3/dev_rehearsal_raw_partial.json

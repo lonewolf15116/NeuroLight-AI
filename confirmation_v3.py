@@ -5,7 +5,9 @@ ALL parameters are read from PROTOCOL_V3.json. Nothing in this file may be tuned
 Usage
   python confirmation_v3.py --audit-only   # hashes, prior check, smoke test on ONE development plant (5100).
                                            # Does NOT instantiate any confirmation plant.
-  python confirmation_v3.py [--budget S]   # one-shot confirmation, resumable per plant-condition; plants in protocol["confirmation"]["plant_seeds"]
+  python confirmation_v3.py --dev-rehearsal [--budget S]   # full pipeline on development plants 5100-5149.
+  python confirmation_v3.py [--budget S]   # one-shot confirmation (requires FROZEN + matching MANIFEST_V3.json),
+                                           # resumable per plant-condition; plants in protocol["confirmation"]["plant_seeds"]
                                            # are SPENT after the first completed run, regardless of outcome.
 
 Simulator: the original scalar experiment.Circuit via v02_robustness.ShiftedCircuit (exact, per-plant RNG),
@@ -134,8 +136,8 @@ def run_plant(seed, cond, P, models, prior):
     rec["PI_legacy"] = run_pi(seed, s, nz, **C["PI_legacy"])
     rec["PI_tuned"] = run_pi(seed, s, nz, **C["PI_tuned"])
     rec["PI_tuned_AW"] = run_pi(seed, s, nz, **C["PI_tuned_AW"])
-    if cond["key"] in C["PI_oracle"]:
-        rec["PI_oracle"] = run_pi(seed, s, nz, **C["PI_oracle"][cond["key"]])
+    if cond["key"] in C["PI_sens_ref"]:   # sensitivity-informed tuned PI reference (uses knowledge of s)
+        rec["PI_sens_ref"] = run_pi(seed, s, nz, **C["PI_sens_ref"][cond["key"]])
     rec["ARX_fixed"] = run_arx(seed, s, nz, prior["w0"], prior["cov0"], adapt=False, **C["ARX_fixed"])
     rec["ARX_RLS"] = run_arx(seed, s, nz, prior["w0"], prior["cov0"], adapt=True, **C["ARX_RLS"])
     rec["DR_H4"] = [run_h4(m, seed, s, nz) for m in models["DR_H4"]]
@@ -167,12 +169,13 @@ def analyse(raw, P):
     out["B1_PI_benchmark"] = [ci(pi, "DR_H4", c, A["B1"]["alpha_each"], "B1") for pi in ("PI_tuned", "PI_tuned_AW") for c in allc]
     out["S1_adaptation"] = [ci("ARX_RLS", "ARX_fixed", c, A["S1"]["alpha_each"], "S1") for c in allc]
     out["S3_chronology"] = [ci("DR_H4_jointshuffle", "DR_H4", c, A["S3"]["alpha_each"], "S3") for c in P["chronology_conditions"]]
+    out["S4_adaptive_linear_vs_H4"] = [ci("ARX_RLS", "DR_H4", c, A["S4"]["alpha_each"], "S4") for c in allc]
     # S2 regime dependence: mean RMSE table and per-condition ranking (descriptive)
-    names = ["PI_legacy", "PI_tuned", "PI_tuned_AW", "PI_oracle", "ARX_fixed", "ARX_RLS", "DR_H4", "DR_Mem141"]
+    names = ["PI_legacy", "PI_tuned", "PI_tuned_AW", "PI_sens_ref", "ARX_fixed", "ARX_RLS", "DR_H4", "DR_Mem141"]
     tab = {}
     for c in allc:
         tab[c] = {n: float(np.mean([plant_value(r, n) for r in raw[c]])) for n in names if n in raw[c][0]}
-        tab[c]["_ranking_excl_oracle"] = sorted([n for n in tab[c] if n != "PI_oracle"], key=lambda n: tab[c][n])
+        tab[c]["_ranking_excl_sens_ref"] = sorted([n for n in tab[c] if n != "PI_sens_ref"], key=lambda n: tab[c][n])
     out["S2_mean_rmse_and_ranking"] = tab
     # decisions
     P1 = out["P1_history"]; P2 = out["P2_linear_sufficiency"][0]; m = P["equivalence_margin_hz"]
@@ -180,53 +183,88 @@ def analyse(raw, P):
         "P1_supported": all(r["ci"][0] > 0 for r in P1),
         "P2_supported": bool(P2["ci"][0] >= -m and P2["ci"][1] <= m),
         "B1": "reported, no directional hypothesis",
-        "S1_S2_S3": "secondary/exploratory; reported with stated alpha, no decision rule",
+        "S1_S4": "secondary/exploratory; reported with stated alpha, no decision rule",
     }
     return out
 
 
-def main(audit_only, budget=float("inf")):
+MANIFEST = ROOT / "MANIFEST_V3.json"
+
+
+def manifest_files(P):
+    """Every file whose content determines the confirmation result."""
+    files = ["confirmation_v3.py", "PROTOCOL_V3.json", "v02_robustness.py", "experiment.py", "experiment_b_final.py",
+             P["arx_prior"]["path"]] + [f["path"] for v in P["models"].values() for f in v]
+    return {f: sha256(ROOT / f) for f in files}
+
+
+def run_block(seeds, P, models, prior, partial, budget):
+    raw = json.loads(partial.read_text()) if partial.exists() else {}
+    t0 = time.time(); total = len(seeds) * len(conditions(P))
+    for cond in conditions(P):
+        lst = raw.setdefault(cond["key"], [])
+        while len(lst) < len(seeds):
+            if time.time() - t0 > budget:
+                partial.write_text(json.dumps(raw))
+                print(f"BUDGET REACHED - resumable; {sum(len(v) for v in raw.values())}/{total} plant-conditions done", flush=True)
+                return None
+            lst.append(run_plant(seeds[len(lst)], cond, P, models, prior))
+        partial.write_text(json.dumps(raw)); print(cond["key"], "complete", flush=True)
+    return raw
+
+
+def main(mode, budget=float("inf")):
     P = json.loads((ROOT / "PROTOCOL_V3.json").read_text())
     models = load_models(P["models"])
     pz = ROOT / P["arx_prior"]["path"]
     if sha256(pz) != P["arx_prior"]["sha256"]: raise RuntimeError("ARX prior hash mismatch")
     prior = dict(np.load(pz))
     script_hash = sha256(Path(__file__))
-    print("protocol status:", P["status"]); print("script sha256:", script_hash)
+    print("mode:", mode, "| protocol status:", P["status"], "| script sha256:", script_hash)
     print("models:", {k: len(v) for k, v in models.items()}, "conditions:", [c["key"] for c in conditions(P)])
-    if audit_only:
+    outdir = ROOT / "results_v3"; outdir.mkdir(exist_ok=True)
+
+    if mode == "audit":
         t0 = time.time(); smoke = {}
         for cond in conditions(P)[:1] + conditions(P)[-1:]:
             smoke[cond["key"]] = run_plant(P["audit_smoke_plant"], cond, P, models, prior)
         print("SMOKE (development plant", P["audit_smoke_plant"], ") seconds:", round(time.time() - t0, 1))
         for k, r in smoke.items():
             print(k, {n: round(plant_value(r, n), 3) for n in r})
-        (ROOT / "results_v3").mkdir(exist_ok=True)
-        (ROOT / "results_v3" / "audit_v3.json").write_text(json.dumps({"script_sha256": script_hash, "protocol": P, "smoke": smoke}, indent=1))
-        print("AUDIT ONLY - no confirmation plant instantiated.")
-        return
+        (outdir / "audit_v3.json").write_text(json.dumps({"script_sha256": script_hash, "file_hashes": manifest_files(P),
+                                                          "protocol": P, "smoke": smoke}, indent=1))
+        print("AUDIT ONLY - no confirmation plant instantiated."); return
+
+    if mode == "rehearsal":   # full pipeline on DEVELOPMENT evaluation plants; allowed while DRAFT
+        seeds = list(range(*P["development_seeds"]["rehearsal_range"]))
+        raw = run_block(seeds, P, models, prior, outdir / "dev_rehearsal_raw_partial.json", budget)
+        if raw is None: return
+        res = {"note": "DEVELOPMENT REHEARSAL on plants %s; not confirmatory." % P["development_seeds"]["rehearsal"],
+               "script_sha256": script_hash, "file_hashes": manifest_files(P), "analysis": analyse(raw, P), "raw": raw}
+        (outdir / "dev_rehearsal_results.json").write_text(json.dumps(res, indent=1))
+        print("REHEARSAL COMPLETE", json.dumps(res["analysis"]["decisions"])); return
+
+    # ---- confirmation
     if P["status"] != "FROZEN":
         raise SystemExit("Protocol status is not FROZEN; refusing to touch confirmation plants.")
+    if not MANIFEST.exists():
+        raise SystemExit("MANIFEST_V3.json missing; run freeze_v3.py first.")
+    man = json.loads(MANIFEST.read_text()); now = manifest_files(P)
+    bad = [f for f in set(man["files"]) | set(now) if man["files"].get(f) != now.get(f)]
+    if bad: raise SystemExit(f"Files differ from frozen manifest: {bad}")
     seeds = list(range(*P["confirmation"]["plant_seeds_range"]))
-    outdir = ROOT / "results_v3"; outdir.mkdir(exist_ok=True)
-    part = outdir / "confirmation_v3_raw_partial.json"
-    raw = json.loads(part.read_text()) if part.exists() else {}
-    t0 = time.time()
-    for cond in conditions(P):
-        lst = raw.setdefault(cond["key"], [])
-        while len(lst) < len(seeds):
-            if time.time() - t0 > budget:
-                part.write_text(json.dumps(raw)); n = sum(len(v) for v in raw.values())
-                print(f"BUDGET REACHED - resumable; {n}/{len(seeds) * len(conditions(P))} plant-conditions done", flush=True); return
-            lst.append(run_plant(seeds[len(lst)], cond, P, models, prior))
-        part.write_text(json.dumps(raw)); print(cond["key"], "complete", flush=True)
-    res = {"warning": f"Plants {P['confirmation']['plant_seeds']} are SPENT.", "script_sha256": script_hash,
+    raw = run_block(seeds, P, models, prior, outdir / "confirmation_v3_raw_partial.json", budget)
+    if raw is None: return
+    res = {"warning": f"Plants {P['confirmation']['plant_seeds']} are SPENT.", "manifest": man,
            "protocol": P, "analysis": analyse(raw, P), "raw": raw}
     (outdir / "confirmation_v3_results.json").write_text(json.dumps(res, indent=1))
     print(json.dumps(res["analysis"]["decisions"], indent=1)); print("CONFIRMATION COMPLETE")
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(); ap.add_argument("--audit-only", action="store_true")
-    ap.add_argument("--budget", type=float, default=float("inf"), help="seconds per invocation; progress is saved per plant and resumed")
-    a = ap.parse_args(); main(a.audit_only, a.budget)
+    ap = argparse.ArgumentParser()
+    g = ap.add_mutually_exclusive_group(); g.add_argument("--audit-only", action="store_true")
+    g.add_argument("--dev-rehearsal", action="store_true", help="run the full pipeline on development plants")
+    ap.add_argument("--budget", type=float, default=float("inf"), help="seconds per invocation; progress saved per plant and resumed")
+    a = ap.parse_args()
+    main("audit" if a.audit_only else "rehearsal" if a.dev_rehearsal else "confirm", a.budget)
