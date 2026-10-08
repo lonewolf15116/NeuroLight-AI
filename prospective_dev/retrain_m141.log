@@ -1,0 +1,26 @@
+budget reached DR_Memoryless_141_101 1923
+budget reached DR_Memoryless_141_101 3854
+budget reached DR_Memoryless_141_101 5774
+budget reached DR_Memoryless_141_101 7621
+budget reached DR_Memoryless_141_101 9455
+DONE DR_Memoryless_141_101 best 9888 val 2.6863 49 s
+budget reached DR_Memoryless_141_102 1293
+budget reached DR_Memoryless_141_102 3143
+budget reached DR_Memoryless_141_102 4987
+budget reached DR_Memoryless_141_102 6811
+budget reached DR_Memoryless_141_102 8630
+DONE DR_Memoryless_141_102 best 10000 val 2.6741 111 s
+budget reached DR_Memoryless_141_103 954
+budget reached DR_Memoryless_141_103 3828
+budget reached DR_Memoryless_141_103 6868
+budget reached DR_Memoryless_141_103 9946
+DONE DR_Memoryless_141_103 best 8782 val 2.6691 3 s
+budget reached DR_Memoryless_141_104 3144
+budget reached DR_Memoryless_141_104 6307
+budget reached DR_Memoryless_141_104 9389
+DONE DR_Memoryless_141_104 best 8338 val 2.6767 34 s
+budget reached DR_Memoryless_141_105 2420
+budget reached DR_Memoryless_141_105 5384
+budget reached DR_Memoryless_141_105 8419
+DONE DR_Memoryless_141_105 best 9922 val 2.6706 83 s
+ALL DONE DR_Memoryless_141

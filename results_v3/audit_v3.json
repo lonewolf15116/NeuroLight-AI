@@ -1,0 +1,566 @@
+{
+ "script_sha256": "367de99ef9948e11c53aa25be9e9f6a87d06595d3d4a80b71791a65e6dd2baab",
+ "protocol": {
+  "study": "NeuroLight-AI prospective confirmation v3 (study phase 2)",
+  "status": "DRAFT",
+  "note": "Set status to FROZEN only after review. Earlier confirmations (3000-3049, 4000-4049, 6000-6049) remain as historical results and are not re-run.",
+  "confirmation": {
+   "plant_seeds": "7000-7049",
+   "plant_seeds_range": [
+    7000,
+    7050
+   ],
+   "n_plants": 50,
+   "rule": "Untouched until FROZEN; spent after the first completed run regardless of outcome."
+  },
+  "development_seeds": {
+   "tuning": "5000-5099 (even seeds used for grids)",
+   "evaluation": "5100-5149"
+  },
+  "audit_smoke_plant": 5100,
+  "sensitivities": [
+   0.5,
+   0.6,
+   0.7,
+   0.8,
+   0.9,
+   1.0,
+   1.1,
+   1.2,
+   1.4
+  ],
+  "noise_nominal": 0.5,
+  "noise_conditions": [
+   1.0,
+   2.0
+  ],
+  "chronology_conditions": [
+   "s0.60",
+   "s0.80"
+  ],
+  "endpoint": {
+   "primary": "tracking RMSE (Hz) over all 180 steps",
+   "secondary": "RMSE steps 50-179; action metrics"
+  },
+  "controllers": {
+   "PI_legacy": {
+    "kp": 0.02,
+    "ki": 0.15,
+    "kt": 0.0
+   },
+   "PI_tuned": {
+    "kp": 0.02,
+    "ki": 0.25,
+    "kt": 0.0
+   },
+   "PI_tuned_AW": {
+    "kp": 0.02,
+    "ki": 0.25,
+    "kt": 0.5
+   },
+   "PI_oracle": {
+    "s0.50": {
+     "kp": 0.06,
+     "ki": 0.1,
+     "kt": 0.0
+    },
+    "s0.60": {
+     "kp": 0.03,
+     "ki": 0.3,
+     "kt": 0.0
+    },
+    "s0.70": {
+     "kp": 0.03,
+     "ki": 0.3,
+     "kt": 0.0
+    },
+    "s0.80": {
+     "kp": 0.02,
+     "ki": 0.25,
+     "kt": 0.0
+    },
+    "s0.90": {
+     "kp": 0.02,
+     "ki": 0.25,
+     "kt": 0.0
+    },
+    "s1.00": {
+     "kp": 0.02,
+     "ki": 0.25,
+     "kt": 0.0
+    },
+    "s1.10": {
+     "kp": 0.02,
+     "ki": 0.2,
+     "kt": 0.0
+    },
+    "s1.20": {
+     "kp": 0.015,
+     "ki": 0.2,
+     "kt": 0.0
+    },
+    "s1.40": {
+     "kp": 0.015,
+     "ki": 0.15,
+     "kt": 0.0
+    }
+   },
+   "ARX_fixed": {
+    "lam": 1.0,
+    "p_scale": 1.0
+   },
+   "ARX_RLS": {
+    "lam": 0.98,
+    "p_scale": 1000000000.0
+   }
+  },
+  "arx_prior": {
+   "path": "prospective_dev/arx10_prior.npz",
+   "sha256": "7afd3e874bfccd7ebb56ab7008c964068a7a91dd9bebdf512be7e68f767988b8",
+   "source": "OLS on training plants 2000-2099 (identical to Experiment B prior)"
+  },
+  "models": {
+   "DR_H4": [
+    {
+     "path": "prospective_dev/retrain_10000/DR_H4_seed_101.npz",
+     "sha256": "3b7e3e71936828d21956f1ecacfc6c1a14203609a52f3ad91af06bb4cbd0f0b2"
+    },
+    {
+     "path": "prospective_dev/retrain_10000/DR_H4_seed_102.npz",
+     "sha256": "2ccb8eed99d348a6c141a505b8f200dc955ca751ce5b0de6e62a85c3ca83240d"
+    },
+    {
+     "path": "prospective_dev/retrain_10000/DR_H4_seed_103.npz",
+     "sha256": "f3d1e1d60bfd9871bdbb082c21afb280086b663b86ce0b12a2e8e5e9cb3e6fc7"
+    },
+    {
+     "path": "prospective_dev/retrain_10000/DR_H4_seed_104.npz",
+     "sha256": "4d1b840d2a2d32e17312693e25f0410cd21bfdaec54927bbf02560faa9216d1c"
+    },
+    {
+     "path": "prospective_dev/retrain_10000/DR_H4_seed_105.npz",
+     "sha256": "2f871c484446c4d6befac0bfea8fcebc017f473ddf80e0fe12b4982965fcadbf"
+    }
+   ],
+   "DR_Mem141": [
+    {
+     "path": "prospective_dev/retrain_10000/DR_Memoryless_141_seed_101.npz",
+     "sha256": "376321dfc7f775ef7b6a3024eaf11f4af673d6eda9cfda82b5d53fa6648fe226"
+    },
+    {
+     "path": "prospective_dev/retrain_10000/DR_Memoryless_141_seed_102.npz",
+     "sha256": "ba8f727b1b38a42efff8b16a0ec933fd1ee1b6825debda2cfce75b509a4e4539"
+    },
+    {
+     "path": "prospective_dev/retrain_10000/DR_Memoryless_141_seed_103.npz",
+     "sha256": "b92e4b0704e1c5b8c95927a654ccc17441d640758fa717cd9da6cc1e3df112fd"
+    },
+    {
+     "path": "prospective_dev/retrain_10000/DR_Memoryless_141_seed_104.npz",
+     "sha256": "a918aab7a0a8796dd22d660177849e329b3cc370be668382c2e22635e339d843"
+    },
+    {
+     "path": "prospective_dev/retrain_10000/DR_Memoryless_141_seed_105.npz",
+     "sha256": "c5410487bec8a39da68b8402efbbe4361540b7fbd33743313be1f8f3238f9707"
+    }
+   ]
+  },
+  "equivalence_margin_hz": 0.25,
+  "statistics": {
+   "unit": "plant",
+   "learned_model_reduction": "mean over five initialisations within plant before differencing",
+   "interval": "BCa bootstrap of mean paired plant-level difference",
+   "resamples": 10000
+  },
+  "analysis": {
+   "P1": {
+    "role": "PRIMARY - history utility",
+    "contrast": "DR_Mem141 - DR_H4",
+    "conditions": [
+     "s0.60",
+     "s0.80"
+    ],
+    "alpha_each": 0.025,
+    "multiplicity": "Bonferroni over 2 conditions",
+    "decision": "supported iff lower bound > 0 at both conditions"
+   },
+   "P2": {
+    "role": "PRIMARY - linear sufficiency",
+    "contrast": "ARX_fixed - DR_H4",
+    "conditions": [
+     "s0.60"
+    ],
+    "alpha": 0.05,
+    "decision": "supported iff whole interval within +/-0.25 Hz"
+   },
+   "B1": {
+    "role": "MANDATORY BENCHMARK - PI robustness",
+    "contrast": "{PI_tuned, PI_tuned_AW} - DR_H4",
+    "conditions": "all 9 sensitivities + 2 noise conditions",
+    "alpha_each": 0.002273,
+    "multiplicity": "Bonferroni over 22 intervals (simultaneous 95%)",
+    "decision": "none; no direction assumed"
+   },
+   "S1": {
+    "role": "SECONDARY - adaptation utility",
+    "contrast": "ARX_RLS - ARX_fixed",
+    "conditions": "all 11",
+    "alpha_each": 0.004545,
+    "decision": "none; exploratory (no minimum effect justified)"
+   },
+   "S2": {
+    "role": "SECONDARY - regime dependence",
+    "output": "mean RMSE and ranking per condition; crossovers reported descriptively"
+   },
+   "S3": {
+    "role": "SECONDARY - chronology",
+    "contrast": "DR_H4_jointshuffle - DR_H4",
+    "conditions": [
+     "s0.60",
+     "s0.80"
+    ],
+    "alpha_each": 0.025,
+    "note": "plant-level, replaces the cell-level C0 interval"
+   }
+  },
+  "development_summary": {
+   "PI_tuned": {
+    "kp": 0.02,
+    "ki": 0.25,
+    "kt": 0.0,
+    "_dev_mean_tuning_rmse": 1.643939866719723
+   },
+   "PI_tuned_AW": {
+    "kp": 0.02,
+    "ki": 0.25,
+    "kt": 0.5,
+    "_dev_mean_tuning_rmse": 1.4633424666976806,
+    "_form": "back-calculation anti-windup"
+   },
+   "ARX_RLS": {
+    "p_scale": 1000000000.0,
+    "lambda": 0.98,
+    "mean_rmse": 1.3449734367941053
+   },
+   "retrained_best_epochs": {
+    "DR_H4_101": 10000,
+    "DR_H4_102": 9934,
+    "DR_H4_103": 9986,
+    "DR_H4_104": 9898,
+    "DR_H4_105": 9825,
+    "DR_Memoryless_141_101": 9888,
+    "DR_Memoryless_141_102": 10000,
+    "DR_Memoryless_141_103": 8782,
+    "DR_Memoryless_141_104": 8338,
+    "DR_Memoryless_141_105": 9922
+   },
+   "retrained_val_rmse_hz": {
+    "DR_H4_101": 1.39,
+    "DR_H4_102": 1.4046,
+    "DR_H4_103": 1.3934,
+    "DR_H4_104": 1.3853,
+    "DR_H4_105": 1.3978,
+    "DR_Memoryless_141_101": 2.6863,
+    "DR_Memoryless_141_102": 2.6741,
+    "DR_Memoryless_141_103": 2.6691,
+    "DR_Memoryless_141_104": 2.6767,
+    "DR_Memoryless_141_105": 2.6706
+   }
+  },
+  "arx_plateau": {
+   "configs_within_0.02Hz_of_best": [
+    [
+     10000000.0,
+     0.95,
+     1.3548
+    ],
+    [
+     10000000.0,
+     0.98,
+     1.361
+    ],
+    [
+     100000000.0,
+     0.95,
+     1.3536
+    ],
+    [
+     100000000.0,
+     0.98,
+     1.3476
+    ],
+    [
+     1000000000.0,
+     0.95,
+     1.3592
+    ],
+    [
+     1000000000.0,
+     0.98,
+     1.345
+    ]
+   ]
+  },
+  "training_notes": [
+   "DR_H4 seed 103 showed a transient validation spike (3.84 Hz) at epoch 10000; the best-validation checkpoint (epoch 9986, 1.393 Hz) is used.",
+   "Retraining was run on the laptop in resumable 165-s chunks (Adam state checkpointed); maths identical to experiment_a.MLP.fit apart from the 10000-epoch budget."
+  ],
+  "flags": [
+   "ARX_RLS.p_scale=1e+09 is the largest tested; objective is a plateau (see arx_plateau), so not extended further",
+   "best epoch >= 9950 for ['DR_H4_101', 'DR_H4_103', 'DR_Memoryless_141_102']; validation gain over last 1000 epochs (Hz): {'DR_H4_101': 0.006, 'DR_H4_103': 0.0054, 'DR_Memoryless_141_102': 0.0027} - treated as plateau"
+  ],
+  "prohibitions": [
+   "No tuning or model selection on 7000-7049",
+   "No change of hypotheses, margins or alpha after FROZEN",
+   "No biological or clinical claim",
+   "Report all controllers and conditions regardless of outcome"
+  ]
+ },
+ "smoke": {
+  "s0.50": {
+   "PI_legacy": {
+    "rmse": 3.557947617050033,
+    "rmse_t50": 3.8635701152166853,
+    "mean_intensity": 0.6791049120235868,
+    "frac_bound": 0.15,
+    "slew": 0.02998402424570292
+   },
+   "PI_tuned": {
+    "rmse": 3.6764832003635193,
+    "rmse_t50": 4.148043462236027,
+    "mean_intensity": 0.68624432818876,
+    "frac_bound": 0.17777777777777778,
+    "slew": 0.03508505204312832
+   },
+   "PI_tuned_AW": {
+    "rmse": 2.305472686924005,
+    "rmse_t50": 2.418798174500032,
+    "mean_intensity": 0.6755957708026415,
+    "frac_bound": 0.17222222222222222,
+    "slew": 0.03746510686678952
+   },
+   "PI_oracle": {
+    "rmse": 2.7076145765585244,
+    "rmse_t50": 2.7828967831361293,
+    "mean_intensity": 0.6689536949646849,
+    "frac_bound": 0.19444444444444445,
+    "slew": 0.09891689393661923
+   },
+   "ARX_fixed": {
+    "rmse": 2.2677557400282007,
+    "rmse_t50": 2.4284793815848187,
+    "mean_intensity": 0.6595555555555556,
+    "frac_bound": 0.17777777777777778,
+    "slew": 0.06106145251396649,
+    "max_coef_drift": 0.0,
+    "pred_change_bound_hz": 0.0,
+    "innov_mae_hz": 1.1489979748224952,
+    "finite": true
+   },
+   "ARX_RLS": {
+    "rmse": 2.225346329108962,
+    "rmse_t50": 2.193371619267174,
+    "mean_intensity": 0.6761666666666667,
+    "frac_bound": 0.2,
+    "slew": 0.059553072625698325,
+    "max_coef_drift": 1.08735987615865,
+    "pred_change_bound_hz": 149.67577743154652,
+    "innov_mae_hz": 0.7383019082731108,
+    "finite": true
+   },
+   "DR_H4": [
+    {
+     "rmse": 2.2028251979513316,
+     "rmse_t50": 2.346112620904413,
+     "mean_intensity": 0.671611111111111,
+     "frac_bound": 0.23333333333333334,
+     "slew": 0.08206703910614525
+    },
+    {
+     "rmse": 2.215378198203356,
+     "rmse_t50": 2.3492612292104167,
+     "mean_intensity": 0.6717222222222223,
+     "frac_bound": 0.2111111111111111,
+     "slew": 0.08726256983240221
+    },
+    {
+     "rmse": 2.2646219777479413,
+     "rmse_t50": 2.384134577468237,
+     "mean_intensity": 0.6701111111111111,
+     "frac_bound": 0.24444444444444444,
+     "slew": 0.0829050279329609
+    },
+    {
+     "rmse": 2.2231072927742157,
+     "rmse_t50": 2.3766864604715634,
+     "mean_intensity": 0.6717222222222222,
+     "frac_bound": 0.20555555555555555,
+     "slew": 0.09966480446927373
+    },
+    {
+     "rmse": 2.213249643429346,
+     "rmse_t50": 2.36657709271651,
+     "mean_intensity": 0.6715555555555556,
+     "frac_bound": 0.2222222222222222,
+     "slew": 0.07748603351955308
+    }
+   ],
+   "DR_Mem141": [
+    {
+     "rmse": 4.8213418567915625,
+     "rmse_t50": 5.078535932452932,
+     "mean_intensity": 0.576777777777778,
+     "frac_bound": 0.03888888888888889,
+     "slew": 0.04921787709497206
+    },
+    {
+     "rmse": 4.726644381394405,
+     "rmse_t50": 5.039565239281309,
+     "mean_intensity": 0.5801666666666667,
+     "frac_bound": 0.027777777777777776,
+     "slew": 0.046648044692737436
+    },
+    {
+     "rmse": 4.909950658916186,
+     "rmse_t50": 5.2150793430189335,
+     "mean_intensity": 0.5754444444444445,
+     "frac_bound": 0.03888888888888889,
+     "slew": 0.04675977653631286
+    },
+    {
+     "rmse": 4.920439899962734,
+     "rmse_t50": 5.2300359827373155,
+     "mean_intensity": 0.5755,
+     "frac_bound": 0.027777777777777776,
+     "slew": 0.047374301675977656
+    },
+    {
+     "rmse": 4.835258690046401,
+     "rmse_t50": 5.156270464855045,
+     "mean_intensity": 0.5798333333333333,
+     "frac_bound": 0.027777777777777776,
+     "slew": 0.04860335195530727
+    }
+   ]
+  },
+  "n2.0": {
+   "PI_legacy": {
+    "rmse": 3.895101340164683,
+    "rmse_t50": 2.768570714024241,
+    "mean_intensity": 0.19146114673753098,
+    "frac_bound": 0.3055555555555556,
+    "slew": 0.036101360851608456
+   },
+   "PI_tuned": {
+    "rmse": 4.045184486098107,
+    "rmse_t50": 2.9608774205133828,
+    "mean_intensity": 0.19407606965022728,
+    "frac_bound": 0.35555555555555557,
+    "slew": 0.03839857165610951
+   },
+   "PI_tuned_AW": {
+    "rmse": 2.5607329363563607,
+    "rmse_t50": 2.2367009227901202,
+    "mean_intensity": 0.2111180173316124,
+    "frac_bound": 0.2777777777777778,
+    "slew": 0.04693147174736175
+   },
+   "ARX_fixed": {
+    "rmse": 2.5869482615365818,
+    "rmse_t50": 2.2223895634247555,
+    "mean_intensity": 0.21538888888888888,
+    "frac_bound": 0.3055555555555556,
+    "slew": 0.0758659217877095,
+    "max_coef_drift": 0.0,
+    "pred_change_bound_hz": 0.0,
+    "innov_mae_hz": 1.1934794095963492,
+    "finite": true
+   },
+   "ARX_RLS": {
+    "rmse": 2.415841515043523,
+    "rmse_t50": 1.9532511022995058,
+    "mean_intensity": 0.2137222222222222,
+    "frac_bound": 0.3277777777777778,
+    "slew": 0.0641340782122905,
+    "max_coef_drift": 0.850542246360092,
+    "pred_change_bound_hz": 113.9068104629906,
+    "innov_mae_hz": 1.0345909619065172,
+    "finite": true
+   },
+   "DR_H4": [
+    {
+     "rmse": 2.5015592705211662,
+     "rmse_t50": 2.0940872119013605,
+     "mean_intensity": 0.21466666666666667,
+     "frac_bound": 0.3111111111111111,
+     "slew": 0.06743016759776536
+    },
+    {
+     "rmse": 2.58728408685162,
+     "rmse_t50": 2.2110094472794803,
+     "mean_intensity": 0.21533333333333332,
+     "frac_bound": 0.32222222222222224,
+     "slew": 0.06921787709497207
+    },
+    {
+     "rmse": 2.518244507990272,
+     "rmse_t50": 2.1519126540127083,
+     "mean_intensity": 0.2144444444444445,
+     "frac_bound": 0.29444444444444445,
+     "slew": 0.06608938547486033
+    },
+    {
+     "rmse": 2.4174607039484393,
+     "rmse_t50": 2.127183072722186,
+     "mean_intensity": 0.2142777777777778,
+     "frac_bound": 0.3111111111111111,
+     "slew": 0.06620111731843577
+    },
+    {
+     "rmse": 2.6027494077446245,
+     "rmse_t50": 2.2426443492179415,
+     "mean_intensity": 0.21438888888888888,
+     "frac_bound": 0.3111111111111111,
+     "slew": 0.06597765363128492
+    }
+   ],
+   "DR_Mem141": [
+    {
+     "rmse": 3.5103694886459014,
+     "rmse_t50": 3.3066123977286317,
+     "mean_intensity": 0.24638888888888885,
+     "frac_bound": 0.1,
+     "slew": 0.05497206703910614
+    },
+    {
+     "rmse": 3.5077039526345164,
+     "rmse_t50": 3.212411821807992,
+     "mean_intensity": 0.24388888888888893,
+     "frac_bound": 0.12777777777777777,
+     "slew": 0.056983240223463696
+    },
+    {
+     "rmse": 3.3740694150086865,
+     "rmse_t50": 3.142920914205704,
+     "mean_intensity": 0.24605555555555556,
+     "frac_bound": 0.11666666666666667,
+     "slew": 0.05318435754189945
+    },
+    {
+     "rmse": 3.29387913515314,
+     "rmse_t50": 2.9897828618053457,
+     "mean_intensity": 0.2426111111111111,
+     "frac_bound": 0.13333333333333333,
+     "slew": 0.05396648044692739
+    },
+    {
+     "rmse": 3.4281135538519245,
+     "rmse_t50": 3.126826528960621,
+     "mean_intensity": 0.24377777777777776,
+     "frac_bound": 0.12222222222222222,
+     "slew": 0.05296089385474861
+    }
+   ]
+  }
+ }
+}

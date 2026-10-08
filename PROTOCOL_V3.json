@@ -1,0 +1,316 @@
+{
+  "study": "NeuroLight-AI prospective confirmation v3 (study phase 2)",
+  "status": "DRAFT",
+  "note": "Set status to FROZEN only after review. Earlier confirmations (3000-3049, 4000-4049, 6000-6049) remain as historical results and are not re-run.",
+  "confirmation": {
+    "plant_seeds": "7000-7049",
+    "plant_seeds_range": [
+      7000,
+      7050
+    ],
+    "n_plants": 50,
+    "rule": "Untouched until FROZEN; spent after the first completed run regardless of outcome."
+  },
+  "development_seeds": {
+    "tuning": "5000-5099 (even seeds used for grids)",
+    "evaluation": "5100-5149"
+  },
+  "audit_smoke_plant": 5100,
+  "sensitivities": [
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0,
+    1.1,
+    1.2,
+    1.4
+  ],
+  "noise_nominal": 0.5,
+  "noise_conditions": [
+    1.0,
+    2.0
+  ],
+  "chronology_conditions": [
+    "s0.60",
+    "s0.80"
+  ],
+  "endpoint": {
+    "primary": "tracking RMSE (Hz) over all 180 steps",
+    "secondary": "RMSE steps 50-179; action metrics"
+  },
+  "controllers": {
+    "PI_legacy": {
+      "kp": 0.02,
+      "ki": 0.15,
+      "kt": 0.0
+    },
+    "PI_tuned": {
+      "kp": 0.02,
+      "ki": 0.25,
+      "kt": 0.0
+    },
+    "PI_tuned_AW": {
+      "kp": 0.02,
+      "ki": 0.25,
+      "kt": 0.5
+    },
+    "PI_oracle": {
+      "s0.50": {
+        "kp": 0.06,
+        "ki": 0.1,
+        "kt": 0.0
+      },
+      "s0.60": {
+        "kp": 0.03,
+        "ki": 0.3,
+        "kt": 0.0
+      },
+      "s0.70": {
+        "kp": 0.03,
+        "ki": 0.3,
+        "kt": 0.0
+      },
+      "s0.80": {
+        "kp": 0.02,
+        "ki": 0.25,
+        "kt": 0.0
+      },
+      "s0.90": {
+        "kp": 0.02,
+        "ki": 0.25,
+        "kt": 0.0
+      },
+      "s1.00": {
+        "kp": 0.02,
+        "ki": 0.25,
+        "kt": 0.0
+      },
+      "s1.10": {
+        "kp": 0.02,
+        "ki": 0.2,
+        "kt": 0.0
+      },
+      "s1.20": {
+        "kp": 0.015,
+        "ki": 0.2,
+        "kt": 0.0
+      },
+      "s1.40": {
+        "kp": 0.015,
+        "ki": 0.15,
+        "kt": 0.0
+      }
+    },
+    "ARX_fixed": {
+      "lam": 1.0,
+      "p_scale": 1.0
+    },
+    "ARX_RLS": {
+      "lam": 0.98,
+      "p_scale": 1000000000.0
+    }
+  },
+  "arx_prior": {
+    "path": "prospective_dev/arx10_prior.npz",
+    "sha256": "7afd3e874bfccd7ebb56ab7008c964068a7a91dd9bebdf512be7e68f767988b8",
+    "source": "OLS on training plants 2000-2099 (identical to Experiment B prior)"
+  },
+  "models": {
+    "DR_H4": [
+      {
+        "path": "prospective_dev/retrain_10000/DR_H4_seed_101.npz",
+        "sha256": "3b7e3e71936828d21956f1ecacfc6c1a14203609a52f3ad91af06bb4cbd0f0b2"
+      },
+      {
+        "path": "prospective_dev/retrain_10000/DR_H4_seed_102.npz",
+        "sha256": "2ccb8eed99d348a6c141a505b8f200dc955ca751ce5b0de6e62a85c3ca83240d"
+      },
+      {
+        "path": "prospective_dev/retrain_10000/DR_H4_seed_103.npz",
+        "sha256": "f3d1e1d60bfd9871bdbb082c21afb280086b663b86ce0b12a2e8e5e9cb3e6fc7"
+      },
+      {
+        "path": "prospective_dev/retrain_10000/DR_H4_seed_104.npz",
+        "sha256": "4d1b840d2a2d32e17312693e25f0410cd21bfdaec54927bbf02560faa9216d1c"
+      },
+      {
+        "path": "prospective_dev/retrain_10000/DR_H4_seed_105.npz",
+        "sha256": "2f871c484446c4d6befac0bfea8fcebc017f473ddf80e0fe12b4982965fcadbf"
+      }
+    ],
+    "DR_Mem141": [
+      {
+        "path": "prospective_dev/retrain_10000/DR_Memoryless_141_seed_101.npz",
+        "sha256": "376321dfc7f775ef7b6a3024eaf11f4af673d6eda9cfda82b5d53fa6648fe226"
+      },
+      {
+        "path": "prospective_dev/retrain_10000/DR_Memoryless_141_seed_102.npz",
+        "sha256": "ba8f727b1b38a42efff8b16a0ec933fd1ee1b6825debda2cfce75b509a4e4539"
+      },
+      {
+        "path": "prospective_dev/retrain_10000/DR_Memoryless_141_seed_103.npz",
+        "sha256": "b92e4b0704e1c5b8c95927a654ccc17441d640758fa717cd9da6cc1e3df112fd"
+      },
+      {
+        "path": "prospective_dev/retrain_10000/DR_Memoryless_141_seed_104.npz",
+        "sha256": "a918aab7a0a8796dd22d660177849e329b3cc370be668382c2e22635e339d843"
+      },
+      {
+        "path": "prospective_dev/retrain_10000/DR_Memoryless_141_seed_105.npz",
+        "sha256": "c5410487bec8a39da68b8402efbbe4361540b7fbd33743313be1f8f3238f9707"
+      }
+    ]
+  },
+  "equivalence_margin_hz": 0.25,
+  "statistics": {
+    "unit": "plant",
+    "learned_model_reduction": "mean over five initialisations within plant before differencing",
+    "interval": "BCa bootstrap of mean paired plant-level difference",
+    "resamples": 10000
+  },
+  "analysis": {
+    "P1": {
+      "role": "PRIMARY - history utility",
+      "contrast": "DR_Mem141 - DR_H4",
+      "conditions": [
+        "s0.60",
+        "s0.80"
+      ],
+      "alpha_each": 0.025,
+      "multiplicity": "Bonferroni over 2 conditions",
+      "decision": "supported iff lower bound > 0 at both conditions"
+    },
+    "P2": {
+      "role": "PRIMARY - linear sufficiency",
+      "contrast": "ARX_fixed - DR_H4",
+      "conditions": [
+        "s0.60"
+      ],
+      "alpha": 0.05,
+      "decision": "supported iff whole interval within +/-0.25 Hz"
+    },
+    "B1": {
+      "role": "MANDATORY BENCHMARK - PI robustness",
+      "contrast": "{PI_tuned, PI_tuned_AW} - DR_H4",
+      "conditions": "all 9 sensitivities + 2 noise conditions",
+      "alpha_each": 0.002273,
+      "multiplicity": "Bonferroni over 22 intervals (simultaneous 95%)",
+      "decision": "none; no direction assumed"
+    },
+    "S1": {
+      "role": "SECONDARY - adaptation utility",
+      "contrast": "ARX_RLS - ARX_fixed",
+      "conditions": "all 11",
+      "alpha_each": 0.004545,
+      "decision": "none; exploratory (no minimum effect justified)"
+    },
+    "S2": {
+      "role": "SECONDARY - regime dependence",
+      "output": "mean RMSE and ranking per condition; crossovers reported descriptively"
+    },
+    "S3": {
+      "role": "SECONDARY - chronology",
+      "contrast": "DR_H4_jointshuffle - DR_H4",
+      "conditions": [
+        "s0.60",
+        "s0.80"
+      ],
+      "alpha_each": 0.025,
+      "note": "plant-level, replaces the cell-level C0 interval"
+    }
+  },
+  "development_summary": {
+    "PI_tuned": {
+      "kp": 0.02,
+      "ki": 0.25,
+      "kt": 0.0,
+      "_dev_mean_tuning_rmse": 1.643939866719723
+    },
+    "PI_tuned_AW": {
+      "kp": 0.02,
+      "ki": 0.25,
+      "kt": 0.5,
+      "_dev_mean_tuning_rmse": 1.4633424666976806,
+      "_form": "back-calculation anti-windup"
+    },
+    "ARX_RLS": {
+      "p_scale": 1000000000.0,
+      "lambda": 0.98,
+      "mean_rmse": 1.3449734367941053
+    },
+    "retrained_best_epochs": {
+      "DR_H4_101": 10000,
+      "DR_H4_102": 9934,
+      "DR_H4_103": 9986,
+      "DR_H4_104": 9898,
+      "DR_H4_105": 9825,
+      "DR_Memoryless_141_101": 9888,
+      "DR_Memoryless_141_102": 10000,
+      "DR_Memoryless_141_103": 8782,
+      "DR_Memoryless_141_104": 8338,
+      "DR_Memoryless_141_105": 9922
+    },
+    "retrained_val_rmse_hz": {
+      "DR_H4_101": 1.39,
+      "DR_H4_102": 1.4046,
+      "DR_H4_103": 1.3934,
+      "DR_H4_104": 1.3853,
+      "DR_H4_105": 1.3978,
+      "DR_Memoryless_141_101": 2.6863,
+      "DR_Memoryless_141_102": 2.6741,
+      "DR_Memoryless_141_103": 2.6691,
+      "DR_Memoryless_141_104": 2.6767,
+      "DR_Memoryless_141_105": 2.6706
+    }
+  },
+  "arx_plateau": {
+    "configs_within_0.02Hz_of_best": [
+      [
+        10000000.0,
+        0.95,
+        1.3548
+      ],
+      [
+        10000000.0,
+        0.98,
+        1.361
+      ],
+      [
+        100000000.0,
+        0.95,
+        1.3536
+      ],
+      [
+        100000000.0,
+        0.98,
+        1.3476
+      ],
+      [
+        1000000000.0,
+        0.95,
+        1.3592
+      ],
+      [
+        1000000000.0,
+        0.98,
+        1.345
+      ]
+    ]
+  },
+  "training_notes": [
+    "DR_H4 seed 103 showed a transient validation spike (3.84 Hz) at epoch 10000; the best-validation checkpoint (epoch 9986, 1.393 Hz) is used.",
+    "Retraining was run on the laptop in resumable 165-s chunks (Adam state checkpointed); maths identical to experiment_a.MLP.fit apart from the 10000-epoch budget."
+  ],
+  "flags": [
+    "ARX_RLS.p_scale=1e+09 is the largest tested; objective is a plateau (see arx_plateau), so not extended further",
+    "best epoch >= 9950 for ['DR_H4_101', 'DR_H4_103', 'DR_Memoryless_141_102']; validation gain over last 1000 epochs (Hz): {'DR_H4_101': 0.006, 'DR_H4_103': 0.0054, 'DR_Memoryless_141_102': 0.0027} - treated as plateau"
+  ],
+  "prohibitions": [
+    "No tuning or model selection on 7000-7049",
+    "No change of hypotheses, margins or alpha after FROZEN",
+    "No biological or clinical claim",
+    "Report all controllers and conditions regardless of outcome"
+  ]
+}
