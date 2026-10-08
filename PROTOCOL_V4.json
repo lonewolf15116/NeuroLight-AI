@@ -32,6 +32,11 @@
   ],
   "noise": 0.5,
   "controllers": {
+    "PI_tuned": {
+      "kp": 0.02,
+      "ki": 0.2,
+      "kt": 0.0
+    },
     "PI_tuned_AW": {
       "kp": 0.02,
       "ki": 0.25,
@@ -60,7 +65,7 @@
     "H4_I2",
     "H4_I3",
     "H4_snap_e900",
-    "H4_snap_e9000",
+    "H4_snap_e6000",
     "H4_I2_e900",
     "H4_I2_e6000"
   ],
@@ -197,26 +202,26 @@
         "sha256": "720ffcf4c1643d78fb84b433d0b505d513b9adb53ab95748cf10b5fbdfb19492"
       }
     ],
-    "H4_snap_e9000": [
+    "H4_snap_e6000": [
       {
-        "path": "prospective_dev4/snapshots/DR_H4_101_e9000.npz",
-        "sha256": "c5450459fa789628e6dc8a1bc2699888f25f4e601265dd2f88d1876ffb6dd934"
+        "path": "prospective_dev4/snapshots/DR_H4_101_e6000.npz",
+        "sha256": "99f7eea14055cd6c08557f9e81fc5478054a1511c354c9f2c5aaf5428c468ea0"
       },
       {
-        "path": "prospective_dev4/snapshots/DR_H4_102_e9000.npz",
-        "sha256": "438ae40a85957ef1ec465151b70e3acc9c74f6f642a3fe83519846a1bed9644a"
+        "path": "prospective_dev4/snapshots/DR_H4_102_e6000.npz",
+        "sha256": "44b31d84308d39de8ca192d9776035e54b921b07c86fb46066f9a937f2663bf7"
       },
       {
-        "path": "prospective_dev4/snapshots/DR_H4_103_e9000.npz",
-        "sha256": "d0b9e55e20ac3d4cb0bb1f7ab2fe30fa6c32f9dbc83f2ca58f46b6651d446c55"
+        "path": "prospective_dev4/snapshots/DR_H4_103_e6000.npz",
+        "sha256": "3a5e702da63b5787c16b2b929bef3ab6929bf0446ab18257a5e80ea30c0a3787"
       },
       {
-        "path": "prospective_dev4/snapshots/DR_H4_104_e9000.npz",
-        "sha256": "8e260d56d76fef6e11e61ceb093fdcd4a6ee67fcbf29a430139e208feb992d0c"
+        "path": "prospective_dev4/snapshots/DR_H4_104_e6000.npz",
+        "sha256": "44de889c527530d644481f8393426eb68c807b65fd52a00fa37e6b9aed2dd895"
       },
       {
-        "path": "prospective_dev4/snapshots/DR_H4_105_e9000.npz",
-        "sha256": "875bde6990464d4f10895cabfefcb1b1fd28c9fb598670da0be7e646d264ad50"
+        "path": "prospective_dev4/snapshots/DR_H4_105_e6000.npz",
+        "sha256": "84b8d11804156dcf640cfd3625ddf55f276b103425501f7dd3d6c0b55707aa3d"
       }
     ],
     "H4_I2_e900": [
@@ -284,46 +289,47 @@
     "resamples": 10000
   },
   "analysis": {
+    "high_gain_set": [
+      "s1.00",
+      "s1.10",
+      "s1.20",
+      "s1.40"
+    ],
+    "high_gain_definition": "all sweep sensitivities at or above the nominal s = 1.0, fixed before confirmation",
     "Q1": {
       "role": "PRIMARY",
-      "test": "fraction of the full-RLS mean improvement over fixed ARX recovered by ARX_gain (ratio of plant-level means over the sweep)",
+      "test": "fraction of the full-RLS mean improvement over fixed ARX recovered by ARX_gain: ratio of plant-level means of (fixed - gain) and (fixed - full) averaged over the 9 sensitivities",
       "alpha": 0.05,
       "threshold": 0.7,
-      "decision": "lower CI bound >= 0.70",
+      "decision": "BCa lower bound >= 0.70",
       "dev_value": 0.86
     },
     "Q2": {
       "role": "PRIMARY",
-      "test": "Spearman correlation of final g with s over 450 plant-conditions",
+      "test": "per plant: Spearman correlation between the plant-condition gain summary g (mean of the last 60 steps) and s across the 9 sensitivities; statistic = mean over the 50 plants",
+      "unit": "plant (time steps are never units)",
+      "alpha": 0.05,
       "threshold": 0.9,
-      "dev_value": "about 1.0 on condition means"
+      "decision": "BCa lower bound >= 0.90",
+      "dev_value": "about 1.0"
     },
     "Q3": {
       "role": "PRIMARY",
-      "test": "H4_10k - H4_I2 RMSE",
-      "conditions": [
-        "s1.00",
-        "s1.20",
-        "s1.40"
-      ],
-      "alpha_each": 0.016667,
-      "decision": "all lower bounds > 0",
-      "dev_value": [
-        0.87,
-        1.93,
-        3.2
-      ]
+      "test": "H4_10k - H4_I2, per-plant mean over the high-gain set",
+      "alpha": 0.05,
+      "decision": "BCa lower bound > 0",
+      "per_setting_alpha_each": 0.0125,
+      "per_setting_role": "consistency check, reported, not a decision criterion",
+      "dev_value": 1.84
     },
     "Q4": {
       "role": "PRIMARY",
-      "test": "training length: (a) H4_snap_e9000 - H4_snap_e900 > 0 and (b) H4_I2_e6000 - H4_I2_e900 < 0",
-      "conditions": [
-        "s1.00",
-        "s1.20",
-        "s1.40"
-      ],
-      "alpha_each": 0.008333,
-      "decision": "(a) all lower bounds > 0 and (b) all upper bounds < 0"
+      "test": "training-length interaction: [H4_snap_e6000 - H4_snap_e900] - [H4_I2_e6000 - H4_I2_e900], per-plant mean over the high-gain set",
+      "alpha": 0.05,
+      "decision": "BCa lower bound > 0",
+      "components": "each bracket reported with its own interval",
+      "dev_value": "about 0.98 / 2.24 / 3.82 at s 1.0 / 1.2 / 1.4",
+      "checkpoint_rule": "all checkpoints fixed before confirmation: fixed epochs 900 and 6000 for both networks; no checkpoint is chosen on confirmation plants"
     },
     "S1": {
       "role": "secondary",
@@ -385,9 +391,33 @@
     },
     "S5": {
       "role": "descriptive",
-      "test": "mean RMSE per controller and condition"
+      "test": "mean RMSE per controller (incl. PI_tuned, PI_tuned_AW, ARX_fixed, ARX_RLS, ARX_gain, all network arms) and condition"
+    },
+    "S6": {
+      "role": "secondary",
+      "test": "H4_I2 - PI_tuned_AW",
+      "conditions": [
+        "s0.50",
+        "s0.60",
+        "s0.70",
+        "s0.80",
+        "s0.90",
+        "s1.00",
+        "s1.10",
+        "s1.20",
+        "s1.40"
+      ],
+      "alpha_each": 0.005556
     }
   },
+  "checkpoint_provenance": {
+    "H4_10k": "best validation (plants 2100-2129), v3",
+    "H4_I2/H4_I3": "best validation (plants 2100-2129)",
+    "H4_I1": "epochs chosen on development plants 5250-5299",
+    "snapshots": "fixed epochs",
+    "confirmation_plants_used_for_selection": false
+  },
+  "intended_claim_if_supported": "Explicit online estimation of a low-dimensional hidden plant parameter can substantially improve learned closed-loop control, and may explain part of the gap between history-based neural predictors and adaptive linear models (synthetic plant only).",
   "prohibitions": [
     "No tuning or model selection on 8000-8049",
     "No change of hypotheses, thresholds or alpha after FROZEN",

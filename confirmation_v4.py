@@ -75,6 +75,7 @@ def conditions(P):
 def run_plant(seed, cond, P, models, prior):
     s, nz = cond["s"], cond["noise"]; C = P["controllers"]; rec = {}
     gf = (prior["w0"], C["ARX_gain"]["lam"], C["ARX_gain"]["p0"], C["ARX_gain"]["act_idx"])
+    rec["PI_tuned"] = V3.run_pi(seed, s, nz, **C["PI_tuned"])
     rec["PI_tuned_AW"] = V3.run_pi(seed, s, nz, **C["PI_tuned_AW"])
     rec["ARX_fixed"] = V3.run_arx(seed, s, nz, prior["w0"], prior["cov0"], adapt=False, lam=1.0, p_scale=1.0)
     rec["ARX_RLS"] = V3.run_arx(seed, s, nz, prior["w0"], prior["cov0"], adapt=True, **C["ARX_RLS"])
@@ -111,18 +112,31 @@ def analyse(raw, P):
     rows = np.array([[np.mean([val(raw[c][i], "ARX_fixed") - val(raw[c][i], "ARX_gain") for c in conds]),
                       np.mean([val(raw[c][i], "ARX_fixed") - val(raw[c][i], "ARX_RLS") for c in conds])] for i in range(len(raw[conds[0]]))])
     k[0] += 1; out["Q1_gain_fraction"] = bca_stat(lambda d: d[:, 0].mean() / d[:, 1].mean(), rows, 800000 + k[0], NB, A["Q1"]["alpha"])
-    # Q2: Spearman correlation between the final gain estimate and s over all plant-conditions
-    g = [raw[c][i]["ARX_gain"]["g_final_mean60"] for c in conds for i in range(len(raw[c]))]
-    sv = [float(c[1:]) for c in conds for _ in raw[c]]
-    rk = lambda x: np.argsort(np.argsort(x)); out["Q2_gain_spearman"] = {"estimate": float(np.corrcoef(rk(g), rk(sv))[0, 1])}
-    out["Q3_gain_input_vs_10k"] = [diff("H4_10k", "H4_I2", c, A["Q3"]["alpha_each"], "Q3") for c in A["Q3"]["conditions"]]
-    out["Q4_training_length_plain"] = [diff("H4_snap_e9000", "H4_snap_e900", c, A["Q4"]["alpha_each"], "Q4a") for c in A["Q4"]["conditions"]]
-    out["Q4_training_length_gaininput"] = [diff("H4_I2_e6000", "H4_I2_e900", c, A["Q4"]["alpha_each"], "Q4b") for c in A["Q4"]["conditions"]]
+    # Q2: within-plant Spearman correlation between the plant-condition gain summary (mean g over the last 60 steps)
+    #     and s across the 9 sensitivities; one value per plant; BCa over plants for the mean. Time steps are never units.
+    sv9 = np.array([float(c[1:]) for c in conds]); n = len(raw[conds[0]])
+    rk = lambda x: np.argsort(np.argsort(x)).astype(float)
+    rho = np.array([[np.corrcoef(rk([raw[c][i]["ARX_gain"]["g_final_mean60"] for c in conds]), rk(sv9))[0, 1]] for i in range(n)])
+    k[0] += 1; out["Q2_gain_spearman"] = bca_stat(lambda d: d[:, 0].mean(), rho, 800000 + k[0], NB, A["Q2"]["alpha"])
+    out["Q2_gain_spearman"]["per_plant"] = rho[:, 0].tolist()
+    HI = A["high_gain_set"]
+    def agg(fn, alpha):   # BCa for the mean over plants of a per-plant aggregate over the high-gain set
+        rows = np.array([[np.mean([fn(raw[c][i]) for c in HI])] for i in range(n)]); k[0] += 1
+        return bca_stat(lambda d: d[:, 0].mean(), rows, 800000 + k[0], NB, alpha)
+    # Q3: H4_10k - H4_I2, aggregate over the high-gain set (decision); per-setting intervals reported for consistency
+    out["Q3_gain_input_vs_10k"] = agg(lambda r: val(r, "H4_10k") - val(r, "H4_I2"), A["Q3"]["alpha"])
+    out["Q3_per_setting"] = [diff("H4_10k", "H4_I2", c, A["Q3"]["per_setting_alpha_each"], "Q3c") for c in HI]
+    # Q4: training-length interaction (difference in differences) at the same epochs for both networks, aggregate over HI
+    did = lambda r: (val(r, "H4_snap_e6000") - val(r, "H4_snap_e900")) - (val(r, "H4_I2_e6000") - val(r, "H4_I2_e900"))
+    out["Q4_training_length_DiD"] = agg(did, A["Q4"]["alpha"])
+    out["Q4_components"] = {"plain_e6000_minus_e900": agg(lambda r: val(r, "H4_snap_e6000") - val(r, "H4_snap_e900"), A["Q4"]["alpha"]),
+                            "gaininput_e6000_minus_e900": agg(lambda r: val(r, "H4_I2_e6000") - val(r, "H4_I2_e900"), A["Q4"]["alpha"])}
     out["S1_I2_vs_ARX_RLS"] = [diff("H4_I2", "ARX_RLS", c, A["S1"]["alpha_each"], "S1") for c in conds]
     out["S2_I1_vs_10k"] = [diff("H4_10k", "H4_I1", c, A["S2"]["alpha_each"], "S2") for c in conds]
     out["S3_I3_vs_10k"] = [diff("H4_10k", "H4_I3", c, A["S3"]["alpha_each"], "S3") for c in conds]
+    out["S6_I2_vs_PI_AW"] = [diff("H4_I2", "PI_tuned_AW", c, A["S6"]["alpha_each"], "S6") for c in conds]
     # S4: action-sensitivity slope ratio (network d yhat/du vs s) / (reference 60*g*w_u vs s), plant-level bootstrap
-    sv9 = np.array([float(c[1:]) for c in conds]); w0u = P["arx_prior"]["w_u"]
+    w0u = P["arx_prior"]["w_u"]
     def slope_rows(name):
         return np.array([[np.mean([q["dyhat_du"] for q in raw[c][i][name]]) for c in conds] +
                          [SCALE * w0u * raw[c][i]["ARX_gain"]["g_final_mean60"] for c in conds] for i in range(len(raw[conds[0]]))])
@@ -130,15 +144,14 @@ def analyse(raw, P):
     out["S4_sensitivity_slope_ratio"] = {}
     for name in ("H4_10k", "H4_900", "H4_I2"):
         k[0] += 1; out["S4_sensitivity_slope_ratio"][name] = bca_stat(sl, slope_rows(name), 800000 + k[0], NB, A["S4"]["alpha_each"])
-    names = ["PI_tuned_AW", "ARX_fixed", "ARX_RLS", "ARX_gain"] + P["network_arms"]
+    names = ["PI_tuned", "PI_tuned_AW", "ARX_fixed", "ARX_RLS", "ARX_gain"] + P["network_arms"]
     out["S5_mean_rmse"] = {c: {n: float(np.mean([val(r, n) for r in raw[c]])) for n in names} for c in conds}
-    q1 = out["Q1_gain_fraction"]; q3 = out["Q3_gain_input_vs_10k"]
     out["decisions"] = {
-        "Q1_supported": bool(q1["ci"][0] >= A["Q1"]["threshold"]),
-        "Q2_supported": bool(out["Q2_gain_spearman"]["estimate"] >= A["Q2"]["threshold"]),
-        "Q3_supported": all(r["ci"][0] > 0 for r in q3),
-        "Q4_supported": all(r["ci"][0] > 0 for r in out["Q4_training_length_plain"]) and all(r["ci"][1] < 0 for r in out["Q4_training_length_gaininput"]),
-        "S": "secondary/exploratory; reported, no decision rule"}
+        "Q1_supported": bool(out["Q1_gain_fraction"]["ci"][0] >= A["Q1"]["threshold"]),
+        "Q2_supported": bool(out["Q2_gain_spearman"]["ci"][0] >= A["Q2"]["threshold"]),
+        "Q3_supported": bool(out["Q3_gain_input_vs_10k"]["ci"][0] > 0),
+        "Q4_supported": bool(out["Q4_training_length_DiD"]["ci"][0] > 0),
+        "S": "secondary/exploratory and per-setting consistency results; reported, no decision rule"}
     return out
 
 

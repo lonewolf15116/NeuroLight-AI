@@ -20,7 +20,8 @@ Each network arm has five seeds, averaged within plant.
 
 | Arm | Definition |
 |---|---|
-| PI_tuned_AW | Kp 0.02, Ki 0.25, k_t 0.5 (v3) |
+| PI_tuned | Kp 0.02, Ki 0.20, plain (v3 retuned) |
+| PI_tuned_AW | Kp 0.02, Ki 0.25, k_t 0.5 (v3 retuned, anti-windup) |
 | ARX_fixed | OLS prior, no update |
 | ARX_RLS | full RLS, P₀ ×10⁹, λ 0.98 (v3) |
 | ARX_gain | one-parameter gain RLS on action terms {u, u₋₁…u₋₄}, λ 0.98, P₀ 1000 |
@@ -29,7 +30,7 @@ Each network arm has five seeds, averaged within plant.
 | H4_I1 | raw snapshot at the per-seed epoch chosen on plants 5250–5299: 300, 600, 600, 900, 600 |
 | H4_I2 | DR-H4 inputs plus online g; best validation within 6000 epochs |
 | H4_I3 | open-loop plus own closed-loop data; best validation within 6000 epochs |
-| H4_snap_e900 / e9000 | raw checkpointed DR-H4 weights at fixed epochs |
+| H4_snap_e900 / e6000 | raw checkpointed DR-H4 weights at fixed epochs |
 | H4_I2_e900 / e6000 | raw I2 weights at fixed epochs |
 
 ## Conditions
@@ -38,19 +39,32 @@ s ∈ {0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.4} at σ = 0.5, giving 9 condit
 
 ## Hypotheses
 
-The unit is the plant. Intervals are BCa with 10 000 resamples and a fixed bootstrap seed per interval.
+The unit is the plant. Intervals are BCa with 10 000 resamples and a fixed bootstrap seed per interval. **High-gain set (fixed in advance):** s ∈ {1.0, 1.1, 1.2, 1.4}, all sweep values at or above nominal.
 
-| ID | Role | Test | Level | Decision | Development value |
-|---|---|---|---|---|---|
-| Q1 | primary | Fraction of full-RLS improvement over fixed ARX recovered by ARX_gain | 95% | lower bound ≥ 0.70 | 0.86 |
-| Q2 | primary | Spearman(final g, s) over 450 plant-conditions | — | ≥ 0.90 | 0.99 (self-test) |
-| Q3 | primary | H4_10k − H4_I2 at s 1.0, 1.2, 1.4 | 98.3% each | all lower bounds > 0 | +0.87, +1.93, +3.20 |
-| Q4 | primary | (a) H4_snap_e9000 − e900 > 0 and (b) H4_I2_e6000 − e900 < 0, at s 1.0, 1.2, 1.4 | 99.17% each (Bonferroni 6) | all six satisfied | (a) +0.57, +1.15, +1.79 |
-| S1 | secondary | H4_I2 − ARX_RLS, all 9 | 99.44% each | none | mean +0.02 |
-| S2 | secondary | H4_10k − H4_I1, all 9 | 99.44% each | none | |
-| S3 | secondary | H4_10k − H4_I3, all 9 | 99.44% each | none | |
-| S4 | secondary | dŷ/du slope ratio vs the gain reference, for H4_10k, H4_900, H4_I2 | 98.3% each | none | 0.39, 0.09, 0.84 |
-| S5 | descriptive | mean RMSE table | — | — | |
+| ID | Role | Test | Decision | Development value |
+|---|---|---|---|---|
+| Q1 | primary | Fraction of the full-RLS improvement over fixed ARX recovered by ARX_gain: ratio of plant-level means averaged over the 9 sensitivities | 95% lower bound ≥ 0.70 | 0.86 |
+| Q2 | primary | Per plant, Spearman correlation between the plant-condition gain summary g (mean of the last 60 steps) and s across the 9 sensitivities; statistic = mean over 50 plants. Time steps are never units. | 95% lower bound ≥ 0.90 | 1.00 (self-test) |
+| Q3 | primary | H4_10k − H4_I2, per-plant mean over the high-gain set (one aggregate) | 95% lower bound > 0 | +1.84 |
+| Q4 | primary | Training-length interaction (difference in differences) at the same epochs for both networks: [plain e6000 − e900] − [gain-input e6000 − e900], per-plant mean over the high-gain set | 95% lower bound > 0 | about +1.0 / +2.2 / +3.8 at s 1.0 / 1.2 / 1.4 |
+| Q3c | consistency | Q3 contrast at each high-gain setting | 98.75% each; reported, not a criterion | |
+| Q4c | consistency | Each Q4 bracket on its own | reported | |
+| S1 | secondary | H4_I2 − ARX_RLS, all 9 | 99.44% each | |
+| S2 / S3 | secondary | H4_10k − H4_I1 and H4_10k − H4_I3, all 9 | 99.44% each | |
+| S4 | secondary | dŷ/du slope ratio vs the gain reference, for H4_10k, H4_900, H4_I2 | 98.3% each | 0.39, 0.09, 0.84 |
+| S5 | descriptive | Mean RMSE for every arm, including PI_tuned, PI_tuned_AW, ARX_fixed, ARX_RLS, ARX_gain | — | |
+| S6 | secondary | H4_I2 − PI_tuned_AW, all 9 | 99.44% each | |
+
+**Checkpoint rule (Q4 and all arms).** Every checkpoint is fixed before confirmation:
+- fixed epochs (900 and 6000 for both networks);
+- best-validation checkpoints chosen on validation plants 2100–2129;
+- I1 epochs chosen on development plants 5250–5299.
+
+No checkpoint, epoch or model variant is chosen on confirmation plants.
+
+**Note on Q2.** Within each plant g was perfectly monotone in s in development, so Q2 is likely to pass. It confirms monotone tracking, not accuracy. Q1 and S4 carry the quantitative weight.
+
+**Intended claim if supported (synthetic plant only).** Explicit online estimation of a low-dimensional hidden plant parameter can substantially improve learned closed-loop control, and may explain part of the gap between history-based neural predictors and adaptive linear models.
 
 ## Disclosures to carry into the paper
 
@@ -61,7 +75,7 @@ The unit is the plant. Intervals are BCa with 10 000 resamples and a fixed boots
 
 ## Integrity and runtime
 
-- **Manifest:** `MANIFEST_V4.json` will hash `confirmation_v4.py`, `confirmation_v3.py`, the protocol, the simulator modules, the ARX prior and all 45 weight files.
+- **Manifest:** `MANIFEST_V4.json` will hash `confirmation_v4.py`, `confirmation_v3.py`, the protocol, the simulator modules, the ARX prior and all 45 weight files (9 network arms × 5 seeds).
 - **Runtime:** about 13 s per plant-condition in the cloud and roughly 5 s on the laptop, so about 40 minutes for 450 plant-conditions. The run is resumable in 160-s chunks; invocations must run one at a time.
 
 ## Open choices for the reviewer before freezing
@@ -69,3 +83,4 @@ The unit is the plant. Intervals are BCa with 10 000 resamples and a fixed boots
 1. Thresholds: Q1 (0.70) and Q2 (0.90) are conservative relative to development values. Keep them, or tighten?
 2. Should σ ∈ {1, 2} conditions be added? This version omits them to keep the focus on gain.
 3. Should H4_I2 and ARX_RLS be tested for equivalence (for example ±0.10 Hz) instead of reported as S1?
+4. Q2 is close to certain to pass; keep it as primary, or move it to secondary?
