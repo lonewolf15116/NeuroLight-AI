@@ -9,10 +9,10 @@
 | Tuned PI matches or beats DR-H4 from s = 0.7 upwards (B1) | **Confirmed**: v3 benchmark |
 | Online-adapted ARX is the strongest controller (S1, S4) | Secondary, pre-specified: v3 |
 | Longer training gives better prediction but worse control (S5) | Secondary, motivated by development data: v3 |
-| Mechanisms behind S4 and S5 | **Not tested**: hypotheses only |
+| Mechanisms behind S4 and S5 | **Confirmed (v4, plants 8000–8049)**: one-parameter gain adaptation recovers 87% of the RLS benefit (Q1); a gain-estimate input removes the high-gain failure (Q3) and reverses the training-length effect (Q4). At σ = 2.0 Q1 drops to 0.24 |
 | Biological / optogenetic relevance | **Not established**: synthetic plant |
 
-Spent plant blocks (never reuse): 1000–1049, 3000–3049, 4000–4049, 6000–6049, 7000–7049. Development plants: 0–69, 1400–1649, 5000–5149. **Next fresh block: 8000–8049** (reserve 9000+ for later phases).
+Spent plant blocks (never reuse): 1000–1049, 3000–3049, 4000–4049, 6000–6049, 7000–7049, 8000–8049 (v4). Development plants: 0–69, 1400–1649, 5000–5149, 5200–5299. **Next fresh block: 9000–9049.**
 
 ## Phase 3: write up and submit (now → about 3 weeks)
 
