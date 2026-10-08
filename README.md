@@ -2,6 +2,8 @@
 
 Synthetic study of learned one-step predictive control of a 64-neuron LIF population under hidden plant-sensitivity shifts, compared with fixed PI feedback and an information-matched linear ARX baseline. **Synthetic only — not experimental neuroscience, not a ChR2 model, not reinforcement learning.**
 
+**Current results:** `results_v3/` and `manuscript/NeuroLight_AI_Manuscript_v3.docx`. **Plan:** `ROADMAP.md`.
+
 ## Study map
 
 | Stage | Script | Status | Plant seeds |
@@ -17,6 +19,8 @@ Synthetic study of learned one-step predictive control of a 64-neuron LIF popula
 | Experiment B development (ARX/RLS, adaptive PI) | `experiment_b_dev*.py` | development | 5000–5149 |
 | Experiment B final: PI vs ARX-10+RLS vs DR-H4 | `experiment_b_final.py` + `EXPERIMENT_B_FINAL_PROTOCOL.json` | **confirmatory** | 6000–6049 (spent) |
 | Post-hoc Experiment B telemetry | `diagnose_experiment_b.py` | exploratory | — |
+| Phase-2 development (PI search, adaptive RLS, retraining, rehearsal) | `prospective_dev/` | development | 5000–5149 |
+| **v3 prospective confirmation** | `confirmation_v3.py` + `PROTOCOL_V3.json` (FROZEN) + `MANIFEST_V3.json` | **confirmatory** | 7000–7049 (spent) |
 
 Training/validation plants for the confirmatory H4 models: 2000–2099 / 2100–2129. Frozen artefacts (scripts, protocols, weights, results) are under `archived_results/`. SHA-256 hashes of the five DR-H4 weight files are recorded in `archived_results/EXPERIMENT_B_FINAL_2026-10-08/experiment_b_final_audit.json`.
 
