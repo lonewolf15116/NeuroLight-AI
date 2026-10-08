@@ -141,6 +141,7 @@ def run_plant(seed, cond, P, models, prior):
     rec["ARX_fixed"] = run_arx(seed, s, nz, prior["w0"], prior["cov0"], adapt=False, **C["ARX_fixed"])
     rec["ARX_RLS"] = run_arx(seed, s, nz, prior["w0"], prior["cov0"], adapt=True, **C["ARX_RLS"])
     rec["DR_H4"] = [run_h4(m, seed, s, nz) for m in models["DR_H4"]]
+    rec["DR_H4_900"] = [run_h4(m, seed, s, nz) for m in models["DR_H4_900"]]   # secondary arm (S5); never primary
     rec["DR_Mem141"] = [run_mem(m, seed, s, nz) for m in models["DR_Mem141"]]
     if cond["key"] in P["chronology_conditions"]:
         rec["DR_H4_jointshuffle"] = [run_h4(m, seed, s, nz, shuffle=True) for m in models["DR_H4"]]
@@ -170,8 +171,9 @@ def analyse(raw, P):
     out["S1_adaptation"] = [ci("ARX_RLS", "ARX_fixed", c, A["S1"]["alpha_each"], "S1") for c in allc]
     out["S3_chronology"] = [ci("DR_H4_jointshuffle", "DR_H4", c, A["S3"]["alpha_each"], "S3") for c in P["chronology_conditions"]]
     out["S4_adaptive_linear_vs_H4"] = [ci("ARX_RLS", "DR_H4", c, A["S4"]["alpha_each"], "S4") for c in allc]
+    out["S5_training_length"] = [ci("DR_H4_900", "DR_H4", c, A["S5"]["alpha_each"], "S5") for c in allc]
     # S2 regime dependence: mean RMSE table and per-condition ranking (descriptive)
-    names = ["PI_legacy", "PI_tuned", "PI_tuned_AW", "PI_sens_ref", "ARX_fixed", "ARX_RLS", "DR_H4", "DR_Mem141"]
+    names = ["PI_legacy", "PI_tuned", "PI_tuned_AW", "PI_sens_ref", "ARX_fixed", "ARX_RLS", "DR_H4", "DR_H4_900", "DR_Mem141"]
     tab = {}
     for c in allc:
         tab[c] = {n: float(np.mean([plant_value(r, n) for r in raw[c]])) for n in names if n in raw[c][0]}
@@ -183,7 +185,7 @@ def analyse(raw, P):
         "P1_supported": all(r["ci"][0] > 0 for r in P1),
         "P2_supported": bool(P2["ci"][0] >= -m and P2["ci"][1] <= m),
         "B1": "reported, no directional hypothesis",
-        "S1_S4": "secondary/exploratory; reported with stated alpha, no decision rule",
+        "S1_S5": "secondary/exploratory; reported with stated alpha, no decision rule; S5 never promoted to primary",
     }
     return out
 

@@ -138,6 +138,8 @@
     }
   },
   "controller_notes": {
+    "DR_H4": "PRIMARY learned model: 10000-epoch retrained, best-validation checkpoint. Selection rule fixed before the development rehearsal; stays primary regardless of S5.",
+    "DR_H4_900": "SECONDARY arm (S5 only): unmodified phase-1 Experiment-A weights (900-epoch budget). Not retrained or altered.",
     "PI_sens_ref": "Sensitivity-informed tuned PI reference: per-sensitivity best member of the searched PI family. Uses knowledge of s, so it is not deployable; it is the best PI this search found, not an upper bound on classical control. Not hypothesis-tested.",
     "ARX_fixed": "OLS prior; online update disabled (lam and p_scale unused)."
   },
@@ -189,6 +191,28 @@
       {
         "path": "prospective_dev/retrain_10000/DR_Memoryless_141_seed_105.npz",
         "sha256": "c5410487bec8a39da68b8402efbbe4361540b7fbd33743313be1f8f3238f9707"
+      }
+    ],
+    "DR_H4_900": [
+      {
+        "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_101.npz",
+        "sha256": "0c25c8661bf0c078878db735d1d115e52c94f0929c8f24896c016bc15831769c"
+      },
+      {
+        "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_102.npz",
+        "sha256": "34ff7810e10e3220f5541b33742d56a48084f9cf585c71005ef654325f63596d"
+      },
+      {
+        "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_103.npz",
+        "sha256": "42e477be97ffe70bbb74da48df5af4db4eea072168c63d19de920a80225a489a"
+      },
+      {
+        "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_104.npz",
+        "sha256": "8dc9401a35645802beaed33abd10bf3ee732fdeab0971282e03b806b87654c37"
+      },
+      {
+        "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_105.npz",
+        "sha256": "d966388795e5ccfe989e9a246ad99cb2269a6244718d7094aade4a076f943c65"
       }
     ]
   },
@@ -300,19 +324,42 @@
       "n_comparisons": 11,
       "alpha_each": 0.004545,
       "decision": "none; exploratory"
+    },
+    "S5": {
+      "role": "SECONDARY - training length (prediction/control mismatch)",
+      "contrast": "DR_H4_900 - DR_H4",
+      "conditions": [
+        "s0.50",
+        "s0.60",
+        "s0.70",
+        "s0.80",
+        "s0.90",
+        "s1.00",
+        "s1.10",
+        "s1.20",
+        "s1.40",
+        "n1.0",
+        "n2.0"
+      ],
+      "n_comparisons": 11,
+      "alpha_each": 0.004545,
+      "multiplicity": "Bonferroni over 11 (simultaneous 95%)",
+      "unit": "plant; each arm averaged over all five initialisations (seeds 101-105) within plant; no seed selection",
+      "decision": "none; never promoted to primary whatever the outcome",
+      "motivation": "Added after the development rehearsal showed that the 10000-epoch models, despite lower one-step validation error, tracked worse in closed loop at s >= 0.8 than the 900-epoch phase-1 models."
     }
   },
   "comparison_count": {
     "conditions": 11,
     "primary": 3,
     "benchmark": 22,
-    "secondary_intervals": 24,
+    "secondary_intervals": 35,
     "note": "Each family is corrected only within itself. Conditions (11) are not comparisons."
   },
   "runtime_estimate": {
-    "laptop_seconds_per_plant_condition": 1.4,
+    "laptop_seconds_per_plant_condition": 2.1,
     "plant_conditions": 550,
-    "estimate_minutes": "15-20 on the laptop (resumable 165-s chunks)"
+    "estimate_minutes": "about 20 on the laptop (resumable 160-s chunks); rehearsal without the 900-epoch arm took 15"
   },
   "development_summary": {
     "PI_tuned": {
@@ -431,6 +478,23 @@
         1.345
       ]
     ]
+  },
+  "prediction_metrics": {
+    "note": "One-step validation RMSE (plants 2100-2129) is a prediction metric, reported separately from closed-loop tracking RMSE; no causal link between them is assumed.",
+    "DR_H4_10000_val_rmse_hz": {
+      "DR_H4_101": 1.39,
+      "DR_H4_102": 1.4046,
+      "DR_H4_103": 1.3934,
+      "DR_H4_104": 1.3853,
+      "DR_H4_105": 1.3978
+    },
+    "DR_H4_900_val_rmse_hz": {
+      "DR_H4_101": 1.6076,
+      "DR_H4_102": 1.6342,
+      "DR_H4_103": 1.6222,
+      "DR_H4_104": 1.8507,
+      "DR_H4_105": 1.6658
+    }
   },
   "training_notes": [
     "DR_H4 seed 103 had a transient validation spike (3.84 Hz) at epoch 10000; its best-validation checkpoint (epoch 9986, 1.393 Hz) is used.",

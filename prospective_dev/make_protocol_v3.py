@@ -64,6 +64,12 @@ def models(name):
     for s in range(101, 106):
         p = os.path.join(HERE, 'retrain_10000', f'{name}_seed_{s}.npz'); out.append({'path': rel(p), 'sha256': sha(p)})
     return out
+def models900():
+    out = []
+    for s in range(101, 106):
+        p = os.path.join(ROOT, 'archived_results', 'EXPERIMENT_A_FINAL_2026-10-07', f'DR_H4_seed_{s}.npz'); out.append({'path': rel(p), 'sha256': sha(p)})
+    return out
+expA = json.load(open(os.path.join(ROOT, 'archived_results', 'EXPERIMENT_A_FINAL_2026-10-07', 'experiment_a_results.json')))['training']['DR_H4']
 log = {}
 for n in ('DR_H4', 'DR_Memoryless_141'): log.update(json.load(open(os.path.join(HERE, 'retrain_10000', f'log_{n}.json'))))
 def last_gain(v):
@@ -99,11 +105,13 @@ P = {
    'ARX_RLS': {'lam': best['lambda'], 'p_scale': best['p_scale']},
  },
  'controller_notes': {
+   'DR_H4': 'PRIMARY learned model: 10000-epoch retrained, best-validation checkpoint. Selection rule fixed before the development rehearsal; stays primary regardless of S5.',
+   'DR_H4_900': 'SECONDARY arm (S5 only): unmodified phase-1 Experiment-A weights (900-epoch budget). Not retrained or altered.',
    'PI_sens_ref': 'Sensitivity-informed tuned PI reference: per-sensitivity best member of the searched PI family. Uses knowledge of s, '
                   'so it is not deployable; it is the best PI this search found, not an upper bound on classical control. Not hypothesis-tested.',
    'ARX_fixed': 'OLS prior; online update disabled (lam and p_scale unused).'},
  'arx_prior': {'path': rel(prior), 'sha256': sha(prior), 'source': 'OLS on training plants 2000-2099 (identical to the Experiment B prior)'},
- 'models': {'DR_H4': models('DR_H4'), 'DR_Mem141': models('DR_Memoryless_141')},
+ 'models': {'DR_H4': models('DR_H4'), 'DR_Mem141': models('DR_Memoryless_141'), 'DR_H4_900': models900()},
  'equivalence_margin_hz': 0.25,
  'equivalence_margin_justification': 'Carried over unchanged from the Experiment B protocol (locked 8 Oct 2026, before its confirmation). '
      'It is about 15% of DR-H4 RMSE at s 0.6 in every phase-1 confirmation and was not re-chosen after phase-2 development data.',
@@ -126,11 +134,17 @@ P = {
           'alpha_each': 0.025, 'note': 'plant-level; replaces the cell-level C0 interval'},
    'S4': {'role': 'SECONDARY - adaptive linear vs neural', 'contrast': 'ARX_RLS - DR_H4', 'conditions': conds, 'n_comparisons': 11,
           'alpha_each': round(0.05 / 11, 6), 'decision': 'none; exploratory'},
+   'S5': {'role': 'SECONDARY - training length (prediction/control mismatch)', 'contrast': 'DR_H4_900 - DR_H4',
+          'conditions': conds, 'n_comparisons': 11, 'alpha_each': round(0.05 / 11, 6), 'multiplicity': 'Bonferroni over 11 (simultaneous 95%)',
+          'unit': 'plant; each arm averaged over all five initialisations (seeds 101-105) within plant; no seed selection',
+          'decision': 'none; never promoted to primary whatever the outcome',
+          'motivation': 'Added after the development rehearsal showed that the 10000-epoch models, despite lower one-step validation error, '
+                        'tracked worse in closed loop at s >= 0.8 than the 900-epoch phase-1 models.'},
  },
- 'comparison_count': {'conditions': len(conds), 'primary': 3, 'benchmark': 22, 'secondary_intervals': 24,
+ 'comparison_count': {'conditions': len(conds), 'primary': 3, 'benchmark': 22, 'secondary_intervals': 35,
                       'note': 'Each family is corrected only within itself. Conditions (11) are not comparisons.'},
- 'runtime_estimate': {'laptop_seconds_per_plant_condition': 1.4, 'plant_conditions': 50 * len(conds),
-                      'estimate_minutes': '15-20 on the laptop (resumable 165-s chunks)'},
+ 'runtime_estimate': {'laptop_seconds_per_plant_condition': 2.1, 'plant_conditions': 50 * len(conds),
+                      'estimate_minutes': 'about 20 on the laptop (resumable 160-s chunks); rehearsal without the 900-epoch arm took 15'},
  'development_summary': {
    'PI_tuned': {**PI_tuned, 'mean_tuning_rmse': round(float(mean[bp]), 4), 'by_s': [round(float(x), 3) for x in M[bp]],
                 'runner_up': {'gain': G[second_plain], 'mean_tuning_rmse': round(float(mean[second_plain]), 4)}},
@@ -140,6 +154,10 @@ P = {
    'retrained_best_epochs': {k: v['best_epoch'] for k, v in log.items()},
    'retrained_val_rmse_hz': {k: round(v['val_rmse_hz'], 4) for k, v in log.items()}},
  'arx_plateau': {'configs_within_0.02Hz_of_best': near},
+ 'prediction_metrics': {
+   'note': 'One-step validation RMSE (plants 2100-2129) is a prediction metric, reported separately from closed-loop tracking RMSE; no causal link between them is assumed.',
+   'DR_H4_10000_val_rmse_hz': {k: round(v['val_rmse_hz'], 4) for k, v in log.items() if k.startswith('DR_H4')},
+   'DR_H4_900_val_rmse_hz': {f"DR_H4_{r['seed']}": round(r['val_rmse_hz'], 4) for r in expA}},
  'training_notes': ['DR_H4 seed 103 had a transient validation spike (3.84 Hz) at epoch 10000; its best-validation checkpoint (epoch 9986, 1.393 Hz) is used.',
                     'Retraining ran on the laptop in resumable 165-s chunks with Adam state checkpointed; maths identical to experiment_a.MLP.fit except the 10000-epoch budget.'],
  'flags': flags,

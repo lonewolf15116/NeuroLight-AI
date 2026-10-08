@@ -1,0 +1,12 @@
+{
+ "note": "self-test, n=3 development plants, not interpreted",
+ "interval_counts": {
+  "P1_history": 2,
+  "P2_linear_sufficiency": 1,
+  "B1_PI_benchmark": 22,
+  "S1_adaptation": 11,
+  "S3_chronology": 2,
+  "S4_adaptive_linear_vs_H4": 11,
+  "S5_training_length": 11
+ }
+}

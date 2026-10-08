@@ -1,6 +1,6 @@
 # NeuroLight-AI: Prospective Confirmation v3 (study phase 2)
 
-**Status: DRAFT, not frozen.** Plants 7000–7049 have not been instantiated by any code. The machine-readable protocol is `PROTOCOL_V3.json`, generated mechanically from development results by `prospective_dev/make_protocol_v3.py`. Both files describe the same protocol; if they disagree, the JSON is what the script executes. **One decision is still open (§8): which DR-H4 / DR-Mem-141 models enter the confirmation.**
+**Status: DRAFT, not frozen.** Plants 7000–7049 have not been instantiated by any code. The machine-readable protocol is `PROTOCOL_V3.json`, generated mechanically from development results by `prospective_dev/make_protocol_v3.py`. Both files describe the same protocol; if they disagree, the JSON is what the script executes. The learned-model decision in §8 is resolved (Option C, chosen 8 Oct 2026).
 
 ## 1. Historical record (preserved, not overwritten)
 
@@ -41,8 +41,9 @@ Every controller sees only the observed rate, its own past actions and the targe
 | PI_sens_ref | **Sensitivity-informed tuned PI reference:** per-sensitivity best member of the searched PI family. Uses knowledge of s, so it is not deployable. It is the best PI this search found, **not an upper bound on classical control**. | reported only, never tested |
 | ARX_fixed | OLS prior fitted on training plants 2000–2099, no online update | P2 |
 | ARX_RLS | same prior, RLS with P₀ ×10⁹ σ̂²(ΦᵀΦ)⁺, λ 0.98 | S1, S4 |
-| DR_H4 | 9→64→1 tanh; 4 rates + 4 past actions + candidate; five initialisations | all |
-| DR_Mem141 | 3→141→1 tanh, parameter-matched to DR_H4, same data; five initialisations | P1 |
+| DR_H4 | **primary**: 9→64→1 tanh; 4 rates + 4 past actions + candidate; 10 000-epoch retrained, best-validation checkpoint; five initialisations | all |
+| DR_Mem141 | 3→141→1 tanh, parameter-matched to DR_H4, same data; five initialisations (10 000-epoch) | P1 |
+| DR_H4_900 | unmodified phase-1 Experiment-A DR-H4 weights (900-epoch budget), seeds 101–105 | S5 only; never primary |
 
 Predictive controllers share the 101-candidate one-step rule (ŷ − r)² + 2u² + 2(u − u₋₁)².
 
@@ -64,13 +65,20 @@ Predictive controllers share the 101-candidate one-step rule (ŷ − r)² + 2u²
 | S2: regime dependence | mean RMSE and ranking per condition | all 11 | 0 | — | descriptive; crossovers reported, none assumed |
 | S3: chronology | DR_H4 joint-shuffle − DR_H4 | s 0.6, 0.8 | 2 | 97.5% each | none; plant-level (replaces the C0 cell-level interval) |
 | S4: adaptive linear vs neural | ARX_RLS − DR_H4 | all 11 | 11 | 99.55% each | none (exploratory) |
+| S5: training length | DR_H4_900 − DR_H4 | all 11 | 11 | 99.55% each | none; never promoted to primary |
 
-Totals: 3 primary comparisons, 22 benchmark comparisons, 24 secondary intervals.
+Totals: 3 primary comparisons, 22 benchmark comparisons, 35 secondary intervals.
 
 **Statistics.**
-- Unit: plant. For learned models, RMSE is averaged over the five initialisations within each plant before differencing.
-- Intervals are BCa bootstrap intervals of the mean paired difference, with 10 000 resamples.
+- Unit: plant. For every learned-model arm, RMSE is averaged over all five initialisations within each plant before differencing; no initialisation is selected.
+- Interval: BCa bootstrap of the mean of the 50 paired plant-level differences. 10 000 resamples; bias correction z₀ from the bootstrap distribution; acceleration from the jackknife (`experiment_b_final.bca_mean_ci`). Each interval gets a fixed bootstrap seed (700001, 700002, … in the order the families are listed), so the analysis is deterministic.
+- Interval level = 1 − α_each as listed above.
 - Primary endpoint: RMSE over all 180 steps. Secondary: RMSE over steps 50–179, plus action metrics.
+
+**S5 (training length).**
+- Why it was added: the development rehearsal showed that the 10 000-epoch models had lower one-step validation error than the 900-epoch phase-1 models yet tracked worse in closed loop at s ≥ 0.8.
+- Prediction metric (one-step validation RMSE) and control metric (closed-loop tracking RMSE) are reported separately; no causal link between them is assumed.
+- The 10 000-epoch models stay primary whatever S5 shows.
 
 **P2 comparator and margin.**
 - P2 uses the **fixed** ARX, so it tests whether a linear representation with the same history suffices without online adaptation. The adaptive ARX is assessed separately in S1 and S4.
@@ -81,7 +89,7 @@ Totals: 3 primary comparisons, 22 benchmark comparisons, 24 secondary intervals.
 - `PROTOCOL_V3.json` records SHA-256 hashes for every model weight file and for the ARX prior. `confirmation_v3.py` aborts on any mismatch.
 - **Freezing** (`python freeze_v3.py --i-confirm-freeze`, only after explicit approval):
   1. Sets status to FROZEN and timestamps it.
-  2. Writes `MANIFEST_V3.json`. It holds SHA-256 hashes for the confirmation script, the protocol, the simulator modules (`experiment.py`, `v02_robustness.py`, `experiment_b_final.py`), the ARX prior and all ten weight files, plus the git commit.
+  2. Writes `MANIFEST_V3.json`. It holds SHA-256 hashes for the confirmation script, the protocol, the simulator modules (`experiment.py`, `v02_robustness.py`, `experiment_b_final.py`), the ARX prior and all fifteen weight files (10 000-epoch DR-H4 and DR-Mem-141, plus the unmodified 900-epoch DR-H4), plus the git commit.
 - The confirmation mode refuses to start unless the status is FROZEN and every file still matches the manifest. The manifest and protocol are committed before the run.
 - Current draft hashes are in `results_v3/audit_v3.json`.
 
@@ -94,7 +102,7 @@ Totals: 3 primary comparisons, 22 benchmark comparisons, 24 secondary intervals.
 | Freeze | `python freeze_v3.py --i-confirm-freeze`, then commit | — |
 | Confirm | `python confirmation_v3.py --budget 160`, repeated until COMPLETE | plants 7000–7049 (spent after the first completed run) |
 
-**Runtime:** the rehearsal took 15 minutes on the laptop (about 1.6 s per plant-condition) in six resumable 160-s chunks, and the confirmation is identical in size. Progress is saved after every plant-condition.
+**Runtime:** the rehearsal took 15 minutes on the laptop (about 1.6 s per plant-condition) in six resumable 160-s chunks. The added 900-epoch arm brings the confirmation to roughly 20 minutes. Progress is saved after every plant-condition.
 
 ## 7. Development rehearsal (plants 5100–5149, current draft models): precision check
 
@@ -116,23 +124,18 @@ P1 and P2 would be supported on development data:
 
 ARX_RLS had the lowest mean RMSE in all 11 development conditions.
 
-## 8. Open decision before freezing: which learned models
+## 8. Learned-model decision (resolved: Option C)
 
-The rehearsal shows a systematic effect.
-- The 10 000-epoch models improve one-step validation error over the phase-1 900-epoch models (DR-H4 1.39 vs 1.61–1.85 Hz).
-- But they are **much worse in closed loop at s ≥ 0.8**. At s 1.2 they score 2.72–3.25 Hz across all five initialisations, against 1.82 Hz for the 900-epoch models on the same development plants (earlier vectorised development run, `post_confirmation_dev/`).
-- At s 0.6 the two model sets are similar (1.65 vs 1.61 Hz); at s 0.8 the 10k models are already worse (1.40 vs 1.22 Hz).
-- This is a development observation of prediction/control objective mismatch.
+Development observation (rehearsal, plants 5100–5149):
+- The 10 000-epoch models improve one-step validation error (DR-H4 1.39–1.40 vs 1.61–1.85 Hz at 900 epochs).
+- But they track worse in closed loop at s ≥ 0.8. At s 1.2 they score 2.72–3.25 Hz across all five initialisations, against 1.82 Hz for the 900-epoch models in an earlier vectorised development run.
 
-Options:
-
-| Option | What enters v3 | Consequence |
-|---|---|---|
-| A (current draft) | 10k-epoch DR_H4 / DR_Mem141 | The selection rule (converged, best validation) was fixed before the rehearsal. DR-H4 will look weak at high gain. |
-| B | phase-1 900-epoch models | Better closed loop at high gain. Under-trained by the protocol's own convergence criterion, and the choice would now be made after seeing closed-loop development data. |
-| C | both: 10k pair primary (P1, P2, B1, S3, S4) plus 900-epoch pair as secondary S5 (DR_H4_900 − DR_H4_10k, all 11, Bonferroni 11) | Tests the objective-mismatch effect prospectively. Adds about 25% runtime. |
-
-The choice belongs to the reviewer and must be made before freezing; the JSON and script will be regenerated to match.
+Decision and conditions:
+1. The 10 000-epoch models remain **primary**. Their selection rule (converged budget, best-validation checkpoint) was fixed before the rehearsal and is not changed.
+2. The 900-epoch models enter as a **secondary arm** for S5 only, with all five seeds and unmodified weights (hashes in the protocol and manifest). Neither family is retrained or altered.
+3. S5 was added because of the development observation above; this is disclosed here and will be disclosed in the paper.
+4. S5 is fully specified before confirmation: contrast, conditions, plant-level averaging, BCa level and Bonferroni correction (§4).
+5. S5 is never promoted to primary, whatever it shows.
 
 ## 9. Prohibitions
 

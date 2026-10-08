@@ -1,8 +1,8 @@
 {
- "script_sha256": "3480a3490378cafc4b3ba619e03b56732fde627fe569817c81d2daea95b73508",
+ "script_sha256": "77177c5e22f8491608a762151d71454df423ff9f42cb2adef8300ac9da1696fb",
  "file_hashes": {
-  "confirmation_v3.py": "3480a3490378cafc4b3ba619e03b56732fde627fe569817c81d2daea95b73508",
-  "PROTOCOL_V3.json": "4e48321053017ce5a02dc5a99412139b5179afc58019eca9931b07745d850937",
+  "confirmation_v3.py": "77177c5e22f8491608a762151d71454df423ff9f42cb2adef8300ac9da1696fb",
+  "PROTOCOL_V3.json": "edff025e96ec4821e46cc5b8f5dda31250851cc7c54069379a67c92eef22f07d",
   "v02_robustness.py": "80dd11f3664e1bafd6bffc5e2013b932c3a40eabf6446e4dc5d8ad2b78f7e34a",
   "experiment.py": "cf36ee4baad8eadebe39ac9220cd16d23310ab827294fb6412f19ee202c6937d",
   "experiment_b_final.py": "d2217f3434f4564d30e9bdec6361deed90df7928f44c06b36d3a2f433d83af69",
@@ -16,7 +16,12 @@
   "prospective_dev/retrain_10000/DR_Memoryless_141_seed_102.npz": "ba8f727b1b38a42efff8b16a0ec933fd1ee1b6825debda2cfce75b509a4e4539",
   "prospective_dev/retrain_10000/DR_Memoryless_141_seed_103.npz": "b92e4b0704e1c5b8c95927a654ccc17441d640758fa717cd9da6cc1e3df112fd",
   "prospective_dev/retrain_10000/DR_Memoryless_141_seed_104.npz": "a918aab7a0a8796dd22d660177849e329b3cc370be668382c2e22635e339d843",
-  "prospective_dev/retrain_10000/DR_Memoryless_141_seed_105.npz": "c5410487bec8a39da68b8402efbbe4361540b7fbd33743313be1f8f3238f9707"
+  "prospective_dev/retrain_10000/DR_Memoryless_141_seed_105.npz": "c5410487bec8a39da68b8402efbbe4361540b7fbd33743313be1f8f3238f9707",
+  "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_101.npz": "0c25c8661bf0c078878db735d1d115e52c94f0929c8f24896c016bc15831769c",
+  "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_102.npz": "34ff7810e10e3220f5541b33742d56a48084f9cf585c71005ef654325f63596d",
+  "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_103.npz": "42e477be97ffe70bbb74da48df5af4db4eea072168c63d19de920a80225a489a",
+  "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_104.npz": "8dc9401a35645802beaed33abd10bf3ee732fdeab0971282e03b806b87654c37",
+  "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_105.npz": "d966388795e5ccfe989e9a246ad99cb2269a6244718d7094aade4a076f943c65"
  },
  "protocol": {
   "study": "NeuroLight-AI prospective confirmation v3 (study phase 2)",
@@ -158,6 +163,8 @@
    }
   },
   "controller_notes": {
+   "DR_H4": "PRIMARY learned model: 10000-epoch retrained, best-validation checkpoint. Selection rule fixed before the development rehearsal; stays primary regardless of S5.",
+   "DR_H4_900": "SECONDARY arm (S5 only): unmodified phase-1 Experiment-A weights (900-epoch budget). Not retrained or altered.",
    "PI_sens_ref": "Sensitivity-informed tuned PI reference: per-sensitivity best member of the searched PI family. Uses knowledge of s, so it is not deployable; it is the best PI this search found, not an upper bound on classical control. Not hypothesis-tested.",
    "ARX_fixed": "OLS prior; online update disabled (lam and p_scale unused)."
   },
@@ -209,6 +216,28 @@
     {
      "path": "prospective_dev/retrain_10000/DR_Memoryless_141_seed_105.npz",
      "sha256": "c5410487bec8a39da68b8402efbbe4361540b7fbd33743313be1f8f3238f9707"
+    }
+   ],
+   "DR_H4_900": [
+    {
+     "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_101.npz",
+     "sha256": "0c25c8661bf0c078878db735d1d115e52c94f0929c8f24896c016bc15831769c"
+    },
+    {
+     "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_102.npz",
+     "sha256": "34ff7810e10e3220f5541b33742d56a48084f9cf585c71005ef654325f63596d"
+    },
+    {
+     "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_103.npz",
+     "sha256": "42e477be97ffe70bbb74da48df5af4db4eea072168c63d19de920a80225a489a"
+    },
+    {
+     "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_104.npz",
+     "sha256": "8dc9401a35645802beaed33abd10bf3ee732fdeab0971282e03b806b87654c37"
+    },
+    {
+     "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_105.npz",
+     "sha256": "d966388795e5ccfe989e9a246ad99cb2269a6244718d7094aade4a076f943c65"
     }
    ]
   },
@@ -320,19 +349,42 @@
     "n_comparisons": 11,
     "alpha_each": 0.004545,
     "decision": "none; exploratory"
+   },
+   "S5": {
+    "role": "SECONDARY - training length (prediction/control mismatch)",
+    "contrast": "DR_H4_900 - DR_H4",
+    "conditions": [
+     "s0.50",
+     "s0.60",
+     "s0.70",
+     "s0.80",
+     "s0.90",
+     "s1.00",
+     "s1.10",
+     "s1.20",
+     "s1.40",
+     "n1.0",
+     "n2.0"
+    ],
+    "n_comparisons": 11,
+    "alpha_each": 0.004545,
+    "multiplicity": "Bonferroni over 11 (simultaneous 95%)",
+    "unit": "plant; each arm averaged over all five initialisations (seeds 101-105) within plant; no seed selection",
+    "decision": "none; never promoted to primary whatever the outcome",
+    "motivation": "Added after the development rehearsal showed that the 10000-epoch models, despite lower one-step validation error, tracked worse in closed loop at s >= 0.8 than the 900-epoch phase-1 models."
    }
   },
   "comparison_count": {
    "conditions": 11,
    "primary": 3,
    "benchmark": 22,
-   "secondary_intervals": 24,
+   "secondary_intervals": 35,
    "note": "Each family is corrected only within itself. Conditions (11) are not comparisons."
   },
   "runtime_estimate": {
-   "laptop_seconds_per_plant_condition": 1.4,
+   "laptop_seconds_per_plant_condition": 2.1,
    "plant_conditions": 550,
-   "estimate_minutes": "15-20 on the laptop (resumable 165-s chunks)"
+   "estimate_minutes": "about 20 on the laptop (resumable 160-s chunks); rehearsal without the 900-epoch arm took 15"
   },
   "development_summary": {
    "PI_tuned": {
@@ -452,6 +504,23 @@
     ]
    ]
   },
+  "prediction_metrics": {
+   "note": "One-step validation RMSE (plants 2100-2129) is a prediction metric, reported separately from closed-loop tracking RMSE; no causal link between them is assumed.",
+   "DR_H4_10000_val_rmse_hz": {
+    "DR_H4_101": 1.39,
+    "DR_H4_102": 1.4046,
+    "DR_H4_103": 1.3934,
+    "DR_H4_104": 1.3853,
+    "DR_H4_105": 1.3978
+   },
+   "DR_H4_900_val_rmse_hz": {
+    "DR_H4_101": 1.6076,
+    "DR_H4_102": 1.6342,
+    "DR_H4_103": 1.6222,
+    "DR_H4_104": 1.8507,
+    "DR_H4_105": 1.6658
+   }
+  },
   "training_notes": [
    "DR_H4 seed 103 had a transient validation spike (3.84 Hz) at epoch 10000; its best-validation checkpoint (epoch 9986, 1.393 Hz) is used.",
    "Retraining ran on the laptop in resumable 165-s chunks with Adam state checkpointed; maths identical to experiment_a.MLP.fit except the 10000-epoch budget."
@@ -555,6 +624,43 @@
      "mean_intensity": 0.6715555555555556,
      "frac_bound": 0.2222222222222222,
      "slew": 0.07748603351955308
+    }
+   ],
+   "DR_H4_900": [
+    {
+     "rmse": 2.1461366666359383,
+     "rmse_t50": 2.3104196139441995,
+     "mean_intensity": 0.670888888888889,
+     "frac_bound": 0.2,
+     "slew": 0.05351955307262571
+    },
+    {
+     "rmse": 2.0852586580540873,
+     "rmse_t50": 2.238682275146699,
+     "mean_intensity": 0.6767222222222222,
+     "frac_bound": 0.2,
+     "slew": 0.04821229050279331
+    },
+    {
+     "rmse": 2.1888505326387753,
+     "rmse_t50": 2.3379342894190747,
+     "mean_intensity": 0.6682222222222224,
+     "frac_bound": 0.18888888888888888,
+     "slew": 0.04692737430167599
+    },
+    {
+     "rmse": 2.4291046015750366,
+     "rmse_t50": 2.539056669334008,
+     "mean_intensity": 0.6561666666666668,
+     "frac_bound": 0.18333333333333332,
+     "slew": 0.04569832402234638
+    },
+    {
+     "rmse": 2.2087924931009426,
+     "rmse_t50": 2.3587177342890255,
+     "mean_intensity": 0.6718333333333334,
+     "frac_bound": 0.19444444444444445,
+     "slew": 0.04821229050279329
     }
    ],
    "DR_Mem141": [
@@ -674,6 +780,43 @@
      "mean_intensity": 0.21438888888888888,
      "frac_bound": 0.3111111111111111,
      "slew": 0.06597765363128492
+    }
+   ],
+   "DR_H4_900": [
+    {
+     "rmse": 2.5284142789076203,
+     "rmse_t50": 2.1272048231743135,
+     "mean_intensity": 0.21061111111111108,
+     "frac_bound": 0.32222222222222224,
+     "slew": 0.06340782122905028
+    },
+    {
+     "rmse": 2.4584228734176055,
+     "rmse_t50": 2.062817909314792,
+     "mean_intensity": 0.209,
+     "frac_bound": 0.31666666666666665,
+     "slew": 0.05944134078212291
+    },
+    {
+     "rmse": 2.374989393426402,
+     "rmse_t50": 2.077967954723825,
+     "mean_intensity": 0.20822222222222225,
+     "frac_bound": 0.32222222222222224,
+     "slew": 0.055642458100558664
+    },
+    {
+     "rmse": 2.5391763865243244,
+     "rmse_t50": 2.1811293375075507,
+     "mean_intensity": 0.21588888888888888,
+     "frac_bound": 0.26666666666666666,
+     "slew": 0.05256983240223464
+    },
+    {
+     "rmse": 2.509122178555221,
+     "rmse_t50": 2.1354075701367483,
+     "mean_intensity": 0.21011111111111108,
+     "frac_bound": 0.32222222222222224,
+     "slew": 0.05748603351955308
     }
    ],
    "DR_Mem141": [
