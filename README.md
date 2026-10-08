@@ -2,7 +2,7 @@
 
 Synthetic study of learned one-step predictive control of a 64-neuron LIF population under hidden plant-sensitivity shifts, compared with fixed PI feedback and an information-matched linear ARX baseline. **Synthetic only — not experimental neuroscience, not a ChR2 model, not reinforcement learning.**
 
-**Current results:** `results_v3/` and `manuscript/NeuroLight_AI_Manuscript_v3.docx`. **Plan:** `ROADMAP.md`.
+**Current results:** `results_v3/`, `results_v4/` and the manuscript `manuscript/NeuroLight_AI_Manuscript_v4.pdf` (source and arXiv package in `manuscript/arxiv/`; every number and figure is generated from the frozen results by `build_tex.py` and `make_figures.py`). **Plan:** `ROADMAP.md`.
 
 ## Study map
 
@@ -21,6 +21,8 @@ Synthetic study of learned one-step predictive control of a 64-neuron LIF popula
 | Post-hoc Experiment B telemetry | `diagnose_experiment_b.py` | exploratory | — |
 | Phase-2 development (PI search, adaptive RLS, retraining, rehearsal) | `prospective_dev/` | development | 5000–5149 |
 | **v3 prospective confirmation** | `confirmation_v3.py` + `PROTOCOL_V3.json` (FROZEN) + `MANIFEST_V3.json` | **confirmatory** | 7000–7049 (spent) |
+| Phase-4 development (gain mechanism, checkpoints, interventions I1–I3) | `prospective_dev4/` | development | 5200–5299 |
+| **v4 prospective confirmation** | `confirmation_v4.py` + `PROTOCOL_V4.json` (FROZEN) + `MANIFEST_V4.json` | **confirmatory** | 8000–8049 (spent) |
 
 Training/validation plants for the confirmatory H4 models: 2000–2099 / 2100–2129. Frozen artefacts (scripts, protocols, weights, results) are under `archived_results/`. SHA-256 hashes of the five DR-H4 weight files are recorded in `archived_results/EXPERIMENT_B_FINAL_2026-10-08/experiment_b_final_audit.json`.
 
