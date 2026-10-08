@@ -49,3 +49,20 @@ DR-H4 retrained (same data, seeds, optimiser) with raw weights saved at 12 epoch
 - **4.2:** prospectively test (a) the decoupling of validation and closed-loop error with rising gain, and (b) the failure of the learned action sensitivity to scale with s.
 
 Interventions still to develop before v4 is frozen: early stopping on a closed-loop validation set; training on closed-loop (on-policy) data; adding the scalar-gain estimate as an input feature.
+
+## 4.2 interventions (`t43_interventions.py`; evaluation plants 5200–5249; I1 selection on 5250–5299)
+
+| Controller | mean RMSE (9 s) | s 1.0 | s 1.4 | dŷ/du slope (reference ≈ 31) |
+|---|---|---|---|---|
+| H4 10 000 epochs | 2.289 | 1.913 | 4.464 | 12.2 |
+| H4 900 epochs | 1.724 | 1.325 | 2.628 | 2.8 |
+| I1: closed-loop early stopping (epochs 300–900) | 1.590 | 1.211 | 2.026 | — |
+| I3: own closed-loop data (best-val) | 1.631 | 1.265 | 2.263 | 12.7 |
+| **I2: gain estimate g as an extra input (best-val)** | **1.350** | **1.042** | **1.265** | **26.0** |
+| ARX + RLS (full), for reference | 1.334 | 1.001 | 1.273 | — |
+
+- **I2** learns to scale its action sensitivity with s and nearly matches the full adaptive ARX.
+- Its validation RMSE is 1.04 Hz vs 1.39 Hz for H4 10k, so the gain input improves prediction too.
+- Its control improves with training (mean 1.91 at 900 epochs → 1.86 → 1.54 → 1.35 at 6000), so the prediction–control mismatch disappears.
+- **I3** shows a residual mismatch (900-epoch snapshot 1.58 vs best-val 1.63).
+- **Interpretation (development):** the failure is that the network does not identify the plant gain from its history window; supplying the gain removes it.

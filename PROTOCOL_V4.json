@@ -1,0 +1,397 @@
+{
+  "study": "NeuroLight-AI prospective confirmation v4 (phase 4: mechanisms)",
+  "status": "DRAFT",
+  "confirmation": {
+    "plant_seeds": "8000-8049",
+    "plant_seeds_range": [
+      8000,
+      8050
+    ],
+    "n_plants": 50
+  },
+  "development_seeds": {
+    "mechanism_analysis": "5200-5249",
+    "I1_control_validation": "5250-5299"
+  },
+  "audit_smoke_plant": 5200,
+  "self_test_plants": [
+    5200,
+    5201,
+    5202
+  ],
+  "sensitivities": [
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0,
+    1.1,
+    1.2,
+    1.4
+  ],
+  "noise": 0.5,
+  "controllers": {
+    "PI_tuned_AW": {
+      "kp": 0.02,
+      "ki": 0.25,
+      "kt": 0.5
+    },
+    "ARX_RLS": {
+      "lam": 0.98,
+      "p_scale": 1000000000.0
+    },
+    "ARX_gain": {
+      "lam": 0.98,
+      "p0": 1000.0,
+      "act_idx": [
+        0,
+        5,
+        6,
+        7,
+        8
+      ]
+    }
+  },
+  "network_arms": [
+    "H4_10k",
+    "H4_900",
+    "H4_I1",
+    "H4_I2",
+    "H4_I3",
+    "H4_snap_e900",
+    "H4_snap_e9000",
+    "H4_I2_e900",
+    "H4_I2_e6000"
+  ],
+  "models": {
+    "H4_10k": [
+      {
+        "path": "prospective_dev/retrain_10000/DR_H4_seed_101.npz",
+        "sha256": "3b7e3e71936828d21956f1ecacfc6c1a14203609a52f3ad91af06bb4cbd0f0b2"
+      },
+      {
+        "path": "prospective_dev/retrain_10000/DR_H4_seed_102.npz",
+        "sha256": "2ccb8eed99d348a6c141a505b8f200dc955ca751ce5b0de6e62a85c3ca83240d"
+      },
+      {
+        "path": "prospective_dev/retrain_10000/DR_H4_seed_103.npz",
+        "sha256": "f3d1e1d60bfd9871bdbb082c21afb280086b663b86ce0b12a2e8e5e9cb3e6fc7"
+      },
+      {
+        "path": "prospective_dev/retrain_10000/DR_H4_seed_104.npz",
+        "sha256": "4d1b840d2a2d32e17312693e25f0410cd21bfdaec54927bbf02560faa9216d1c"
+      },
+      {
+        "path": "prospective_dev/retrain_10000/DR_H4_seed_105.npz",
+        "sha256": "2f871c484446c4d6befac0bfea8fcebc017f473ddf80e0fe12b4982965fcadbf"
+      }
+    ],
+    "H4_900": [
+      {
+        "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_101.npz",
+        "sha256": "0c25c8661bf0c078878db735d1d115e52c94f0929c8f24896c016bc15831769c"
+      },
+      {
+        "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_102.npz",
+        "sha256": "34ff7810e10e3220f5541b33742d56a48084f9cf585c71005ef654325f63596d"
+      },
+      {
+        "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_103.npz",
+        "sha256": "42e477be97ffe70bbb74da48df5af4db4eea072168c63d19de920a80225a489a"
+      },
+      {
+        "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_104.npz",
+        "sha256": "8dc9401a35645802beaed33abd10bf3ee732fdeab0971282e03b806b87654c37"
+      },
+      {
+        "path": "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_105.npz",
+        "sha256": "d966388795e5ccfe989e9a246ad99cb2269a6244718d7094aade4a076f943c65"
+      }
+    ],
+    "H4_I1": [
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_101_e300.npz",
+        "sha256": "0cb89f526324ce3c251fa3886a9f37efa2fceb08fcf72ef67e628341f9822bbe"
+      },
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_102_e600.npz",
+        "sha256": "31f3b49883cb1cd23ce959f6f5f43373a30e1ae72b916e1d1db65b45252f97d5"
+      },
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_103_e600.npz",
+        "sha256": "04e913b835f6b1b0a439ea8072a89cc66bfe5936b09ffa9a44e9413f47245fdb"
+      },
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_104_e900.npz",
+        "sha256": "67a909bca727b8e2360ad8482f758a9b63b6d51e0c463b314bb1729e587f23e0"
+      },
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_105_e600.npz",
+        "sha256": "bbd1171d49db0425cb885e1ae3ef6eb417dbe0c505b46a19bc258ddf5cd40d4e"
+      }
+    ],
+    "H4_I2": [
+      {
+        "path": "prospective_dev4/models_i2/i2_101_best.npz",
+        "sha256": "c600f11c2e51959fde0075c50c1d138c854d34d8dfa1b2f8389b11f8ef6139dc"
+      },
+      {
+        "path": "prospective_dev4/models_i2/i2_102_best.npz",
+        "sha256": "568507619e897bb2381ee43ef5f76b5f518c127038e1c38c3ef1eba24cb1736d"
+      },
+      {
+        "path": "prospective_dev4/models_i2/i2_103_best.npz",
+        "sha256": "6a140aee079e8e6f534a0e8c6ffd61fc27571736af888e3d18463ae913d72b48"
+      },
+      {
+        "path": "prospective_dev4/models_i2/i2_104_best.npz",
+        "sha256": "24a3a4c554dade59e71aecfcdf9a2662e726f19d78408a43e13d4796e54de186"
+      },
+      {
+        "path": "prospective_dev4/models_i2/i2_105_best.npz",
+        "sha256": "27546af0bfda483a5d4ac8e11e6e085b16f40eb2e9d04d80187d288496cb99a2"
+      }
+    ],
+    "H4_I3": [
+      {
+        "path": "prospective_dev4/models_i3/i3_101_best.npz",
+        "sha256": "b24056656246e80c9050a33be3e06e10ac8af306e62b3819d0c38fb51e04cc72"
+      },
+      {
+        "path": "prospective_dev4/models_i3/i3_102_best.npz",
+        "sha256": "d9eb1c4bf093beae143bd9f07225d09cc3c4783e4b102e89821a17db04e2e465"
+      },
+      {
+        "path": "prospective_dev4/models_i3/i3_103_best.npz",
+        "sha256": "d580e07e5459958e49610ebf560ef0a5bf84fde7cb8a6766a45004dafaefd174"
+      },
+      {
+        "path": "prospective_dev4/models_i3/i3_104_best.npz",
+        "sha256": "1e64c63e5f45bedb736b41fd31e79dc860450325ccbccbeafedc6ce47d6dc5ec"
+      },
+      {
+        "path": "prospective_dev4/models_i3/i3_105_best.npz",
+        "sha256": "9aa5b77ffd26074683ceb034d8619152ce83b8d26142915172d786b7c6e545e0"
+      }
+    ],
+    "H4_snap_e900": [
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_101_e900.npz",
+        "sha256": "af2e4bcfddfc45e9a00f2b615b30218d8ea95fe558275a41e613393395d869bd"
+      },
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_102_e900.npz",
+        "sha256": "3f52653b8fbc3dbdc7fbd6d0d50ab2ca915568f9bdecc07d3634d5f9bbc7203e"
+      },
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_103_e900.npz",
+        "sha256": "be897014bf397dc44725be085efc5f34921ffd0624dff88d6b9d6654e8f0e4f9"
+      },
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_104_e900.npz",
+        "sha256": "67a909bca727b8e2360ad8482f758a9b63b6d51e0c463b314bb1729e587f23e0"
+      },
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_105_e900.npz",
+        "sha256": "720ffcf4c1643d78fb84b433d0b505d513b9adb53ab95748cf10b5fbdfb19492"
+      }
+    ],
+    "H4_snap_e9000": [
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_101_e9000.npz",
+        "sha256": "c5450459fa789628e6dc8a1bc2699888f25f4e601265dd2f88d1876ffb6dd934"
+      },
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_102_e9000.npz",
+        "sha256": "438ae40a85957ef1ec465151b70e3acc9c74f6f642a3fe83519846a1bed9644a"
+      },
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_103_e9000.npz",
+        "sha256": "d0b9e55e20ac3d4cb0bb1f7ab2fe30fa6c32f9dbc83f2ca58f46b6651d446c55"
+      },
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_104_e9000.npz",
+        "sha256": "8e260d56d76fef6e11e61ceb093fdcd4a6ee67fcbf29a430139e208feb992d0c"
+      },
+      {
+        "path": "prospective_dev4/snapshots/DR_H4_105_e9000.npz",
+        "sha256": "875bde6990464d4f10895cabfefcb1b1fd28c9fb598670da0be7e646d264ad50"
+      }
+    ],
+    "H4_I2_e900": [
+      {
+        "path": "prospective_dev4/models_i2/i2_101_e900.npz",
+        "sha256": "3755454b2142f8a33609aaafc914686cd029b0dab947d07a82a9d39698d3bbd8"
+      },
+      {
+        "path": "prospective_dev4/models_i2/i2_102_e900.npz",
+        "sha256": "9f4babefa3172ed419ffa31889201538f3f1edaf62b2e9fc9266c1488516b6fa"
+      },
+      {
+        "path": "prospective_dev4/models_i2/i2_103_e900.npz",
+        "sha256": "ac0e67f2c87e5c95c92fd061cf4021911786dc09635456cba1ae26d68890dfc0"
+      },
+      {
+        "path": "prospective_dev4/models_i2/i2_104_e900.npz",
+        "sha256": "9924e8cac0c6bbb7cbff68c7a8235e5210f481324424972456024acf6ced3dee"
+      },
+      {
+        "path": "prospective_dev4/models_i2/i2_105_e900.npz",
+        "sha256": "78fc367502ee69d3c969a7f1e6741c8a64a4e0445ebde416f2d6889637a18895"
+      }
+    ],
+    "H4_I2_e6000": [
+      {
+        "path": "prospective_dev4/models_i2/i2_101_e6000.npz",
+        "sha256": "c600f11c2e51959fde0075c50c1d138c854d34d8dfa1b2f8389b11f8ef6139dc"
+      },
+      {
+        "path": "prospective_dev4/models_i2/i2_102_e6000.npz",
+        "sha256": "568507619e897bb2381ee43ef5f76b5f518c127038e1c38c3ef1eba24cb1736d"
+      },
+      {
+        "path": "prospective_dev4/models_i2/i2_103_e6000.npz",
+        "sha256": "6a140aee079e8e6f534a0e8c6ffd61fc27571736af888e3d18463ae913d72b48"
+      },
+      {
+        "path": "prospective_dev4/models_i2/i2_104_e6000.npz",
+        "sha256": "24a3a4c554dade59e71aecfcdf9a2662e726f19d78408a43e13d4796e54de186"
+      },
+      {
+        "path": "prospective_dev4/models_i2/i2_105_e6000.npz",
+        "sha256": "17d5d13da2234688aba638f0a4a3a05e984f4ff2d10f92468b76771b2b9514ba"
+      }
+    ]
+  },
+  "model_notes": {
+    "H4_10k": "v3 primary DR-H4 (10000-epoch, best validation)",
+    "H4_900": "phase-1 900-epoch weights",
+    "H4_I1": "I1 closed-loop early stopping: per-seed snapshot epoch chosen on plants 5250-5299: {'101': 300, '102': 600, '103': 600, '104': 900, '105': 600}",
+    "H4_I2": "I2: 10 inputs (DR-H4 inputs + one-parameter gain-RLS estimate g), best validation within 6000 epochs",
+    "H4_I3": "I3: DR-H4 retrained on open-loop + own closed-loop data, best validation within 6000 epochs",
+    "H4_snap_*": "raw DR-H4 weights at fixed epochs from the checkpointed retraining",
+    "H4_I2_e*": "raw I2 weights at fixed epochs"
+  },
+  "arx_prior": {
+    "path": "prospective_dev/arx10_prior.npz",
+    "sha256": "7afd3e874bfccd7ebb56ab7008c964068a7a91dd9bebdf512be7e68f767988b8",
+    "w_u": 0.407092896034901
+  },
+  "statistics": {
+    "unit": "plant; network arms averaged over five seeds within plant",
+    "interval": "BCa bootstrap",
+    "resamples": 10000
+  },
+  "analysis": {
+    "Q1": {
+      "role": "PRIMARY",
+      "test": "fraction of the full-RLS mean improvement over fixed ARX recovered by ARX_gain (ratio of plant-level means over the sweep)",
+      "alpha": 0.05,
+      "threshold": 0.7,
+      "decision": "lower CI bound >= 0.70",
+      "dev_value": 0.86
+    },
+    "Q2": {
+      "role": "PRIMARY",
+      "test": "Spearman correlation of final g with s over 450 plant-conditions",
+      "threshold": 0.9,
+      "dev_value": "about 1.0 on condition means"
+    },
+    "Q3": {
+      "role": "PRIMARY",
+      "test": "H4_10k - H4_I2 RMSE",
+      "conditions": [
+        "s1.00",
+        "s1.20",
+        "s1.40"
+      ],
+      "alpha_each": 0.016667,
+      "decision": "all lower bounds > 0",
+      "dev_value": [
+        0.87,
+        1.93,
+        3.2
+      ]
+    },
+    "Q4": {
+      "role": "PRIMARY",
+      "test": "training length: (a) H4_snap_e9000 - H4_snap_e900 > 0 and (b) H4_I2_e6000 - H4_I2_e900 < 0",
+      "conditions": [
+        "s1.00",
+        "s1.20",
+        "s1.40"
+      ],
+      "alpha_each": 0.008333,
+      "decision": "(a) all lower bounds > 0 and (b) all upper bounds < 0"
+    },
+    "S1": {
+      "role": "secondary",
+      "test": "H4_I2 - ARX_RLS",
+      "conditions": [
+        "s0.50",
+        "s0.60",
+        "s0.70",
+        "s0.80",
+        "s0.90",
+        "s1.00",
+        "s1.10",
+        "s1.20",
+        "s1.40"
+      ],
+      "alpha_each": 0.005556
+    },
+    "S2": {
+      "role": "secondary",
+      "test": "H4_10k - H4_I1",
+      "conditions": [
+        "s0.50",
+        "s0.60",
+        "s0.70",
+        "s0.80",
+        "s0.90",
+        "s1.00",
+        "s1.10",
+        "s1.20",
+        "s1.40"
+      ],
+      "alpha_each": 0.005556
+    },
+    "S3": {
+      "role": "secondary",
+      "test": "H4_10k - H4_I3",
+      "conditions": [
+        "s0.50",
+        "s0.60",
+        "s0.70",
+        "s0.80",
+        "s0.90",
+        "s1.00",
+        "s1.10",
+        "s1.20",
+        "s1.40"
+      ],
+      "alpha_each": 0.005556
+    },
+    "S4": {
+      "role": "secondary",
+      "test": "slope of network dyhat/du vs s divided by slope of 60*g*w_u vs s, for H4_10k, H4_900, H4_I2",
+      "alpha_each": 0.016667,
+      "dev_value": {
+        "H4_10k": 0.39,
+        "H4_900": 0.09,
+        "H4_I2": 0.84
+      }
+    },
+    "S5": {
+      "role": "descriptive",
+      "test": "mean RMSE per controller and condition"
+    }
+  },
+  "prohibitions": [
+    "No tuning or model selection on 8000-8049",
+    "No change of hypotheses, thresholds or alpha after FROZEN",
+    "Report all arms and conditions",
+    "No biological claim"
+  ]
+}

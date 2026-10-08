@@ -7,3 +7,5 @@ prospective_dev/retrain_*/ckpt_*
 results_v3/confirmation_v3_raw_partial.json
 results_v3/dev_rehearsal_raw_partial.json
 prospective_dev4/snapshots/ckpt_*
+prospective_dev4/models_i*/ckpt_*
+results_v4/*partial.json
