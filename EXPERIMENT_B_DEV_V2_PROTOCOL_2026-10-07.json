@@ -1,0 +1,49 @@
+{
+  "study": "B-Dev-v2 robust adaptive PI",
+  "status": "DEVELOPMENT ONLY",
+  "seeds": {
+    "tuning": "5000-5099",
+    "validation": "5100-5149"
+  },
+  "sensitivity": [
+    0.6,
+    0.8,
+    1.0,
+    1.2
+  ],
+  "gamma_grid": [
+    0.01,
+    0.05,
+    0.1,
+    0.2
+  ],
+  "delta_grid": [
+    0.001,
+    0.005,
+    0.01
+  ],
+  "epsilon": 0.0001,
+  "g_bounds": [
+    0.2,
+    2.5
+  ],
+  "eta": 0.25,
+  "selection": "one global gamma/delta minimizing equal-weight tuning RMSE across four sensitivities",
+  "anti_windup": "conditional integration; clipping alone is not treated as anti-windup",
+  "nominal_gain": "median positive normalized dy/du on tuning seeds at nominal sensitivity; validation excluded",
+  "diagnostics": [
+    "tracking RMSE",
+    "gain-ratio RMSE vs true sensitivity (diagnostic only)",
+    "dead-zone freeze rate",
+    "gain-boundary clamp rate",
+    "control saturation-attempt rate",
+    "full validation traces"
+  ],
+  "limits": [
+    "local dy/du is a heuristic, not full plant identification",
+    "g/g_nom is not assumed identical to simulator sensitivity",
+    "true sensitivity never enters controller",
+    "no validation retuning",
+    "no future confirmation seeds"
+  ]
+}

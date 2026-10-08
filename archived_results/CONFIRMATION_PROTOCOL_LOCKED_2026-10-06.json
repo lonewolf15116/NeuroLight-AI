@@ -1,0 +1,86 @@
+{
+  "study": "NeuroLight-AI confirmatory study",
+  "status": "LOCKED BEFORE CONFIRMATION DATA",
+  "date_locked": "2026-10-06",
+  "scope": "Synthetic neural-population control; not a biological or optogenetic efficacy claim.",
+  "frozen_prior_evidence": {
+    "v04_final_seeds": "1000-1049 (spent; excluded)",
+    "v05": "diagnostic only",
+    "v06": "mechanistic development only"
+  },
+  "hypotheses": {
+    "H1": "Ordered H4 history reduces tracking RMSE relative to the memoryless learned controller under low-sensitivity plant shift.",
+    "H2": "H4 beats the prespecified PI controller at sensitivity 0.60 and 0.80, but is not expected to beat PI universally.",
+    "H3": "Jointly shuffling aligned historical (rate, action) pairs degrades H4 closed-loop performance at sensitivity 0.60 and 0.80.",
+    "H4": "Controller rankings are regime-dependent; at sensitivity 1.20 PI is expected to outperform H4."
+  },
+  "primary_conditions": {
+    "sensitivity": [
+      0.6,
+      0.8,
+      1.0,
+      1.2
+    ]
+  },
+  "secondary_conditions": {
+    "process_noise": [
+      1.0,
+      2.0,
+      4.0
+    ],
+    "noise_4_note": "extrapolation beyond randomized training range"
+  },
+  "mechanistic_conditions": {
+    "sensitivity": [
+      0.6,
+      0.8
+    ],
+    "comparison": "ordered H4 vs joint-shuffled aligned pairs"
+  },
+  "training": {
+    "model_initialization_seeds": [
+      101,
+      102,
+      103,
+      104,
+      105
+    ],
+    "training_plant_seeds": "2000-2099",
+    "validation_plant_seeds": "2100-2129",
+    "history_steps": 4,
+    "history_ms": 200,
+    "randomization": {
+      "sensitivity": [
+        0.6,
+        1.4
+      ],
+      "bias_shift": [
+        -2.0,
+        2.0
+      ],
+      "noise": [
+        0.5,
+        2.0
+      ]
+    },
+    "max_epochs": 900
+  },
+  "confirmation": {
+    "plant_seeds": "3000-3049",
+    "rule": "These seeds become spent immediately after the first completed confirmation run.",
+    "pi": {
+      "kp": 0.02,
+      "ki": 0.15,
+      "retune_on_confirmation": false
+    },
+    "primary_outcome": "tracking RMSE (Hz)",
+    "secondary_outcomes": [
+      "mean light intensity",
+      "fraction light=0",
+      "fraction light=1",
+      "mean absolute action change"
+    ],
+    "uncertainty": "paired bootstrap 95% CI and paired win fraction; preserve model-initialization results rather than selecting the best model",
+    "delay": "excluded from this confirmation"
+  }
+}

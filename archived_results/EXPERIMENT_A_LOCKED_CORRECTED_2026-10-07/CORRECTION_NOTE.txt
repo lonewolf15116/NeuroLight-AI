@@ -1,0 +1,1 @@
+First confirmation launch aborted at CONFIRM 0.60 before valid plant evaluation because positional arguments to control() were ordered incorrectly: control(m,s,kind,sens) passed "h4" as the RNG seed. Corrected mechanically to control(model=m,kind=kind,seed=s,sensitivity=sens). No scientific result was inspected before correction. 

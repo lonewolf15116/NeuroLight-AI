@@ -1,0 +1,63 @@
+{
+  "study": "NeuroLight-AI B-Dev-v1.2: matched DR-ARX prior + online RLS",
+  "status": "DEVELOPMENT ONLY - NO FUTURE CONFIRMATION BLOCK DECLARED",
+  "date": "2026-10-07",
+  "source_verification": {
+    "experiment_a_sha256": "dd517b3ed3587cd2c2f93bfb401adf937664ef685d78fa95e33671cc8ae8603b"
+  },
+  "question": "After giving a linear H=4 ARX predictor the same Experiment-A domain-randomized prior trajectories and explicit online RLS adaptation, does frozen DR-H4 retain a development-set advantage?",
+  "offline_prior": {
+    "seeds": "2000-2099",
+    "steps_per_plant": 300,
+    "randomization": "exact Experiment-A: rng seed+70000; noise U(.5,2), sensitivity U(.6,1.4), bias U(-2,2); light resampled U(0,1) every 4 steps",
+    "regressor": "[u_t, y_t/60, y_t-1/60, y_t-2/60, y_t-3/60, u_t-1, u_t-2, u_t-3, 1]",
+    "fit": "numpy least-squares OLS; covariance shape sigma^2 * pinv(Z^T Z)"
+  },
+  "development": {
+    "tuning_seeds": "5000-5099",
+    "validation_seeds": "5100-5149",
+    "sensitivity": [
+      0.6,
+      0.8,
+      1.0,
+      1.2
+    ],
+    "RLS_lambda_grid": [
+      0.98,
+      0.99,
+      0.995
+    ],
+    "P_scale_grid": [
+      0.1,
+      0.3,
+      1.0
+    ],
+    "selection": "one global lambda/P-scale minimizing equal-weight mean tuning RMSE across all four sensitivities"
+  },
+  "action_selection": {
+    "candidates": "0.00..1.00 by 0.01",
+    "objective": "(predicted_rate_hz-target_hz)^2 + 2*u^2 + 2*(u-u_prev)^2",
+    "identical_to_Experiment_A_H4": true
+  },
+  "H4": {
+    "models": "frozen DR_H4 seeds 101-105 from Experiment A",
+    "retraining": false
+  },
+  "analysis": {
+    "unit": "plant",
+    "H4_value_per_plant": "mean RMSE over five frozen model initializations",
+    "development_difference": "ARX RMSE - H4 plant-mean RMSE",
+    "no_confirmatory_CI": true
+  },
+  "interpretation_limits": [
+    "H4 superiority would only establish advantage over this tested linear ARX+RLS comparator, not prove nonlinear representation is necessary.",
+    "ARX matching H4 would support a simpler online linear-identification explanation.",
+    "This is development evidence only."
+  ],
+  "prohibitions": [
+    "Do not use validation results to retune lambda or P-scale.",
+    "Do not retrain H4.",
+    "Do not touch or declare future confirmation seeds.",
+    "Do not call the one-step controller MPC."
+  ]
+}

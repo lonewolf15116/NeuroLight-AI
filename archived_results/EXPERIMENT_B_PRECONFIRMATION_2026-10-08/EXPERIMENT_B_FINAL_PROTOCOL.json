@@ -1,0 +1,86 @@
+{
+  "study": "NeuroLight-AI Experiment B Final Confirmation",
+  "status": "PRE-CONFIRMATION LOCK CANDIDATE \u2014 audit before one-shot execution",
+  "important_corrections_to_draft": [
+    "DR-H4 is 9->64->1 (705 parameters), not 3->141->1; 3->141->1 is the matched memoryless Experiment-A comparator.",
+    "The episode has 180 control steps, so proposed t=[50,200] extends beyond the episode. Full 180-step RMSE remains primary to match all development; t=50..179 is secondary.",
+    "H2 is treated as practical equivalence only if the entire 95% BCa CI lies inside +/-0.25 Hz, not merely if the point estimate is within 0.25 Hz.",
+    "H1 is a controller-performance comparison against fixed PI, not a pure causal test of history alone."
+  ],
+  "confirmation": {
+    "plant_seeds": "6000-6049",
+    "n_plants": 50,
+    "sensitivities": [
+      0.6,
+      0.8,
+      1.0,
+      1.2
+    ],
+    "noise": 0.5,
+    "bias_shift": 0.0,
+    "h4_model_seeds": [
+      101,
+      102,
+      103,
+      104,
+      105
+    ]
+  },
+  "controllers": {
+    "fixed_pi": {
+      "form": "frozen positional/integral baseline",
+      "kp": 0.02,
+      "ki": 0.15,
+      "integral_update": "clip(I + error*0.05, -10, 10)"
+    },
+    "matched_dr_arx10_rls": {
+      "regressor": "[candidate u_t, 4 rates/60 newest->oldest, 4 past actions newest->oldest, intercept]",
+      "offline_fit": "OLS on exact Experiment-A DR training trajectories seeds 2000-2099",
+      "rls_lambda": 0.98,
+      "p_scale": 1.0,
+      "action_selection": "101-point grid; (pred-target)^2 + 2*u^2 + 2*(u-u_prev)^2"
+    },
+    "dr_h4": {
+      "architecture": "9->64->1 tanh, 705 parameters; five frozen Experiment-A models",
+      "input": "4 rates/60 + 4 past actions + candidate action",
+      "action_selection": "same 101-point grid and cost as ARX"
+    }
+  },
+  "endpoints": {
+    "primary": "tracking RMSE (Hz), all 180 control steps; preserves development endpoint",
+    "secondary": "tracking RMSE (Hz), zero-based steps 50-179",
+    "secondary_action_metrics": [
+      "mean intensity",
+      "fraction at 0",
+      "fraction at 1",
+      "mean absolute action change"
+    ]
+  },
+  "statistics": {
+    "unit": "plant seed",
+    "h4_reduction": "average RMSE across five frozen H4 initializations within each plant before comparator difference",
+    "paired_differences": [
+      "PI - mean(H4 models)",
+      "ARX10 - mean(H4 models)"
+    ],
+    "interval": "95% BCa bootstrap CI of mean paired plant difference",
+    "resamples": 10000,
+    "model_initialization_variability": "report SD across the five H4 model-specific mean RMSE values separately"
+  },
+  "hypotheses": {
+    "H1": "At s=0.60, PI-H4 mean > +1.0 Hz and 95% BCa CI excludes 0.",
+    "H2": "At s=0.60, ARX10-H4 is practically equivalent if the entire 95% BCa CI is inside [-0.25,+0.25] Hz.",
+    "H3": "At s=1.20, ARX10-H4 mean > +0.50 Hz and 95% BCa CI excludes 0."
+  },
+  "execution_policy": [
+    "Run --audit-only first; audit mode must not instantiate seeds 6000-6049.",
+    "Review hashes, H4 model manifest, ARX-10 prior diagnostics, and source before confirmation.",
+    "After final approval, execute confirmation exactly once.",
+    "After first completed confirmation, seeds 6000-6049 are spent regardless of outcome.",
+    "No controller retuning or hypothesis changes after confirmation."
+  ],
+  "excluded_from_primary_confirmation": [
+    "B-Dev-v2 incremental-gain adaptive PI",
+    "B-Dev-v2.1 b0-scheduled dynamic adaptive PI"
+  ]
+}

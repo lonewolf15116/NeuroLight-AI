@@ -1,0 +1,221 @@
+{
+  "frozen_predictor": "results\\predictor.npz",
+  "evaluation_seeds": [
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209,
+    210,
+    211,
+    212,
+    213,
+    214,
+    215,
+    216,
+    217,
+    218,
+    219,
+    220,
+    221,
+    222,
+    223,
+    224,
+    225,
+    226,
+    227,
+    228,
+    229
+  ],
+  "tuned_pi": {
+    "kp": 0.020000000000000004,
+    "ki": 0.15
+  },
+  "scenarios": {
+    "nominal": {
+      "learned_rmse_hz": 0.975778782505637,
+      "pi_rmse_hz": 1.238996262193307,
+      "paired_advantage_hz": 0.26321747968766984,
+      "advantage_95ci_hz": [
+        0.22316246733561465,
+        0.2965735569451142
+      ],
+      "learned_win_fraction": 0.9333333333333333,
+      "learned_mean_intensity": 0.37728148148148155,
+      "pi_mean_intensity": 0.37527889187427893
+    },
+    "sensitivity_0.6x": {
+      "learned_rmse_hz": 7.330473625186213,
+      "pi_rmse_hz": 2.3037668938379414,
+      "paired_advantage_hz": -5.026706731348271,
+      "advantage_95ci_hz": [
+        -5.161530092913922,
+        -4.901339021132512
+      ],
+      "learned_win_fraction": 0.0,
+      "learned_mean_intensity": 0.47714629629629635,
+      "pi_mean_intensity": 0.6192266924780935
+    },
+    "sensitivity_0.8x": {
+      "learned_rmse_hz": 3.312249162506985,
+      "pi_rmse_hz": 1.591004179565176,
+      "paired_advantage_hz": -1.721244982941809,
+      "advantage_95ci_hz": [
+        -1.8491169695281393,
+        -1.6016469803243707
+      ],
+      "learned_win_fraction": 0.0,
+      "learned_mean_intensity": 0.42096666666666666,
+      "pi_mean_intensity": 0.4672106544649041
+    },
+    "sensitivity_1.2x": {
+      "learned_rmse_hz": 2.7271524093126014,
+      "pi_rmse_hz": 1.1518655638977287,
+      "paired_advantage_hz": -1.5752868454148727,
+      "advantage_95ci_hz": [
+        -1.676524697827077,
+        -1.4669237468755922
+      ],
+      "learned_win_fraction": 0.0,
+      "learned_mean_intensity": 0.34254259259259257,
+      "pi_mean_intensity": 0.31354995122654383
+    },
+    "sensitivity_1.4x": {
+      "learned_rmse_hz": 4.7808162385905995,
+      "pi_rmse_hz": 1.283576239920684,
+      "paired_advantage_hz": -3.4972399986699143,
+      "advantage_95ci_hz": [
+        -3.599979030220334,
+        -3.385920224353372
+      ],
+      "learned_win_fraction": 0.0,
+      "learned_mean_intensity": 0.31402962962962966,
+      "pi_mean_intensity": 0.269343606954081
+    },
+    "noise_1.0": {
+      "learned_rmse_hz": 1.8500851090900663,
+      "pi_rmse_hz": 1.518056959722152,
+      "paired_advantage_hz": -0.3320281493679145,
+      "advantage_95ci_hz": [
+        -0.40589164616716134,
+        -0.255233196364633
+      ],
+      "learned_win_fraction": 0.1,
+      "learned_mean_intensity": 0.35704444444444444,
+      "pi_mean_intensity": 0.33317465293178067
+    },
+    "noise_2.0": {
+      "learned_rmse_hz": 5.013615901410421,
+      "pi_rmse_hz": 3.172890403628204,
+      "paired_advantage_hz": -1.8407254977822165,
+      "advantage_95ci_hz": [
+        -1.9078751242953436,
+        -1.7726507293872094
+      ],
+      "learned_win_fraction": 0.0,
+      "learned_mean_intensity": 0.3130351851851852,
+      "pi_mean_intensity": 0.22167338836299094
+    },
+    "noise_4.0": {
+      "learned_rmse_hz": 11.537633590927411,
+      "pi_rmse_hz": 10.097965624508738,
+      "paired_advantage_hz": -1.439667966418673,
+      "advantage_95ci_hz": [
+        -1.510776695765652,
+        -1.363568100437225
+      ],
+      "learned_win_fraction": 0.0,
+      "learned_mean_intensity": 0.22672037037037038,
+      "pi_mean_intensity": 0.028606061465726747
+    },
+    "delay_50ms": {
+      "learned_rmse_hz": 2.1352741844774488,
+      "pi_rmse_hz": 6.199056069107765,
+      "paired_advantage_hz": 4.063781884630318,
+      "advantage_95ci_hz": [
+        3.964436945166926,
+        4.1617129001623425
+      ],
+      "learned_win_fraction": 1.0,
+      "learned_mean_intensity": 0.3793407407407407,
+      "pi_mean_intensity": 0.37937995610142383
+    },
+    "delay_100ms": {
+      "learned_rmse_hz": 4.072351671198389,
+      "pi_rmse_hz": 13.924469539266415,
+      "paired_advantage_hz": 9.852117868068019,
+      "advantage_95ci_hz": [
+        9.775199227161364,
+        9.92476531874308
+      ],
+      "learned_win_fraction": 1.0,
+      "learned_mean_intensity": 0.3813555555555556,
+      "pi_mean_intensity": 0.38715863386552407
+    },
+    "delay_250ms": {
+      "learned_rmse_hz": 9.687351254122158,
+      "pi_rmse_hz": 21.0815375622823,
+      "paired_advantage_hz": 11.394186308160139,
+      "advantage_95ci_hz": [
+        11.345028097800435,
+        11.442703524212686
+      ],
+      "learned_win_fraction": 1.0,
+      "learned_mean_intensity": 0.38482037037037026,
+      "pi_mean_intensity": 0.39962572271323016
+    },
+    "sensor_noise_2hz": {
+      "learned_rmse_hz": 1.4959961226192269,
+      "pi_rmse_hz": 2.2242917985973962,
+      "paired_advantage_hz": 0.7282956759781691,
+      "advantage_95ci_hz": [
+        0.6811864539888386,
+        0.7699559831058722
+      ],
+      "learned_win_fraction": 1.0,
+      "learned_mean_intensity": 0.37720740740740744,
+      "pi_mean_intensity": 0.37490285699760606
+    },
+    "sensor_noise_5hz": {
+      "learned_rmse_hz": 2.8751509200833842,
+      "pi_rmse_hz": 4.499740707911769,
+      "paired_advantage_hz": 1.6245897878283855,
+      "advantage_95ci_hz": [
+        1.56872754195951,
+        1.6782579133485565
+      ],
+      "learned_win_fraction": 1.0,
+      "learned_mean_intensity": 0.37712407407407406,
+      "pi_mean_intensity": 0.37423196860270885
+    },
+    "bias_minus2": {
+      "learned_rmse_hz": 3.5073059940123708,
+      "pi_rmse_hz": 1.3967859698606888,
+      "paired_advantage_hz": -2.110520024151682,
+      "advantage_95ci_hz": [
+        -2.2374634921608423,
+        -1.9923210466912693
+      ],
+      "learned_win_fraction": 0.0,
+      "learned_mean_intensity": 0.42482962962962956,
+      "pi_mean_intensity": 0.4651196923850177
+    },
+    "bias_plus2": {
+      "learned_rmse_hz": 3.3538297642538257,
+      "pi_rmse_hz": 1.2093879729383266,
+      "paired_advantage_hz": -2.1444417913154994,
+      "advantage_95ci_hz": [
+        -2.2568647842838176,
+        -2.0226339326234273
+      ],
+      "learned_win_fraction": 0.0,
+      "learned_mean_intensity": 0.33010740740740746,
+      "pi_mean_intensity": 0.2854373275942433
+    }
+  }
+}

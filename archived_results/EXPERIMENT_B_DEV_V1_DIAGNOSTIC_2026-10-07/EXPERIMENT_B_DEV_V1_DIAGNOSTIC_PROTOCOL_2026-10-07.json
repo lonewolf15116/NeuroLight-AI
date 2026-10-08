@@ -1,0 +1,29 @@
+{
+  "study": "B-Dev-v1 cold-start RLS-ARX diagnostic",
+  "status": "DEVELOPMENT DIAGNOSTIC ONLY",
+  "date": "2026-10-07",
+  "seeds": "5100-5149 already spent",
+  "frozen": {
+    "lambda": 0.98,
+    "P0": 10.0,
+    "w0": "zeros"
+  },
+  "hypothesis": "Zero initial action coefficient makes candidate predictions action-independent; action penalties select zero, so input gain remains unexcited.",
+  "diagnostics": [
+    "RMSE",
+    "fraction zero",
+    "nonzero action count",
+    "distinct actions",
+    "first nonzero timestep",
+    "final b0",
+    "final P00",
+    "full seed-5100 trace per sensitivity"
+  ],
+  "decision_rule": "If essentially all actions are zero and b0 stays near zero, classify v1 as cold-start excitation/identifiability failure.",
+  "prohibitions": [
+    "no tuning",
+    "no exploration modification",
+    "no H4 modification",
+    "no new confirmation seeds"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "prediction": {
+    "mlp": {
+      "test_rmse_hz": 0.8015108683819764,
+      "validation_rmse_hz": 0.7594517735045062
+    },
+    "linear": {
+      "test_rmse_hz": 0.9340682580329402
+    },
+    "persistence": {
+      "test_rmse_hz": 7.89893536588232
+    }
+  },
+  "control": {
+    "noise_0.5": {
+      "open_loop": {
+        "rmse_hz": 4.783451733151098,
+        "mean_intensity": 0.4222222222222222,
+        "rmse_std_hz": 0.5761786715485852
+      },
+      "pi": {
+        "rmse_hz": 2.0169144181615004,
+        "mean_intensity": 0.36745774423874616,
+        "rmse_std_hz": 0.03448602800964112
+      },
+      "learned": {
+        "rmse_hz": 0.9669358984527628,
+        "mean_intensity": 0.37579444444444443,
+        "rmse_std_hz": 0.12741455548680952
+      }
+    },
+    "noise_1.0": {
+      "open_loop": {
+        "rmse_hz": 6.199426706371396,
+        "mean_intensity": 0.4222222222222222,
+        "rmse_std_hz": 0.6185953235860365
+      },
+      "pi": {
+        "rmse_hz": 2.3606165163324997,
+        "mean_intensity": 0.32520896156334206,
+        "rmse_std_hz": 0.05787382893515725
+      },
+      "learned": {
+        "rmse_hz": 1.9435514783577559,
+        "mean_intensity": 0.3555388888888889,
+        "rmse_std_hz": 0.25189149621626417
+      }
+    }
+  }
+}

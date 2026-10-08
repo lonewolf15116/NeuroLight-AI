@@ -1,0 +1,847 @@
+{
+  "protocol": {
+    "purpose": "development-only mechanistic history ablation",
+    "history_steps": 4,
+    "history_ms": 200,
+    "train_seeds": "1400-1499",
+    "validation_seeds": "1500-1529",
+    "diagnostic_seeds": "1600-1649",
+    "excluded_frozen_v04_final_seeds": "1000-1049",
+    "interpretation": {
+      "joint_shuffle": "preserves rate/action pairing while disrupting chronology",
+      "reverse": "preserves aligned pairs and values while reversing chronology",
+      "rate_only": "removes action-history information",
+      "action_only": "removes rate-history information"
+    }
+  },
+  "training": {
+    "best_epoch": 900,
+    "train_rmse_hz": 1.6992419349064998,
+    "validation_rmse_hz": 1.650615701681598
+  },
+  "tuned_pi": {
+    "kp": 0.020000000000000004,
+    "ki": 0.15
+  },
+  "sensitivity": {
+    "0.50": {
+      "pi_rmse_hz": 4.008863635435477,
+      "full": {
+        "rmse_hz": 2.7056413259789105,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 3.7045750234996215,
+        "delta_vs_full_hz": 0.9989336975207107
+      },
+      "reverse": {
+        "rmse_hz": 7.63767351283834,
+        "delta_vs_full_hz": 4.932032186859428
+      },
+      "rate_only": {
+        "rmse_hz": 11.833315633615037,
+        "delta_vs_full_hz": 9.127674307636125
+      },
+      "action_only": {
+        "rmse_hz": 14.132292523642668,
+        "delta_vs_full_hz": 11.426651197663759
+      },
+      "rate_shuffle": {
+        "rmse_hz": 5.259266376079844,
+        "delta_vs_full_hz": 2.553625050100933
+      },
+      "action_shuffle": {
+        "rmse_hz": 2.9352757822471194,
+        "delta_vs_full_hz": 0.22963445626820833
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": 1.3032223094565665,
+        "ci95_hz": [
+          1.2710203027494393,
+          1.3358165196905858
+        ],
+        "h4_win_fraction": 1.0
+      }
+    },
+    "0.55": {
+      "pi_rmse_hz": 2.827534497476756,
+      "full": {
+        "rmse_hz": 1.8391492706932322,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 3.616948212874148,
+        "delta_vs_full_hz": 1.7777989421809162
+      },
+      "reverse": {
+        "rmse_hz": 8.805486085890221,
+        "delta_vs_full_hz": 6.966336815196987
+      },
+      "rate_only": {
+        "rmse_hz": 11.131026765644636,
+        "delta_vs_full_hz": 9.291877494951404
+      },
+      "action_only": {
+        "rmse_hz": 16.66471647572532,
+        "delta_vs_full_hz": 14.825567205032087
+      },
+      "rate_shuffle": {
+        "rmse_hz": 5.579283734889401,
+        "delta_vs_full_hz": 3.7401344641961685
+      },
+      "action_shuffle": {
+        "rmse_hz": 2.2649139740655273,
+        "delta_vs_full_hz": 0.42576470337229516
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": 0.9883852267835236,
+        "ci95_hz": [
+          0.9380296765926389,
+          1.0433322871715913
+        ],
+        "h4_win_fraction": 1.0
+      }
+    },
+    "0.60": {
+      "pi_rmse_hz": 2.29125711869405,
+      "full": {
+        "rmse_hz": 1.580653554927215,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 4.058381903984296,
+        "delta_vs_full_hz": 2.477728349057082
+      },
+      "reverse": {
+        "rmse_hz": 10.035317002572521,
+        "delta_vs_full_hz": 8.454663447645306
+      },
+      "rate_only": {
+        "rmse_hz": 10.506125297263997,
+        "delta_vs_full_hz": 8.925471742336782
+      },
+      "action_only": {
+        "rmse_hz": 19.36956791105824,
+        "delta_vs_full_hz": 17.788914356131023
+      },
+      "rate_shuffle": {
+        "rmse_hz": 6.259903665483323,
+        "delta_vs_full_hz": 4.679250110556108
+      },
+      "action_shuffle": {
+        "rmse_hz": 2.133739503520259,
+        "delta_vs_full_hz": 0.5530859485930447
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": 0.7106035637668358,
+        "ci95_hz": [
+          0.6971793606742871,
+          0.7240450680916932
+        ],
+        "h4_win_fraction": 1.0
+      }
+    },
+    "0.65": {
+      "pi_rmse_hz": 2.07075099960029,
+      "full": {
+        "rmse_hz": 1.441956328778134,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 4.784686158279996,
+        "delta_vs_full_hz": 3.3427298295018626
+      },
+      "reverse": {
+        "rmse_hz": 11.336360572283981,
+        "delta_vs_full_hz": 9.894404243505848
+      },
+      "rate_only": {
+        "rmse_hz": 9.95321423722373,
+        "delta_vs_full_hz": 8.511257908445595
+      },
+      "action_only": {
+        "rmse_hz": 22.14742381907407,
+        "delta_vs_full_hz": 20.70546749029593
+      },
+      "rate_shuffle": {
+        "rmse_hz": 7.104014364880512,
+        "delta_vs_full_hz": 5.662058036102377
+      },
+      "action_shuffle": {
+        "rmse_hz": 2.095500036468913,
+        "delta_vs_full_hz": 0.6535437076907791
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": 0.6287946708221563,
+        "ci95_hz": [
+          0.6107905176208707,
+          0.6464523027428085
+        ],
+        "h4_win_fraction": 1.0
+      }
+    },
+    "0.70": {
+      "pi_rmse_hz": 1.88425639881335,
+      "full": {
+        "rmse_hz": 1.3530465992472154,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 5.530414920751569,
+        "delta_vs_full_hz": 4.177368321504353
+      },
+      "reverse": {
+        "rmse_hz": 12.72323007680851,
+        "delta_vs_full_hz": 11.370183477561293
+      },
+      "rate_only": {
+        "rmse_hz": 9.454150982196099,
+        "delta_vs_full_hz": 8.101104382948883
+      },
+      "action_only": {
+        "rmse_hz": 24.9429730159371,
+        "delta_vs_full_hz": 23.58992641668988
+      },
+      "rate_shuffle": {
+        "rmse_hz": 8.176318597940641,
+        "delta_vs_full_hz": 6.823271998693425
+      },
+      "action_shuffle": {
+        "rmse_hz": 2.136531297111645,
+        "delta_vs_full_hz": 0.7834846978644299
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": 0.5312097995661348,
+        "ci95_hz": [
+          0.5158837996706348,
+          0.5475022217919049
+        ],
+        "h4_win_fraction": 1.0
+      }
+    },
+    "0.75": {
+      "pi_rmse_hz": 1.724161857038999,
+      "full": {
+        "rmse_hz": 1.2783035113751875,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 6.4921778041730045,
+        "delta_vs_full_hz": 5.2138742927978186
+      },
+      "reverse": {
+        "rmse_hz": 14.071475555705545,
+        "delta_vs_full_hz": 12.793172044330358
+      },
+      "rate_only": {
+        "rmse_hz": 9.009865350345516,
+        "delta_vs_full_hz": 7.73156183897033
+      },
+      "action_only": {
+        "rmse_hz": 27.738115628764294,
+        "delta_vs_full_hz": 26.459812117389106
+      },
+      "rate_shuffle": {
+        "rmse_hz": 9.061133340935537,
+        "delta_vs_full_hz": 7.782829829560352
+      },
+      "action_shuffle": {
+        "rmse_hz": 2.2606249138096812,
+        "delta_vs_full_hz": 0.9823214024344938
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": 0.4458583456638114,
+        "ci95_hz": [
+          0.43148759869113507,
+          0.46049246566220947
+        ],
+        "h4_win_fraction": 1.0
+      }
+    },
+    "0.80": {
+      "pi_rmse_hz": 1.5761739138053448,
+      "full": {
+        "rmse_hz": 1.2600350406407297,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 7.3071224126634435,
+        "delta_vs_full_hz": 6.047087372022714
+      },
+      "reverse": {
+        "rmse_hz": 15.371471318614649,
+        "delta_vs_full_hz": 14.11143627797392
+      },
+      "rate_only": {
+        "rmse_hz": 8.609318223533542,
+        "delta_vs_full_hz": 7.349283182892813
+      },
+      "action_only": {
+        "rmse_hz": 30.513767577701614,
+        "delta_vs_full_hz": 29.253732537060884
+      },
+      "rate_shuffle": {
+        "rmse_hz": 10.09192508515403,
+        "delta_vs_full_hz": 8.8318900445133
+      },
+      "action_shuffle": {
+        "rmse_hz": 2.412987549833841,
+        "delta_vs_full_hz": 1.1529525091931108
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": 0.31613887316461503,
+        "ci95_hz": [
+          0.29657736539701907,
+          0.3359681202068454
+        ],
+        "h4_win_fraction": 1.0
+      }
+    },
+    "0.85": {
+      "pi_rmse_hz": 1.4709412940302335,
+      "full": {
+        "rmse_hz": 1.2679028633949112,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 8.296669954759379,
+        "delta_vs_full_hz": 7.028767091364471
+      },
+      "reverse": {
+        "rmse_hz": 16.546108280464157,
+        "delta_vs_full_hz": 15.278205417069243
+      },
+      "rate_only": {
+        "rmse_hz": 8.25226760786311,
+        "delta_vs_full_hz": 6.984364744468199
+      },
+      "action_only": {
+        "rmse_hz": 33.25297445701491,
+        "delta_vs_full_hz": 31.98507159362
+      },
+      "rate_shuffle": {
+        "rmse_hz": 10.981164685933486,
+        "delta_vs_full_hz": 9.713261822538577
+      },
+      "action_shuffle": {
+        "rmse_hz": 2.6552614853527103,
+        "delta_vs_full_hz": 1.3873586219577996
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": 0.20303843063532231,
+        "ci95_hz": [
+          0.1818273952653547,
+          0.223643169337238
+        ],
+        "h4_win_fraction": 1.0
+      }
+    },
+    "0.90": {
+      "pi_rmse_hz": 1.3757800871572217,
+      "full": {
+        "rmse_hz": 1.310827324682221,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 9.14027666444973,
+        "delta_vs_full_hz": 7.82944933976751
+      },
+      "reverse": {
+        "rmse_hz": 17.5476573982842,
+        "delta_vs_full_hz": 16.236830073601983
+      },
+      "rate_only": {
+        "rmse_hz": 7.922209028427622,
+        "delta_vs_full_hz": 6.611381703745399
+      },
+      "action_only": {
+        "rmse_hz": 35.96435758382799,
+        "delta_vs_full_hz": 34.65353025914577
+      },
+      "rate_shuffle": {
+        "rmse_hz": 11.775512490134712,
+        "delta_vs_full_hz": 10.46468516545249
+      },
+      "action_shuffle": {
+        "rmse_hz": 2.900866707717873,
+        "delta_vs_full_hz": 1.5900393830356523
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": 0.0649527624750005,
+        "ci95_hz": [
+          0.044211105402396034,
+          0.08631095032497499
+        ],
+        "h4_win_fraction": 0.72
+      }
+    },
+    "0.95": {
+      "pi_rmse_hz": 1.2908909768293741,
+      "full": {
+        "rmse_hz": 1.4117012740901405,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 10.01263490717983,
+        "delta_vs_full_hz": 8.600933633089689
+      },
+      "reverse": {
+        "rmse_hz": 18.57179306498399,
+        "delta_vs_full_hz": 17.16009179089385
+      },
+      "rate_only": {
+        "rmse_hz": 7.646961940692026,
+        "delta_vs_full_hz": 6.235260666601883
+      },
+      "action_only": {
+        "rmse_hz": 38.63410877070691,
+        "delta_vs_full_hz": 37.22240749661677
+      },
+      "rate_shuffle": {
+        "rmse_hz": 12.545696901249311,
+        "delta_vs_full_hz": 11.133995627159173
+      },
+      "action_shuffle": {
+        "rmse_hz": 3.191522336365734,
+        "delta_vs_full_hz": 1.7798210622755932
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": -0.1208102972607663,
+        "ci95_hz": [
+          -0.15103897591661514,
+          -0.0915104744597627
+        ],
+        "h4_win_fraction": 0.18
+      }
+    },
+    "1.00": {
+      "pi_rmse_hz": 1.243036515696396,
+      "full": {
+        "rmse_hz": 1.5379264794124023,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 10.927769884075166,
+        "delta_vs_full_hz": 9.389843404662765
+      },
+      "reverse": {
+        "rmse_hz": 19.726940902754894,
+        "delta_vs_full_hz": 18.189014423342492
+      },
+      "rate_only": {
+        "rmse_hz": 7.397693456658605,
+        "delta_vs_full_hz": 5.859766977246202
+      },
+      "action_only": {
+        "rmse_hz": 41.268907769310275,
+        "delta_vs_full_hz": 39.73098128989787
+      },
+      "rate_shuffle": {
+        "rmse_hz": 13.198813152844302,
+        "delta_vs_full_hz": 11.6608866734319
+      },
+      "action_shuffle": {
+        "rmse_hz": 3.517155675582267,
+        "delta_vs_full_hz": 1.9792291961698643
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": -0.29488996371600623,
+        "ci95_hz": [
+          -0.3240681119844894,
+          -0.26553158919017567
+        ],
+        "h4_win_fraction": 0.0
+      }
+    },
+    "1.05": {
+      "pi_rmse_hz": 1.1873228096812039,
+      "full": {
+        "rmse_hz": 1.7162858295954182,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 11.655202321858042,
+        "delta_vs_full_hz": 9.93891649226262
+      },
+      "reverse": {
+        "rmse_hz": 20.796442159842695,
+        "delta_vs_full_hz": 19.080156330247277
+      },
+      "rate_only": {
+        "rmse_hz": 7.209006075403046,
+        "delta_vs_full_hz": 5.492720245807626
+      },
+      "action_only": {
+        "rmse_hz": 43.86180464481159,
+        "delta_vs_full_hz": 42.14551881521619
+      },
+      "rate_shuffle": {
+        "rmse_hz": 13.912372976671714,
+        "delta_vs_full_hz": 12.196087147076293
+      },
+      "action_shuffle": {
+        "rmse_hz": 3.858931642391779,
+        "delta_vs_full_hz": 2.1426458127963612
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": -0.5289630199142142,
+        "ci95_hz": [
+          -0.5621077021761827,
+          -0.49729671838334566
+        ],
+        "h4_win_fraction": 0.0
+      }
+    },
+    "1.10": {
+      "pi_rmse_hz": 1.175390480983259,
+      "full": {
+        "rmse_hz": 1.8777360040180762,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 12.314851633230175,
+        "delta_vs_full_hz": 10.437115629212098
+      },
+      "reverse": {
+        "rmse_hz": 21.667593172872373,
+        "delta_vs_full_hz": 19.789857168854297
+      },
+      "rate_only": {
+        "rmse_hz": 7.031693217053754,
+        "delta_vs_full_hz": 5.153957213035678
+      },
+      "action_only": {
+        "rmse_hz": 46.415736673302405,
+        "delta_vs_full_hz": 44.53800066928433
+      },
+      "rate_shuffle": {
+        "rmse_hz": 14.655914922273967,
+        "delta_vs_full_hz": 12.77817891825589
+      },
+      "action_shuffle": {
+        "rmse_hz": 4.185753489519134,
+        "delta_vs_full_hz": 2.3080174855010576
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": -0.7023455230348175,
+        "ci95_hz": [
+          -0.7349980012299294,
+          -0.6707187291343714
+        ],
+        "h4_win_fraction": 0.0
+      }
+    },
+    "1.15": {
+      "pi_rmse_hz": 1.162106651191708,
+      "full": {
+        "rmse_hz": 2.134145102886688,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 13.210270085639992,
+        "delta_vs_full_hz": 11.076124982753306
+      },
+      "reverse": {
+        "rmse_hz": 22.411194305735783,
+        "delta_vs_full_hz": 20.277049202849096
+      },
+      "rate_only": {
+        "rmse_hz": 6.914488834777609,
+        "delta_vs_full_hz": 4.7803437318909205
+      },
+      "action_only": {
+        "rmse_hz": 48.9294288687496,
+        "delta_vs_full_hz": 46.79528376586293
+      },
+      "rate_shuffle": {
+        "rmse_hz": 15.20682364727866,
+        "delta_vs_full_hz": 13.072678544391975
+      },
+      "action_shuffle": {
+        "rmse_hz": 4.532628664155843,
+        "delta_vs_full_hz": 2.398483561269156
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": -0.9720384516949798,
+        "ci95_hz": [
+          -1.0183377035442485,
+          -0.9253059552874231
+        ],
+        "h4_win_fraction": 0.0
+      }
+    },
+    "1.20": {
+      "pi_rmse_hz": 1.158391560462761,
+      "full": {
+        "rmse_hz": 2.41055077175334,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 13.768190619731058,
+        "delta_vs_full_hz": 11.357639847977715
+      },
+      "reverse": {
+        "rmse_hz": 23.198131778366687,
+        "delta_vs_full_hz": 20.787581006613344
+      },
+      "rate_only": {
+        "rmse_hz": 6.842655334994708,
+        "delta_vs_full_hz": 4.432104563241367
+      },
+      "action_only": {
+        "rmse_hz": 51.408297556226444,
+        "delta_vs_full_hz": 48.9977467844731
+      },
+      "rate_shuffle": {
+        "rmse_hz": 15.99757753770795,
+        "delta_vs_full_hz": 13.587026765954608
+      },
+      "action_shuffle": {
+        "rmse_hz": 5.026475153831455,
+        "delta_vs_full_hz": 2.6159243820781146
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": -1.2521592112905784,
+        "ci95_hz": [
+          -1.3107350548035508,
+          -1.193592995716915
+        ],
+        "h4_win_fraction": 0.0
+      }
+    },
+    "1.25": {
+      "pi_rmse_hz": 1.1707600749860383,
+      "full": {
+        "rmse_hz": 2.694041687382882,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 14.684389387442263,
+        "delta_vs_full_hz": 11.990347700059383
+      },
+      "reverse": {
+        "rmse_hz": 24.011526644521744,
+        "delta_vs_full_hz": 21.317484957138866
+      },
+      "rate_only": {
+        "rmse_hz": 6.801951022559515,
+        "delta_vs_full_hz": 4.1079093351766325
+      },
+      "action_only": {
+        "rmse_hz": 53.845439625695,
+        "delta_vs_full_hz": 51.15139793831211
+      },
+      "rate_shuffle": {
+        "rmse_hz": 16.723286321308517,
+        "delta_vs_full_hz": 14.029244633925636
+      },
+      "action_shuffle": {
+        "rmse_hz": 5.369032725613747,
+        "delta_vs_full_hz": 2.674991038230865
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": -1.523281612396844,
+        "ci95_hz": [
+          -1.5865088435263903,
+          -1.4617340143431665
+        ],
+        "h4_win_fraction": 0.0
+      }
+    },
+    "1.30": {
+      "pi_rmse_hz": 1.2012449053644205,
+      "full": {
+        "rmse_hz": 3.062690401632382,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 15.240058962883529,
+        "delta_vs_full_hz": 12.177368561251146
+      },
+      "reverse": {
+        "rmse_hz": 24.78353877042834,
+        "delta_vs_full_hz": 21.72084836879596
+      },
+      "rate_only": {
+        "rmse_hz": 6.82010852729143,
+        "delta_vs_full_hz": 3.7574181256590493
+      },
+      "action_only": {
+        "rmse_hz": 56.24544125930901,
+        "delta_vs_full_hz": 53.18275085767664
+      },
+      "rate_shuffle": {
+        "rmse_hz": 17.419326632210343,
+        "delta_vs_full_hz": 14.356636230577958
+      },
+      "action_shuffle": {
+        "rmse_hz": 5.7338783218651,
+        "delta_vs_full_hz": 2.671187920232718
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": -1.8614454962679607,
+        "ci95_hz": [
+          -1.9315883866422834,
+          -1.7913137229511884
+        ],
+        "h4_win_fraction": 0.0
+      }
+    },
+    "1.35": {
+      "pi_rmse_hz": 1.228783149175951,
+      "full": {
+        "rmse_hz": 3.556840652957163,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 15.978878647905121,
+        "delta_vs_full_hz": 12.422037994947962
+      },
+      "reverse": {
+        "rmse_hz": 25.64708373348792,
+        "delta_vs_full_hz": 22.090243080530758
+      },
+      "rate_only": {
+        "rmse_hz": 6.994093111687574,
+        "delta_vs_full_hz": 3.4372524587304114
+      },
+      "action_only": {
+        "rmse_hz": 58.612439336188174,
+        "delta_vs_full_hz": 55.05559868323101
+      },
+      "rate_shuffle": {
+        "rmse_hz": 18.032744170503182,
+        "delta_vs_full_hz": 14.475903517546017
+      },
+      "action_shuffle": {
+        "rmse_hz": 6.16927644900464,
+        "delta_vs_full_hz": 2.612435796047477
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": -2.3280575037812112,
+        "ci95_hz": [
+          -2.424731153337987,
+          -2.2322169525736255
+        ],
+        "h4_win_fraction": 0.0
+      }
+    },
+    "1.40": {
+      "pi_rmse_hz": 1.284428671350851,
+      "full": {
+        "rmse_hz": 4.0258091075165385,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 16.38056009777211,
+        "delta_vs_full_hz": 12.354750990255573
+      },
+      "reverse": {
+        "rmse_hz": 26.485582559683458,
+        "delta_vs_full_hz": 22.459773452166914
+      },
+      "rate_only": {
+        "rmse_hz": 7.274391948977717,
+        "delta_vs_full_hz": 3.2485828414611797
+      },
+      "action_only": {
+        "rmse_hz": 60.942591093809405,
+        "delta_vs_full_hz": 56.916781986292854
+      },
+      "rate_shuffle": {
+        "rmse_hz": 18.728114465044513,
+        "delta_vs_full_hz": 14.70230535752798
+      },
+      "action_shuffle": {
+        "rmse_hz": 6.563373378359613,
+        "delta_vs_full_hz": 2.537564270843074
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": -2.741380436165687,
+        "ci95_hz": [
+          -2.832478244375286,
+          -2.653903057201976
+        ],
+        "h4_win_fraction": 0.0
+      }
+    },
+    "1.45": {
+      "pi_rmse_hz": 1.3422545937719068,
+      "full": {
+        "rmse_hz": 4.63194521260392,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 17.21225436869003,
+        "delta_vs_full_hz": 12.580309156086111
+      },
+      "reverse": {
+        "rmse_hz": 27.301122247750175,
+        "delta_vs_full_hz": 22.669177035146255
+      },
+      "rate_only": {
+        "rmse_hz": 7.639540579193111,
+        "delta_vs_full_hz": 3.0075953665891912
+      },
+      "action_only": {
+        "rmse_hz": 63.23597721079896,
+        "delta_vs_full_hz": 58.60403199819503
+      },
+      "rate_shuffle": {
+        "rmse_hz": 19.39745897911897,
+        "delta_vs_full_hz": 14.765513766515044
+      },
+      "action_shuffle": {
+        "rmse_hz": 6.892290957316143,
+        "delta_vs_full_hz": 2.2603457447122235
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": -3.289690618832013,
+        "ci95_hz": [
+          -3.3860438058188485,
+          -3.1917115293392366
+        ],
+        "h4_win_fraction": 0.0
+      }
+    },
+    "1.50": {
+      "pi_rmse_hz": 1.3975575724393985,
+      "full": {
+        "rmse_hz": 5.186314723356212,
+        "delta_vs_full_hz": 0.0
+      },
+      "joint_shuffle": {
+        "rmse_hz": 17.616404739616733,
+        "delta_vs_full_hz": 12.430090016260522
+      },
+      "reverse": {
+        "rmse_hz": 28.104193305464904,
+        "delta_vs_full_hz": 22.917878582108692
+      },
+      "rate_only": {
+        "rmse_hz": 8.256806284182057,
+        "delta_vs_full_hz": 3.0704915608258445
+      },
+      "action_only": {
+        "rmse_hz": 65.49382745612607,
+        "delta_vs_full_hz": 60.307512732769844
+      },
+      "rate_shuffle": {
+        "rmse_hz": 19.843452564652754,
+        "delta_vs_full_hz": 14.657137841296542
+      },
+      "action_shuffle": {
+        "rmse_hz": 7.262341473741064,
+        "delta_vs_full_hz": 2.0760267503848526
+      },
+      "full_vs_pi": {
+        "pi_minus_h4_mean_hz": -3.788757150916814,
+        "ci95_hz": [
+          -3.89315834466396,
+          -3.6854872518393216
+        ],
+        "h4_win_fraction": 0.0
+      }
+    }
+  }
+}

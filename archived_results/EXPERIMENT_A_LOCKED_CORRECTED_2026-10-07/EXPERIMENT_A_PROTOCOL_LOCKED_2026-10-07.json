@@ -1,0 +1,86 @@
+{
+  "study": "NeuroLight-AI Experiment A: matched DR-Memoryless vs DR-H4",
+  "status": "LOCK BEFORE ANY EVALUATION ON 4000-4049",
+  "date_locked": "2026-10-07",
+  "purpose": "Isolate the value of temporal history beyond domain-randomized training and model capacity.",
+  "models": {
+    "DR_H4": {
+      "architecture": "9->64->1",
+      "parameters": 705,
+      "role": "history treatment"
+    },
+    "DR_Memoryless_141": {
+      "architecture": "3->141->1",
+      "parameters": 706,
+      "role": "PRIMARY parameter-matched comparator"
+    },
+    "DR_Memoryless_64": {
+      "architecture": "3->64->1",
+      "parameters": 321,
+      "role": "SECONDARY width-matched comparator"
+    }
+  },
+  "training": {
+    "seeds": "2000-2099",
+    "validation": "2100-2129",
+    "model_seeds": [
+      101,
+      102,
+      103,
+      104,
+      105
+    ],
+    "randomization": {
+      "sensitivity": [
+        0.6,
+        1.4
+      ],
+      "bias_shift": [
+        -2,
+        2
+      ],
+      "noise": [
+        0.5,
+        2
+      ]
+    },
+    "steps_per_plant": 300,
+    "max_epochs": 900,
+    "learning_rate": 0.006,
+    "checkpoint": "minimum validation MSE within fixed 900 epochs"
+  },
+  "confirmation": {
+    "seeds": "4000-4049",
+    "primary_sensitivity": [
+      0.6,
+      0.8
+    ],
+    "secondary_sensitivity": [
+      1.0,
+      1.2
+    ],
+    "primary_outcome": "tracking RMSE Hz",
+    "bootstrap_resamples": 10000,
+    "rule": "Untouched until protocol and code frozen; spent after first completed run."
+  },
+  "hypotheses": {
+    "H1": "At sensitivity 0.60 DR-H4 has lower plant-level RMSE than DR-Memoryless-141.",
+    "H2": "At sensitivity 0.80 DR-H4 has lower plant-level RMSE than DR-Memoryless-141.",
+    "H3": "At 0.60 and 0.80 DR-H4 also outperforms DR-Memoryless-64.",
+    "H4": "History advantage is not expected to be universal at 1.00 and 1.20."
+  },
+  "analysis": {
+    "unit": "plant",
+    "model_seed_handling": "average each controller over 5 model seeds within each plant",
+    "primary_difference": "mean(DR-Memoryless-141)-mean(DR-H4) per plant",
+    "uncertainty": "paired percentile bootstrap over 50 plant differences",
+    "support_rule": "95% CI entirely above zero favors H4",
+    "report_all_models": true
+  },
+  "prohibitions": [
+    "No tuning on 4000-4049",
+    "No best-model selection",
+    "No choosing comparator after results",
+    "No biological efficacy claim"
+  ]
+}

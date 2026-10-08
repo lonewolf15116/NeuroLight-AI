@@ -1,0 +1,52 @@
+{
+  "study": "NeuroLight-AI B-Dev-v2.1 Dynamic Observable Adaptive PI",
+  "date": "2026-10-07",
+  "status": "LAST ADAPTIVE-CONTROLLER DEVELOPMENT STAGE",
+  "seed_policy": {
+    "tuning": "5000-5099",
+    "validation": "5100-5149",
+    "future_confirmation": "NOT DECLARED OR TOUCHED"
+  },
+  "frozen_prior": {
+    "source": "B-Dev-v1.2 dr_arx_prior.npz",
+    "sha256": "9da07cf88f96402d9faf2d1061f2d31acb0ae916fad42a41123785ca11a31797",
+    "w0_b0": 0.4089689,
+    "rls_lambda": 0.98,
+    "p_scale": 1.0
+  },
+  "observer_information_set": "candidate u_t + 4 rate histories + 3 most recent action histories + intercept; exact frozen v1.2 representation, including omission of oldest fourth action",
+  "controller": "strict incremental PI; observer may schedule PI gains but may not perform candidate-action search",
+  "gain_statistic": "b0/b0_nom; true sensitivity is diagnostic only and never enters controller",
+  "gain_ratio_bounds": [
+    0.25,
+    4.0
+  ],
+  "scheduling_law": "Kp,Ki multiplied by clip(b0/b0_nom,0.25,4)^(-alpha)",
+  "alpha_grid": [
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "selection": "one global alpha minimizing equal-weight mean tuning tracking RMSE across sensitivities 0.60,0.80,1.00,1.20",
+  "anti_windup": "conditional suppression of integral increment when it drives farther into saturation",
+  "validation_diagnostics": [
+    "tracking RMSE",
+    "observer one-step RMSE",
+    "b0 trace",
+    "gain-ratio trace",
+    "gain-ratio RMSE vs true sensitivity",
+    "gain-ratio clamp rate",
+    "saturation-attempt rate",
+    "anti-windup activation rate",
+    "raw rate/action traces"
+  ],
+  "observer_sanity": "report whether mean b0/b0_nom is strictly monotonic increasing across validation sensitivities; do not retune if it fails",
+  "stop_rule": "After this run, freeze/archive the result. Do not create v2.2/v2.3 to rescue performance. Proceed to Experiment-B protocol freeze/audit.",
+  "interpretation_limits": [
+    "Development evidence only.",
+    "b0 is a scheduling proxy, not the simulator sensitivity parameter.",
+    "ARX prior uses 3 past actions rather than H4's 4; this frozen v1.2 representation is retained transparently.",
+    "Failure of this controller is not evidence that adaptive feedback is impossible."
+  ]
+}

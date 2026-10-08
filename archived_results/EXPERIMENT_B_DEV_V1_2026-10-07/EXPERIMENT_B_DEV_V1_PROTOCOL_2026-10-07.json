@@ -1,0 +1,58 @@
+{
+  "study": "NeuroLight-AI B-Dev-v1: Online RLS-ARX vs frozen DR-H4",
+  "status": "DEVELOPMENT ONLY - NO CONFIRMATORY HOLDOUT DECLARED",
+  "date": "2026-10-07",
+  "question": "Can linear online system identification plus the same one-step candidate search account for the history advantage of frozen DR-H4?",
+  "data": {
+    "tuning_seeds": "5000-5099",
+    "validation_seeds": "5100-5149",
+    "sensitivity": [
+      0.6,
+      0.8,
+      1.0,
+      1.2
+    ],
+    "noise": 0.5,
+    "bias_shift": 0.0
+  },
+  "DR_H4": {
+    "models": "Frozen Experiment-A DR_H4_seed_101..105.npz",
+    "retraining": false,
+    "history_steps": 4,
+    "candidate_actions": 101
+  },
+  "RLS_ARX": {
+    "regression": "[u_t, y_t/60, y_(t-1)/60, y_(t-2)/60, y_(t-3)/60, u_(t-1), u_(t-2), u_(t-3), 1]",
+    "parameters": 9,
+    "forgetting_grid": [
+      0.98,
+      0.99,
+      0.995,
+      0.999
+    ],
+    "P0_grid": [
+      10.0,
+      100.0,
+      1000.0
+    ],
+    "selection": "One global configuration minimizing equal-weight mean RMSE across all four sensitivities on tuning seeds only."
+  },
+  "action_selection": {
+    "grid": "0.00 to 1.00 inclusive in increments of 0.01",
+    "objective": "(predicted_rate_hz-target_hz)^2 + 2*u^2 + 2*(u-u_prev)^2",
+    "note": "Uses exact Experiment-A/H4 units and objective; no /60 is applied to only the tracking term."
+  },
+  "analysis": {
+    "unit": "plant",
+    "H4_per_plant": "mean RMSE over five frozen model initializations",
+    "development_difference": "ARX RMSE - H4 plant-mean RMSE",
+    "confirmation_statistics": "Not performed in B-Dev-v1."
+  },
+  "prohibitions": [
+    "No new confirmation block is declared or touched.",
+    "Do not tune RLS from validation results.",
+    "Do not retrain or select H4 models.",
+    "Do not call this MPC; it is one-step predictive grid-search control.",
+    "Do not overwrite Experiment A or B-Dev-v0 archives."
+  ]
+}

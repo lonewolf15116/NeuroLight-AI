@@ -1,0 +1,276 @@
+{
+  "protocol": {
+    "history_steps": 4,
+    "history_ms": 200,
+    "train_seeds": "500-599",
+    "validation_seeds": "600-629",
+    "final_test_seeds": "1000-1049",
+    "warning": "Treat these final-test seeds as spent after this run."
+  },
+  "training": {
+    "best_epoch": 700,
+    "train_rmse_hz": 1.6220607824871573,
+    "validation_rmse_hz": 1.5368452942794464
+  },
+  "tuned_pi": {
+    "kp": 0.020000000000000004,
+    "ki": 0.15
+  },
+  "scenarios": {
+    "nominal": {
+      "history_rmse_hz": 1.455548490355807,
+      "original_rmse_hz": 0.9645846257563763,
+      "pi_rmse_hz": 1.2379274514629617,
+      "history_advantage_over_original_hz": -0.4909638645994307,
+      "vs_original_95ci_hz": [
+        -0.525558288069208,
+        -0.45782030669880314
+      ],
+      "win_fraction_vs_original": 0.0,
+      "history_advantage_over_pi_hz": -0.21762103889284534,
+      "vs_pi_95ci_hz": [
+        -0.24874290996345402,
+        -0.18700522677325684
+      ],
+      "win_fraction_vs_pi": 0.02
+    },
+    "sensitivity_0.6x": {
+      "history_rmse_hz": 1.5768772395795665,
+      "original_rmse_hz": 7.343498828936208,
+      "pi_rmse_hz": 2.3099227042901367,
+      "history_advantage_over_original_hz": 5.766621589356642,
+      "vs_original_95ci_hz": [
+        5.665180325462033,
+        5.86791798900214
+      ],
+      "win_fraction_vs_original": 1.0,
+      "history_advantage_over_pi_hz": 0.7330454647105702,
+      "vs_pi_95ci_hz": [
+        0.7196363216971987,
+        0.7461009769840138
+      ],
+      "win_fraction_vs_pi": 1.0
+    },
+    "sensitivity_0.8x": {
+      "history_rmse_hz": 1.2175526580569362,
+      "original_rmse_hz": 3.333357726969129,
+      "pi_rmse_hz": 1.596502955890874,
+      "history_advantage_over_original_hz": 2.1158050689121923,
+      "vs_original_95ci_hz": [
+        2.021917462442159,
+        2.213122386266628
+      ],
+      "win_fraction_vs_original": 1.0,
+      "history_advantage_over_pi_hz": 0.3789502978339382,
+      "vs_pi_95ci_hz": [
+        0.35981128225741804,
+        0.3985512595869926
+      ],
+      "win_fraction_vs_pi": 1.0
+    },
+    "sensitivity_1.2x": {
+      "history_rmse_hz": 2.2219203054270382,
+      "original_rmse_hz": 2.700426158135241,
+      "pi_rmse_hz": 1.1577985383498879,
+      "history_advantage_over_original_hz": 0.47850585270820295,
+      "vs_original_95ci_hz": [
+        0.4038524843831183,
+        0.5534514933143926
+      ],
+      "win_fraction_vs_original": 0.98,
+      "history_advantage_over_pi_hz": -1.06412176707715,
+      "vs_pi_95ci_hz": [
+        -1.1069017200547242,
+        -1.0208380534931667
+      ],
+      "win_fraction_vs_pi": 0.0
+    },
+    "sensitivity_1.4x": {
+      "history_rmse_hz": 3.3240895337976064,
+      "original_rmse_hz": 4.747773373323983,
+      "pi_rmse_hz": 1.259647911696753,
+      "history_advantage_over_original_hz": 1.423683839526376,
+      "vs_original_95ci_hz": [
+        1.343699870506123,
+        1.5006222868616903
+      ],
+      "win_fraction_vs_original": 1.0,
+      "history_advantage_over_pi_hz": -2.064441622100854,
+      "vs_pi_95ci_hz": [
+        -2.1435845733254695,
+        -1.9861700013859978
+      ],
+      "win_fraction_vs_pi": 0.0
+    },
+    "noise_1.0": {
+      "history_rmse_hz": 1.2737148354705752,
+      "original_rmse_hz": 1.8480481489490967,
+      "pi_rmse_hz": 1.5410110387954674,
+      "history_advantage_over_original_hz": 0.5743333134785217,
+      "vs_original_95ci_hz": [
+        0.5118016269853329,
+        0.6371536089747133
+      ],
+      "win_fraction_vs_original": 1.0,
+      "history_advantage_over_pi_hz": 0.2672962033248924,
+      "vs_pi_95ci_hz": [
+        0.24684383389783768,
+        0.2870925749224204
+      ],
+      "win_fraction_vs_pi": 1.0
+    },
+    "noise_2.0": {
+      "history_rmse_hz": 2.118424884693276,
+      "original_rmse_hz": 5.012587745024589,
+      "pi_rmse_hz": 3.241417646073204,
+      "history_advantage_over_original_hz": 2.894162860331312,
+      "vs_original_95ci_hz": [
+        2.848224178174274,
+        2.9416273057197033
+      ],
+      "win_fraction_vs_original": 1.0,
+      "history_advantage_over_pi_hz": 1.1229927613799278,
+      "vs_pi_95ci_hz": [
+        1.088170772232355,
+        1.156267261764346
+      ],
+      "win_fraction_vs_pi": 1.0
+    },
+    "noise_4.0": {
+      "history_rmse_hz": 9.00600570965814,
+      "original_rmse_hz": 11.531106018212265,
+      "pi_rmse_hz": 10.108625212806638,
+      "history_advantage_over_original_hz": 2.5251003085541273,
+      "vs_original_95ci_hz": [
+        2.4939517955654877,
+        2.556113069775811
+      ],
+      "win_fraction_vs_original": 1.0,
+      "history_advantage_over_pi_hz": 1.1026195031484969,
+      "vs_pi_95ci_hz": [
+        1.0718196166440488,
+        1.1320733989778007
+      ],
+      "win_fraction_vs_pi": 1.0
+    },
+    "delay_50ms": {
+      "history_rmse_hz": 12.820334146974101,
+      "original_rmse_hz": 2.143718209877798,
+      "pi_rmse_hz": 6.09437430844671,
+      "history_advantage_over_original_hz": -10.676615937096303,
+      "vs_original_95ci_hz": [
+        -10.722373641741186,
+        -10.629307093246453
+      ],
+      "win_fraction_vs_original": 0.0,
+      "history_advantage_over_pi_hz": -6.725959838527391,
+      "vs_pi_95ci_hz": [
+        -6.793261027031589,
+        -6.657972660777923
+      ],
+      "win_fraction_vs_pi": 0.0
+    },
+    "delay_100ms": {
+      "history_rmse_hz": 18.605996648598687,
+      "original_rmse_hz": 4.026791441678553,
+      "pi_rmse_hz": 13.871411047773517,
+      "history_advantage_over_original_hz": -14.579205206920134,
+      "vs_original_95ci_hz": [
+        -14.639898810513122,
+        -14.520634338499987
+      ],
+      "win_fraction_vs_original": 0.0,
+      "history_advantage_over_pi_hz": -4.734585600825167,
+      "vs_pi_95ci_hz": [
+        -4.778202540198885,
+        -4.692021182853086
+      ],
+      "win_fraction_vs_pi": 0.0
+    },
+    "delay_250ms": {
+      "history_rmse_hz": 25.958443362486737,
+      "original_rmse_hz": 9.639406059193405,
+      "pi_rmse_hz": 21.03482140349757,
+      "history_advantage_over_original_hz": -16.31903730329334,
+      "vs_original_95ci_hz": [
+        -16.36358697405931,
+        -16.276163307269474
+      ],
+      "win_fraction_vs_original": 0.0,
+      "history_advantage_over_pi_hz": -4.923621958989175,
+      "vs_pi_95ci_hz": [
+        -4.952817057144078,
+        -4.895406578902804
+      ],
+      "win_fraction_vs_pi": 0.0
+    },
+    "sensor_noise_2hz": {
+      "history_rmse_hz": 3.30921943145527,
+      "original_rmse_hz": 1.4727010754441614,
+      "pi_rmse_hz": 2.2235901702237024,
+      "history_advantage_over_original_hz": -1.836518356011108,
+      "vs_original_95ci_hz": [
+        -1.880943065382172,
+        -1.7910811872661871
+      ],
+      "win_fraction_vs_original": 0.0,
+      "history_advantage_over_pi_hz": -1.0856292612315674,
+      "vs_pi_95ci_hz": [
+        -1.1356045868082432,
+        -1.034255528968073
+      ],
+      "win_fraction_vs_pi": 0.0
+    },
+    "sensor_noise_5hz": {
+      "history_rmse_hz": 6.277234122155502,
+      "original_rmse_hz": 2.824210227816288,
+      "pi_rmse_hz": 4.432376330639616,
+      "history_advantage_over_original_hz": -3.453023894339213,
+      "vs_original_95ci_hz": [
+        -3.536265402769121,
+        -3.3683822654657907
+      ],
+      "win_fraction_vs_original": 0.0,
+      "history_advantage_over_pi_hz": -1.8448577915158857,
+      "vs_pi_95ci_hz": [
+        -1.9407135316610318,
+        -1.7517266625698524
+      ],
+      "win_fraction_vs_pi": 0.0
+    },
+    "bias_minus2": {
+      "history_rmse_hz": 1.4425082950638926,
+      "original_rmse_hz": 3.5372576654868033,
+      "pi_rmse_hz": 1.3957780901833476,
+      "history_advantage_over_original_hz": 2.0947493704229108,
+      "vs_original_95ci_hz": [
+        1.99070536724386,
+        2.1969597749078784
+      ],
+      "win_fraction_vs_original": 1.0,
+      "history_advantage_over_pi_hz": -0.04673020488054498,
+      "vs_pi_95ci_hz": [
+        -0.0758661374108305,
+        -0.018490620457553765
+      ],
+      "win_fraction_vs_pi": 0.34
+    },
+    "bias_plus2": {
+      "history_rmse_hz": 1.5226741116302778,
+      "original_rmse_hz": 3.33214353610268,
+      "pi_rmse_hz": 1.2243144920332154,
+      "history_advantage_over_original_hz": 1.8094694244724019,
+      "vs_original_95ci_hz": [
+        1.7236550176416983,
+        1.8946623620073586
+      ],
+      "win_fraction_vs_original": 1.0,
+      "history_advantage_over_pi_hz": -0.2983596195970624,
+      "vs_pi_95ci_hz": [
+        -0.3212964458751675,
+        -0.27589226949616236
+      ],
+      "win_fraction_vs_pi": 0.0
+    }
+  }
+}

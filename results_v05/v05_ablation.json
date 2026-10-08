@@ -1,0 +1,520 @@
+{
+  "protocol": {
+    "purpose": "development-only diagnostic ablation",
+    "train_seeds": "1100-1199",
+    "validation_seeds": "1200-1229",
+    "diagnostic_seeds": "1300-1349",
+    "excluded_final_seeds": "1000-1049"
+  },
+  "training": {
+    "1": {
+      "best_epoch": 133,
+      "train_rmse_hz": 3.2381979946702977,
+      "validation_rmse_hz": 2.864130650403911
+    },
+    "2": {
+      "best_epoch": 900,
+      "train_rmse_hz": 1.7919647130356258,
+      "validation_rmse_hz": 1.592930910430531
+    },
+    "4": {
+      "best_epoch": 900,
+      "train_rmse_hz": 1.9854088380203478,
+      "validation_rmse_hz": 1.6600459147991502
+    },
+    "8": {
+      "best_epoch": 892,
+      "train_rmse_hz": 1.6346659949252167,
+      "validation_rmse_hz": 1.4547058596423692
+    }
+  },
+  "tuned_pi": {
+    "kp": 0.020000000000000004,
+    "ki": 0.15
+  },
+  "sensitivity": {
+    "0.50": {
+      "pi_rmse_hz": 4.054398902730047,
+      "h1": {
+        "rmse_hz": 5.832195962925657,
+        "shuffled_rmse_hz": 5.832195962925657,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 2.919171680311978,
+        "shuffled_rmse_hz": 3.80888047903221,
+        "shuffle_penalty_hz": 0.8897087987202323
+      },
+      "h4": {
+        "rmse_hz": 2.788554196312075,
+        "shuffled_rmse_hz": 3.9158538266285268,
+        "shuffle_penalty_hz": 1.1272996303164518
+      },
+      "h8": {
+        "rmse_hz": 2.794028091731473,
+        "shuffled_rmse_hz": 5.385178577175299,
+        "shuffle_penalty_hz": 2.5911504854438276
+      }
+    },
+    "0.55": {
+      "pi_rmse_hz": 2.9243625920152687,
+      "h1": {
+        "rmse_hz": 5.041547328264401,
+        "shuffled_rmse_hz": 5.041547328264401,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 2.0490957614295557,
+        "shuffled_rmse_hz": 3.605290912081711,
+        "shuffle_penalty_hz": 1.5561951506521552
+      },
+      "h4": {
+        "rmse_hz": 1.869618218318667,
+        "shuffled_rmse_hz": 3.7707692428449655,
+        "shuffle_penalty_hz": 1.9011510245262984
+      },
+      "h8": {
+        "rmse_hz": 1.887626336734504,
+        "shuffled_rmse_hz": 5.763306454345132,
+        "shuffle_penalty_hz": 3.8756801176106275
+      }
+    },
+    "0.60": {
+      "pi_rmse_hz": 2.3046633542581954,
+      "h1": {
+        "rmse_hz": 4.347746644244583,
+        "shuffled_rmse_hz": 4.347746644244583,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 1.7562485039814686,
+        "shuffled_rmse_hz": 4.030444671130004,
+        "shuffle_penalty_hz": 2.274196167148535
+      },
+      "h4": {
+        "rmse_hz": 1.5797440760982613,
+        "shuffled_rmse_hz": 4.268969264564312,
+        "shuffle_penalty_hz": 2.689225188466051
+      },
+      "h8": {
+        "rmse_hz": 1.5971147789920679,
+        "shuffled_rmse_hz": 6.587554821993089,
+        "shuffle_penalty_hz": 4.99044004300102
+      }
+    },
+    "0.65": {
+      "pi_rmse_hz": 2.0821046389071127,
+      "h1": {
+        "rmse_hz": 3.743302421038471,
+        "shuffled_rmse_hz": 3.743302421038471,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 1.5980930574992975,
+        "shuffled_rmse_hz": 4.584437071725887,
+        "shuffle_penalty_hz": 2.9863440142265887
+      },
+      "h4": {
+        "rmse_hz": 1.4482035579231134,
+        "shuffled_rmse_hz": 4.888556108336828,
+        "shuffle_penalty_hz": 3.440352550413714
+      },
+      "h8": {
+        "rmse_hz": 1.4174046947153573,
+        "shuffled_rmse_hz": 7.373340746062554,
+        "shuffle_penalty_hz": 5.955936051347196
+      }
+    },
+    "0.70": {
+      "pi_rmse_hz": 1.8931391812262657,
+      "h1": {
+        "rmse_hz": 3.2095093657474094,
+        "shuffled_rmse_hz": 3.2095093657474094,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 1.5183742378839127,
+        "shuffled_rmse_hz": 5.195803519240354,
+        "shuffle_penalty_hz": 3.677429281356442
+      },
+      "h4": {
+        "rmse_hz": 1.3473069977055951,
+        "shuffled_rmse_hz": 5.741933939535182,
+        "shuffle_penalty_hz": 4.394626941829585
+      },
+      "h8": {
+        "rmse_hz": 1.3000736570841287,
+        "shuffled_rmse_hz": 8.375314835533695,
+        "shuffle_penalty_hz": 7.075241178449566
+      }
+    },
+    "0.75": {
+      "pi_rmse_hz": 1.7316271260107885,
+      "h1": {
+        "rmse_hz": 2.7476452761745196,
+        "shuffled_rmse_hz": 2.7476452761745196,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 1.4492251569654124,
+        "shuffled_rmse_hz": 6.072088269737077,
+        "shuffle_penalty_hz": 4.622863112771664
+      },
+      "h4": {
+        "rmse_hz": 1.266409135384451,
+        "shuffled_rmse_hz": 6.538934045600937,
+        "shuffle_penalty_hz": 5.272524910216486
+      },
+      "h8": {
+        "rmse_hz": 1.2386335424378307,
+        "shuffled_rmse_hz": 9.350126666337776,
+        "shuffle_penalty_hz": 8.111493123899946
+      }
+    },
+    "0.80": {
+      "pi_rmse_hz": 1.5918887220141726,
+      "h1": {
+        "rmse_hz": 2.3596156029047903,
+        "shuffled_rmse_hz": 2.3596156029047903,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 1.4325649610189835,
+        "shuffled_rmse_hz": 6.831932748595971,
+        "shuffle_penalty_hz": 5.399367787576986
+      },
+      "h4": {
+        "rmse_hz": 1.229851395538506,
+        "shuffled_rmse_hz": 7.417489022388099,
+        "shuffle_penalty_hz": 6.187637626849594
+      },
+      "h8": {
+        "rmse_hz": 1.20294097273609,
+        "shuffled_rmse_hz": 10.280658914857373,
+        "shuffle_penalty_hz": 9.077717942121282
+      }
+    },
+    "0.85": {
+      "pi_rmse_hz": 1.4814225096596116,
+      "h1": {
+        "rmse_hz": 2.034917206456412,
+        "shuffled_rmse_hz": 2.034917206456412,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 1.4800703076378603,
+        "shuffled_rmse_hz": 7.8042503405264165,
+        "shuffle_penalty_hz": 6.324180032888556
+      },
+      "h4": {
+        "rmse_hz": 1.2165028192941623,
+        "shuffled_rmse_hz": 8.248148581093805,
+        "shuffle_penalty_hz": 7.031645761799641
+      },
+      "h8": {
+        "rmse_hz": 1.2064747851965056,
+        "shuffled_rmse_hz": 11.259082973697062,
+        "shuffle_penalty_hz": 10.052608188500555
+      }
+    },
+    "0.90": {
+      "pi_rmse_hz": 1.378815823253119,
+      "h1": {
+        "rmse_hz": 1.7975560865060003,
+        "shuffled_rmse_hz": 1.7975560865060003,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 1.6514532636098675,
+        "shuffled_rmse_hz": 8.655177466235896,
+        "shuffle_penalty_hz": 7.003724202626029
+      },
+      "h4": {
+        "rmse_hz": 1.2257342997929037,
+        "shuffled_rmse_hz": 9.080001324505613,
+        "shuffle_penalty_hz": 7.854267024712708
+      },
+      "h8": {
+        "rmse_hz": 1.2421885031991042,
+        "shuffled_rmse_hz": 12.202351298199305,
+        "shuffle_penalty_hz": 10.960162795000201
+      }
+    },
+    "0.95": {
+      "pi_rmse_hz": 1.3060127177619953,
+      "h1": {
+        "rmse_hz": 1.6302360031160499,
+        "shuffled_rmse_hz": 1.6302360031160499,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 1.836630655746465,
+        "shuffled_rmse_hz": 9.533485735491356,
+        "shuffle_penalty_hz": 7.696855079744892
+      },
+      "h4": {
+        "rmse_hz": 1.2634313041423726,
+        "shuffled_rmse_hz": 9.894896363972457,
+        "shuffle_penalty_hz": 8.631465059830083
+      },
+      "h8": {
+        "rmse_hz": 1.315800049811276,
+        "shuffled_rmse_hz": 12.987809710993538,
+        "shuffle_penalty_hz": 11.67200966118226
+      }
+    },
+    "1.00": {
+      "pi_rmse_hz": 1.24351011444512,
+      "h1": {
+        "rmse_hz": 1.5514894540627142,
+        "shuffled_rmse_hz": 1.5514894540627142,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 2.2063284822051195,
+        "shuffled_rmse_hz": 10.387584928619392,
+        "shuffle_penalty_hz": 8.181256446414272
+      },
+      "h4": {
+        "rmse_hz": 1.3391617195440972,
+        "shuffled_rmse_hz": 10.708901019632314,
+        "shuffle_penalty_hz": 9.369739300088218
+      },
+      "h8": {
+        "rmse_hz": 1.4255421419054295,
+        "shuffled_rmse_hz": 13.77440588480494,
+        "shuffle_penalty_hz": 12.348863742899509
+      }
+    },
+    "1.05": {
+      "pi_rmse_hz": 1.1999344506755054,
+      "h1": {
+        "rmse_hz": 1.5794212509391037,
+        "shuffled_rmse_hz": 1.5794212509391037,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 2.6465777680661415,
+        "shuffled_rmse_hz": 11.055565235407098,
+        "shuffle_penalty_hz": 8.408987467340959
+      },
+      "h4": {
+        "rmse_hz": 1.4315895309559608,
+        "shuffled_rmse_hz": 11.30891734399965,
+        "shuffle_penalty_hz": 9.877327813043689
+      },
+      "h8": {
+        "rmse_hz": 1.5603843046327655,
+        "shuffled_rmse_hz": 14.6065542222104,
+        "shuffle_penalty_hz": 13.04616991757763
+      }
+    },
+    "1.10": {
+      "pi_rmse_hz": 1.1672504754547,
+      "h1": {
+        "rmse_hz": 1.6669135523711633,
+        "shuffled_rmse_hz": 1.6669135523711633,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 3.38653543276033,
+        "shuffled_rmse_hz": 11.874936921615445,
+        "shuffle_penalty_hz": 8.488401488855112
+      },
+      "h4": {
+        "rmse_hz": 1.5403566558022002,
+        "shuffled_rmse_hz": 12.003929616759658,
+        "shuffle_penalty_hz": 10.463572960957457
+      },
+      "h8": {
+        "rmse_hz": 1.7382099521557024,
+        "shuffled_rmse_hz": 15.33719900156285,
+        "shuffle_penalty_hz": 13.598989049407148
+      }
+    },
+    "1.15": {
+      "pi_rmse_hz": 1.1525446646836912,
+      "h1": {
+        "rmse_hz": 1.8018136233679198,
+        "shuffled_rmse_hz": 1.8018136233679198,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 4.207671277215709,
+        "shuffled_rmse_hz": 12.458948193939516,
+        "shuffle_penalty_hz": 8.251276916723805
+      },
+      "h4": {
+        "rmse_hz": 1.6775579005489814,
+        "shuffled_rmse_hz": 12.657778734773224,
+        "shuffle_penalty_hz": 10.98022083422424
+      },
+      "h8": {
+        "rmse_hz": 1.9170840631046315,
+        "shuffled_rmse_hz": 16.03954248727672,
+        "shuffle_penalty_hz": 14.12245842417209
+      }
+    },
+    "1.20": {
+      "pi_rmse_hz": 1.162971142996429,
+      "h1": {
+        "rmse_hz": 1.9468990212744361,
+        "shuffled_rmse_hz": 1.9468990212744361,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 5.010859342203711,
+        "shuffled_rmse_hz": 13.170165192549023,
+        "shuffle_penalty_hz": 8.15930585034531
+      },
+      "h4": {
+        "rmse_hz": 1.85123042702383,
+        "shuffled_rmse_hz": 13.321830510680064,
+        "shuffle_penalty_hz": 11.470600083656233
+      },
+      "h8": {
+        "rmse_hz": 2.1315939307889304,
+        "shuffled_rmse_hz": 16.686825671022586,
+        "shuffle_penalty_hz": 14.555231740233655
+      }
+    },
+    "1.25": {
+      "pi_rmse_hz": 1.1562121850532407,
+      "h1": {
+        "rmse_hz": 2.134953688856309,
+        "shuffled_rmse_hz": 2.134953688856309,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 5.785237677539889,
+        "shuffled_rmse_hz": 13.804595886607265,
+        "shuffle_penalty_hz": 8.019358209067375
+      },
+      "h4": {
+        "rmse_hz": 2.022217044261391,
+        "shuffled_rmse_hz": 13.83010907019602,
+        "shuffle_penalty_hz": 11.807892025934628
+      },
+      "h8": {
+        "rmse_hz": 2.3478027821464202,
+        "shuffled_rmse_hz": 17.421142334961466,
+        "shuffle_penalty_hz": 15.073339552815044
+      }
+    },
+    "1.30": {
+      "pi_rmse_hz": 1.1817022170231106,
+      "h1": {
+        "rmse_hz": 2.3151931082934687,
+        "shuffled_rmse_hz": 2.3151931082934687,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 6.241808890948599,
+        "shuffled_rmse_hz": 14.500907010091304,
+        "shuffle_penalty_hz": 8.259098119142703
+      },
+      "h4": {
+        "rmse_hz": 2.2356022575723893,
+        "shuffled_rmse_hz": 14.442686146257738,
+        "shuffle_penalty_hz": 12.20708388868535
+      },
+      "h8": {
+        "rmse_hz": 2.559731074612077,
+        "shuffled_rmse_hz": 18.198958678874007,
+        "shuffle_penalty_hz": 15.639227604261928
+      }
+    },
+    "1.35": {
+      "pi_rmse_hz": 1.2304058275525371,
+      "h1": {
+        "rmse_hz": 2.4948516825845726,
+        "shuffled_rmse_hz": 2.4948516825845726,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 6.554386592127129,
+        "shuffled_rmse_hz": 14.970435772155808,
+        "shuffle_penalty_hz": 8.416049180028683
+      },
+      "h4": {
+        "rmse_hz": 2.488528354395051,
+        "shuffled_rmse_hz": 14.99137198263817,
+        "shuffle_penalty_hz": 12.502843628243122
+      },
+      "h8": {
+        "rmse_hz": 2.791282469662586,
+        "shuffled_rmse_hz": 18.73086953006157,
+        "shuffle_penalty_hz": 15.939587060398985
+      }
+    },
+    "1.40": {
+      "pi_rmse_hz": 1.2617370857888763,
+      "h1": {
+        "rmse_hz": 2.6720626262978415,
+        "shuffled_rmse_hz": 2.6720626262978415,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 6.788577145944792,
+        "shuffled_rmse_hz": 15.61978198907187,
+        "shuffle_penalty_hz": 8.831204843127075
+      },
+      "h4": {
+        "rmse_hz": 2.7353317272213293,
+        "shuffled_rmse_hz": 15.505437783671029,
+        "shuffle_penalty_hz": 12.770106056449698
+      },
+      "h8": {
+        "rmse_hz": 3.006510174323358,
+        "shuffled_rmse_hz": 19.51603593331471,
+        "shuffle_penalty_hz": 16.509525758991355
+      }
+    },
+    "1.45": {
+      "pi_rmse_hz": 1.3251673487296338,
+      "h1": {
+        "rmse_hz": 2.8810720759759034,
+        "shuffled_rmse_hz": 2.8810720759759034,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 6.996594072946274,
+        "shuffled_rmse_hz": 16.138612267085904,
+        "shuffle_penalty_hz": 9.142018194139627
+      },
+      "h4": {
+        "rmse_hz": 3.0551906202284163,
+        "shuffled_rmse_hz": 16.060430712683193,
+        "shuffle_penalty_hz": 13.005240092454777
+      },
+      "h8": {
+        "rmse_hz": 3.2302895583258153,
+        "shuffled_rmse_hz": 20.206586260345272,
+        "shuffle_penalty_hz": 16.976296702019457
+      }
+    },
+    "1.50": {
+      "pi_rmse_hz": 1.3782707888848802,
+      "h1": {
+        "rmse_hz": 3.0554227110440713,
+        "shuffled_rmse_hz": 3.0554227110440713,
+        "shuffle_penalty_hz": 0.0
+      },
+      "h2": {
+        "rmse_hz": 7.195555066681761,
+        "shuffled_rmse_hz": 16.60250211844982,
+        "shuffle_penalty_hz": 9.406947051768059
+      },
+      "h4": {
+        "rmse_hz": 3.4382299632483817,
+        "shuffled_rmse_hz": 16.507100740793277,
+        "shuffle_penalty_hz": 13.068870777544898
+      },
+      "h8": {
+        "rmse_hz": 3.5359437312349167,
+        "shuffled_rmse_hz": 20.882560121877138,
+        "shuffle_penalty_hz": 17.34661639064222
+      }
+    }
+  }
+}
