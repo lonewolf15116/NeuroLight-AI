@@ -1,0 +1,27 @@
+{
+  "frozen_utc": "2026-10-08T10:40:40+00:00",
+  "git_commit_before_freeze": "c3f5b85a7f95baf4fd2f635801c54cbc7ef6aa06",
+  "files": {
+    "confirmation_v3.py": "77177c5e22f8491608a762151d71454df423ff9f42cb2adef8300ac9da1696fb",
+    "PROTOCOL_V3.json": "e18c02ca9fd862d665dc1ea52cb0dffb82b08f47ffee93c18855b1c63acee733",
+    "v02_robustness.py": "80dd11f3664e1bafd6bffc5e2013b932c3a40eabf6446e4dc5d8ad2b78f7e34a",
+    "experiment.py": "cf36ee4baad8eadebe39ac9220cd16d23310ab827294fb6412f19ee202c6937d",
+    "experiment_b_final.py": "d2217f3434f4564d30e9bdec6361deed90df7928f44c06b36d3a2f433d83af69",
+    "prospective_dev/arx10_prior.npz": "7afd3e874bfccd7ebb56ab7008c964068a7a91dd9bebdf512be7e68f767988b8",
+    "prospective_dev/retrain_10000/DR_H4_seed_101.npz": "3b7e3e71936828d21956f1ecacfc6c1a14203609a52f3ad91af06bb4cbd0f0b2",
+    "prospective_dev/retrain_10000/DR_H4_seed_102.npz": "2ccb8eed99d348a6c141a505b8f200dc955ca751ce5b0de6e62a85c3ca83240d",
+    "prospective_dev/retrain_10000/DR_H4_seed_103.npz": "f3d1e1d60bfd9871bdbb082c21afb280086b663b86ce0b12a2e8e5e9cb3e6fc7",
+    "prospective_dev/retrain_10000/DR_H4_seed_104.npz": "4d1b840d2a2d32e17312693e25f0410cd21bfdaec54927bbf02560faa9216d1c",
+    "prospective_dev/retrain_10000/DR_H4_seed_105.npz": "2f871c484446c4d6befac0bfea8fcebc017f473ddf80e0fe12b4982965fcadbf",
+    "prospective_dev/retrain_10000/DR_Memoryless_141_seed_101.npz": "376321dfc7f775ef7b6a3024eaf11f4af673d6eda9cfda82b5d53fa6648fe226",
+    "prospective_dev/retrain_10000/DR_Memoryless_141_seed_102.npz": "ba8f727b1b38a42efff8b16a0ec933fd1ee1b6825debda2cfce75b509a4e4539",
+    "prospective_dev/retrain_10000/DR_Memoryless_141_seed_103.npz": "b92e4b0704e1c5b8c95927a654ccc17441d640758fa717cd9da6cc1e3df112fd",
+    "prospective_dev/retrain_10000/DR_Memoryless_141_seed_104.npz": "a918aab7a0a8796dd22d660177849e329b3cc370be668382c2e22635e339d843",
+    "prospective_dev/retrain_10000/DR_Memoryless_141_seed_105.npz": "c5410487bec8a39da68b8402efbbe4361540b7fbd33743313be1f8f3238f9707",
+    "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_101.npz": "0c25c8661bf0c078878db735d1d115e52c94f0929c8f24896c016bc15831769c",
+    "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_102.npz": "34ff7810e10e3220f5541b33742d56a48084f9cf585c71005ef654325f63596d",
+    "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_103.npz": "42e477be97ffe70bbb74da48df5af4db4eea072168c63d19de920a80225a489a",
+    "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_104.npz": "8dc9401a35645802beaed33abd10bf3ee732fdeab0971282e03b806b87654c37",
+    "archived_results/EXPERIMENT_A_FINAL_2026-10-07/DR_H4_seed_105.npz": "d966388795e5ccfe989e9a246ad99cb2269a6244718d7094aade4a076f943c65"
+  }
+}

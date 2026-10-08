@@ -1,6 +1,6 @@
 {
   "study": "NeuroLight-AI prospective confirmation v3 (study phase 2)",
-  "status": "DRAFT",
+  "status": "FROZEN",
   "historical_record": {
     "note": "Phase-1 confirmations C0 (3000-3049), A (4000-4049) and B (6000-6049), their archives under archived_results/, and the manuscript drafts are historical and are neither re-run nor overwritten. V3 writes only to results_v3/.",
     "phase1_git_branch": "phase1-historical (commit c348cb8)"
@@ -510,5 +510,6 @@
     "No change of hypotheses, margins or alpha after FROZEN",
     "No biological or clinical claim",
     "Report all controllers and conditions regardless of outcome"
-  ]
+  ],
+  "frozen_utc": "2026-10-08T10:40:40+00:00"
 }
