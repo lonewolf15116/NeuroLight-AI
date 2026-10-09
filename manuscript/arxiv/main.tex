@@ -220,7 +220,7 @@ $s$ & PI+AW & ARX & ARX+RLS & ARX-$g$ & H4-10k & H4-900 & I1 & I3 & I2 \\\midrul
 \caption{Protocol v4: mean tracking RMSE against hidden sensitivity for six arms. Shading marks the pre-specified high-gain set. All arms are in Table~\ref{tab:v4}.}\label{fig:v4}
 \end{figure}
 
-\subsection{At $\sigma=0.5$, one input gain accounts for most of the adaptive-ARX advantage (Q1)}
+\subsection{At \texorpdfstring{$\sigma=0.5$}{sigma=0.5}, one input gain accounts for most of the adaptive-ARX advantage (Q1)}
 Adapting the single scalar $g$ recovered 0.871 [0.863, 0.878] of the improvement that full ten-coefficient RLS achieves over the fixed ARX, above the 0.70 threshold. In secondary analyses, the estimate behaved as a gain estimate should (Figure~\ref{fig:g}): its rank correlation with $s$ was 1.0 on every one of the 50 plants (minimum 1.00); a per-plant linear fit gave slope 1.27 [1.26, 1.29] (99\%), intercept 0.028 and mean absolute residual 0.017; the coefficient of variation of $g/s$ was 0.021. Because $g$ multiplies the domain-randomised prior's action terms, its absolute scale is relative to that prior ($g=1$ at $s=1$ would mean no correction; observed $g-1=$ 0.30).
 
 \begin{figure}[t]\centering
@@ -290,7 +290,9 @@ At $\sigma=2.0$, Q1 was 0.24 [0.17, 0.32]: gain-only adaptation recovered only a
 In a first pre-registered confirmation on untouched synthetic plants, removing the input--output history substantially worsened the trained predictor at low and moderate gain ($s=0.6$, $0.8$), and a linear model with the same history was practically equivalent at low gain (primary hypotheses); in pre-specified secondary and benchmark comparisons, online linear adaptation outperformed it, anti-windup PI matched or beat it from moderate gain upwards, and longer training improved its predictions while worsening its control. A second protocol, with these observations turned into primary hypotheses, indicated that, in this synthetic plant at the primary noise level ($\sigma=0.5$), most of this pattern follows from one missing quantity: re-estimating a single input gain recovered most of the benefit of adaptive ARX, and giving the network that estimate removed both its high-gain failure and its prediction--control mismatch at the primary noise level. In this synthetic plant at low process noise, explicit estimation of the hidden parameter mattered more than model expressiveness.
 
 \section*{Code and data availability}
+\begin{sloppypar}
 Code, frozen protocols (\texttt{PROTOCOL\_V3.json}, \texttt{PROTOCOL\_V4.json}), manifests, model weights, raw per-plant results, development records and the scripts that generate every number and figure in this paper: \url{https://github.com/lonewolf15116/NeuroLight-AI}, archived at \url{https://doi.org/10.5281/zenodo.23263620}.
+\end{sloppypar}
 
 \begin{thebibliography}{99}\small
 \bibitem{newman2015} Newman JP, Fong M, Millard DC, Whitmire CJ, Stanley GB, Potter SM. Optogenetic feedback control of neural activity. \emph{eLife} 4:e07192, 2015. doi:10.7554/eLife.07192
