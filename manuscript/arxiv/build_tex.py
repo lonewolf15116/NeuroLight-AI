@@ -26,6 +26,8 @@ V.update(p1a=pci(p1a['mean'], *p1a['ci']), p1b=pci(p1b['mean'], *p1b['ci']), p1a
 CONDS3 = ['s0.50', 's0.60', 's0.70', 's0.80', 's0.90', 's1.00', 's1.10', 's1.20', 's1.40', 'n1.0', 'n2.0']
 lab3 = lambda c: f'$s={c[1:]}$' if c.startswith('s') else f'$\\sigma={c[1:]}$'
 s4n = sum(get3('S4_adaptive_linear_vs_H4', c)['ci'][1] < 0 for c in CONDS3)
+s4c = lambda c: (lambda r: pci(r['mean'], *r['ci'], d=3))(get3('S4_adaptive_linear_vs_H4', c))
+V.update(s4_05=s4c('s0.50'), s4_n2=s4c('n2.0'))
 V.update(s4n=str(s4n), s1_lo=f"{abs(get3('S1_adaptation', 'n2.0')['mean']):.2f}", s1_hi=f"{abs(get3('S1_adaptation', 's1.40')['mean']):.2f}",
          aw06=sg(get3('B1_PI_benchmark', 's0.60', 'PI_tuned_AW - DR_H4')['mean']), aw07=f"{abs(get3('B1_PI_benchmark', 's0.70', 'PI_tuned_AW - DR_H4')['mean']):.2f}",
          aw14=f"{abs(get3('B1_PI_benchmark', 's1.40', 'PI_tuned_AW - DR_H4')['mean']):.2f}", awn2=sg(get3('B1_PI_benchmark', 'n2.0', 'PI_tuned_AW - DR_H4')['mean']),
