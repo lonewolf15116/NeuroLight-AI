@@ -1,6 +1,6 @@
 # NeuroLight-AI: Prospective Confirmation v3 (study phase 2)
 
-**Status: DRAFT, not frozen.** Plants 7000–7049 have not been instantiated by any code. The machine-readable protocol is `PROTOCOL_V3.json`, generated mechanically from development results by `prospective_dev/make_protocol_v3.py`. Both files describe the same protocol; if they disagree, the JSON is what the script executes. The learned-model decision in §8 is resolved (Option C, chosen 8 Oct 2026).
+**Status: DRAFT, not frozen.** Plants 7000–7049 have not been instantiated by any code. The machine-readable protocol is `PROTOCOL_V3.json`, generated mechanically from development results by `prospective_dev/make_protocol_v3.py`. Both files describe the same protocol; if they disagree, the JSON is what the script executes. The learned-model decision in Section 8 is resolved (Option C, chosen 8 Oct 2026).
 
 ## 1. Historical record (preserved, not overwritten)
 
@@ -22,7 +22,7 @@
 | → PI_sens_ref | Per-sensitivity best member of the whole family (table in JSON). | |
 | Adaptive ARX/RLS | P₀ scale 1–10⁹ × λ 0.8–1.0. The objective is flat (6 configs within 0.02 Hz) for P₀ ≥ 10⁷, λ 0.95–0.98; argmin **P₀ ×10⁹, λ 0.98** (1.345 Hz vs 2.46 fixed). | `t3*_arx.py` |
 | Model retraining | DR-H4 and DR-Mem-141 retrained for 10 000 epochs (same data, seeds, optimiser). DR-H4 validation RMSE is 1.39–1.40 Hz (was 1.61–1.85 at 900 epochs). Gain over the last 1000 epochs is ≤ 0.007 Hz. | `retrain_chunked.py`, `retrain_10000/` |
-| Dress rehearsal | Full v3 pipeline and analysis on evaluation plants 5100–5149 (§7). | `results_v3/dev_rehearsal_results.json` |
+| Dress rehearsal | Full v3 pipeline and analysis on evaluation plants 5100–5149 (Section 7). | `results_v3/dev_rehearsal_results.json` |
 
 Edge flags recorded in the JSON:
 - PI_sens_ref at s 0.70 chose k_t = 1.0, the top of the k_t grid.
@@ -134,7 +134,7 @@ Decision and conditions:
 1. The 10 000-epoch models remain **primary**. Their selection rule (converged budget, best-validation checkpoint) was fixed before the rehearsal and is not changed.
 2. The 900-epoch models enter as a **secondary arm** for S5 only, with all five seeds and unmodified weights (hashes in the protocol and manifest). Neither family is retrained or altered.
 3. S5 was added because of the development observation above; this is disclosed here and will be disclosed in the paper.
-4. S5 is fully specified before confirmation: contrast, conditions, plant-level averaging, BCa level and Bonferroni correction (§4).
+4. S5 is fully specified before confirmation: contrast, conditions, plant-level averaging, BCa level and Bonferroni correction (Section 4).
 5. S5 is never promoted to primary, whatever it shows.
 
 ## 9. Prohibitions
